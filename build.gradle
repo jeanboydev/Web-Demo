@@ -46,9 +46,8 @@ dependencies {
 
     //hibernate
     compile "org.hibernate:hibernate-core:${rootProject.hibernateVersion}"//核心包
-    compile "org.hibernate:hibernate-entitymanager:${rootProject.hibernateVersion}"//
+//    compile "org.hibernate:hibernate-entitymanager:${rootProject.hibernateVersion}"//
     compile "c3p0:c3p0:0.9.1.2"//数据库连接池
-    compile "com.alibaba:druid:1.1.10"
 
     //json
     compile "com.alibaba:fastjson:${rootProject.fastjsonVersion}"

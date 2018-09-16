@@ -30,23 +30,4 @@
     <!--扫描目录下所有的注解-->
     <!--<context:component-scan base-package="com.jeanboy.web.**"/>-->
 
-    <!--Hibernate 整合扫描目录-->
-    <!--<context:component-scan base-package="com.jeanboy.web.demo.domain.model"/>-->
-
-
-    <!-- 配置导入多个 Properties 配置文件 -->
-    <!--<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
-        <!--<property name="locations">-->
-            <!--<list>-->
-                <!--&lt;!&ndash; 要是有多个配置文件，只需在这里继续添加即可 &ndash;&gt;-->
-                <!--<value>classpath:/config/database.properties</value>-->
-            <!--</list>-->
-        <!--</property>-->
-    <!--</bean>-->
-    <!-- 配置导入多个 Properties 配置文件 -->
-    <!--<context:property-placeholder location="classpath*:config/*.properties"/>-->
-
-    <!-- 配置加载数据源组件 -->
-    <!--<import resource="classpath*:/config/spring-data.xml" />-->
-
 </beans>
