@@ -1,4 +1,4 @@
-package com.jeanboy.web.demo.model;
+package com.jeanboy.web.demo.domain.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

@@ -16,16 +16,37 @@
         <property name="jdbcUrl" value="${url}"/>
         <property name="user" value="${username}"/>
         <property name="password" value="${password}"/>
-        <property name="initialPoolSize" value="1"/>
+        <property name="initialPoolSize" value="10"/>
         <property name="minPoolSize" value="1"/>
         <property name="maxPoolSize" value="40"/>
         <property name="maxIdleTime" value="20"/>
+        <property name="maxStatements" value="0"/>
+        <property name="maxStatementsPerConnection" value="0"/>
+        <property name="checkoutTimeout" value="10000"/>
     </bean>
+
+    <!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">-->
+        <!--<property name="url" value="${url}" />-->
+        <!--<property name="username" value="${username}" />-->
+        <!--<property name="password" value="${password}" />-->
+        <!--<property name="filters" value="stat" />-->
+        <!--<property name="maxActive" value="20" />-->
+        <!--<property name="initialSize" value="1" />-->
+        <!--<property name="maxWait" value="60000" />-->
+        <!--<property name="minIdle" value="1" />-->
+        <!--<property name="timeBetweenEvictionRunsMillis" value="60000" />-->
+        <!--<property name="minEvictableIdleTimeMillis" value="300000" />-->
+        <!--<property name="testWhileIdle" value="true" />-->
+        <!--<property name="testOnBorrow" value="false" />-->
+        <!--<property name="testOnReturn" value="false" />-->
+        <!--<property name="poolPreparedStatements" value="true" />-->
+        <!--<property name="maxOpenPreparedStatements" value="20" />-->
+    <!--</bean>-->
 
     <!-- 配置 session 工厂 -->
     <bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-        <property name="packagesToScan" value="com.jeanboy.web.**.model"/>
+        <property name="packagesToScan" value="com.jeanboy.web.demo.domain.model"/>
         <property name="hibernateProperties">
             <props>
                 <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
