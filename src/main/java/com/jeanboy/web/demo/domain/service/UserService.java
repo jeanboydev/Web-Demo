@@ -1,7 +1,7 @@
 package com.jeanboy.web.demo.domain.service;
 
 import com.jeanboy.web.demo.domain.UserContract;
-import com.jeanboy.web.demo.domain.model.UserModel;
+import com.jeanboy.web.demo.domain.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +16,17 @@ public class UserService implements UserContract.Service{
     }
 
     @Override
-    public UserModel get(Long id) {
+    public UserEntity get(Long id) {
         return repository.get(id);
     }
 
     @Override
-    public Long save(UserModel model) {
+    public Long save(UserEntity model) {
         return repository.save(model);
     }
 
     @Override
-    public void update(UserModel model) {
+    public void update(UserEntity model) {
         repository.update(model);
     }
 }

@@ -1,20 +1,20 @@
 package com.jeanboy.web.demo.domain;
 
 import com.jeanboy.web.demo.base.BaseContract;
-import com.jeanboy.web.demo.domain.model.UserModel;
+import com.jeanboy.web.demo.domain.entity.UserEntity;
 
 public interface UserContract {
 
-    interface Repository extends BaseContract<Long, UserModel> {
+    interface Repository extends BaseContract<Long, UserEntity> {
 
     }
 
     interface Service {
 
-        UserModel get(Long id);
+        UserEntity get(Long id);
 
-        Long save(UserModel model);
+        Long save(UserEntity model);
 
-        void update(UserModel model);
+        void update(UserEntity model);
     }
 }

@@ -2,7 +2,7 @@ package com.jeanboy.web.demo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
-import com.jeanboy.web.demo.domain.model.UserModel;
+import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -26,7 +26,7 @@ public class UsersController extends BaseController {
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     public String test() {
-        UserModel userModel = new UserModel();
+        UserEntity userModel = new UserEntity();
         userModel.setUsername("test");
         userModel.setPassword("123");
         userModel.setNickname("测试昵称");
@@ -38,7 +38,7 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "get", method = RequestMethod.GET)
     @ResponseBody
     public String test2() {
-        UserModel userModel = userService.get(1L);
+        UserEntity userModel = userService.get(1L);
         return JSON.toJSONString(userModel);
     }
 }
