@@ -12,7 +12,7 @@ public class PermissionEntity implements Serializable {
     @Column(nullable = false)
     private int identity;
     @Column(nullable = false)
-    private int description;
+    private String description;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
 
@@ -32,11 +32,11 @@ public class PermissionEntity implements Serializable {
         this.identity = identity;
     }
 
-    public int getDescription() {
+    public String getDescription() {
         return description;
     }
 
-    public void setDescription(int description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
