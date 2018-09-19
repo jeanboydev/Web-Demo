@@ -3,8 +3,8 @@ package com.jeanboy.web.demo.domain.entity;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity(name = "role")
-public class RoleEntity implements Serializable {
+@Entity(name = "attendance_type")
+public class AttendanceTypeEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

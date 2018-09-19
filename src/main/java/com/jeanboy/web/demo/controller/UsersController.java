@@ -29,7 +29,7 @@ public class UsersController extends BaseController {
         UserEntity userModel = new UserEntity();
         userModel.setUsername("test");
         userModel.setPassword("123");
-        userModel.setNickname("测试昵称");
+//        userModel.setNickname("测试昵称");
         userModel.setUpdateTime(System.currentTimeMillis());
         userService.save(userModel);
         return "hello world";
