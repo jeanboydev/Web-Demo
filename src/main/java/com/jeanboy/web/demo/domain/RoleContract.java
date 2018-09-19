@@ -11,9 +11,9 @@ public interface RoleContract {
 
     interface Service {
 
-        RoleEntity get(Long id);
+        RoleEntity get(Integer id);
 
-        Long save(RoleEntity model);
+        Integer save(RoleEntity model);
 
         void update(RoleEntity model);
     }
