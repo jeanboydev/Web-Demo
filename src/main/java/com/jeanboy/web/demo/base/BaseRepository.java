@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Transactional
 @Repository
@@ -28,26 +29,28 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
 
     protected abstract Class<T> getClazz();
 
-    protected T findByWhere(String name, String value) {
-        try {
+    protected T findByWhere(String name, Object value) {
+//        try {
             Session session = getCurrentSession();
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = builder.createQuery(getClazz());
             Root<T> from = query.from(getClazz());
             query.select(from);
             query.where(builder.equal(from.get(name), value));
-            return session.createQuery(query).getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+//            return session.createQuery(query).getSingleResult();
+            Optional<T> optional = session.createQuery(query).uniqueResultOptional();
+            return optional.orElse(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
 //        异常参考解决方式
 //        Optional<T> optionalT = session.createQuery(query).uniqueResultOptional();
 //        return optionalT == Optional.empty() ? null : optionalT.get();
     }
 
     protected T findByWhere(Map<String, Object> whereParams) {
-        try {
+//        try {
             Session session = getCurrentSession();
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = builder.createQuery(getClazz());
@@ -62,11 +65,13 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
                 predicateArray[i] = predicateList.get(i);
             }
             query.where(builder.and(predicateArray));
-            return session.createQuery(query).getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+//            return session.createQuery(query).getSingleResult();
+            Optional<T> optional = session.createQuery(query).uniqueResultOptional();
+            return optional.orElse(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
 //        异常参考解决方式
 //        Optional<T> optionalT = session.createQuery(query).uniqueResultOptional();
 //        return optionalT == Optional.empty() ? null : optionalT.get();

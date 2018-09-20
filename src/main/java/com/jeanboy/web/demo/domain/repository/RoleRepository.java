@@ -8,10 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public class RoleRepository extends BaseRepository<Integer, RoleEntity> implements RoleContract.Repository{
+public class RoleRepository extends BaseRepository<Integer, RoleEntity> implements RoleContract.Repository {
 
     @Override
     protected Class<RoleEntity> getClazz() {
         return RoleEntity.class;
+    }
+
+    @Override
+    public RoleEntity findByIdentity(Integer identity) {
+        return findByWhere("permissionIdentity", identity);
     }
 }

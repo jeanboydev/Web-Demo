@@ -13,11 +13,11 @@ public class UserEntity implements Serializable {
     private String username;
     @Column(nullable = false)
     private String password;
-    @Column(nullable = false)
-    private String realname;
+    @Column(name = "real_name",nullable = false)
+    private String realName;
     private int gender;
     private long birthday;
-    @Column(name = "education_level", nullable = false)
+    @Column(name = "education_level")
     private int educationLevel;
     @Column(name = "import_time", length = 13, nullable = false)
     private long importTime;
@@ -25,9 +25,9 @@ public class UserEntity implements Serializable {
     private long updateTime;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
-    @Column(name = "job_id", nullable = false)
+    @Column(name = "job_id")
     private int jobId;
-    @Column(name = "department_id", nullable = false)
+    @Column(name = "department_id")
     private int departmentId;
     @Column(name = "role_id", nullable = false)
     private int roleId;
@@ -56,12 +56,12 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public String getRealname() {
-        return realname;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setRealname(String realname) {
-        this.realname = realname;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public int getGender() {

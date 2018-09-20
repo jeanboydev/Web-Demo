@@ -8,10 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 @Repository
-public class UserRepository extends BaseRepository<Long, UserEntity> implements UserContract.Repository{
+public class UserRepository extends BaseRepository<Long, UserEntity> implements UserContract.Repository {
 
     @Override
     protected Class<UserEntity> getClazz() {
         return UserEntity.class;
+    }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return findByWhere("username", username);
     }
 }

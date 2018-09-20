@@ -5,11 +5,13 @@ import java.util.Map;
 
 public class PermissionConfig {
 
+
     public static final int IDENTITY_SELECT = 1;    //0001
     public static final int IDENTITY_INSERT = 2;    //0010
     public static final int IDENTITY_UPDATE = 4;    //0100
     public static final int IDENTITY_DELETE = 8;    //1000
 
+    public static final int MASTER = 65535;                 //1111 1111 1111 1111
 
     public static final int TABLE_PERMISSION = 16;          //0000 0000 0001 0000
     public static final int TABLE_ROLE = 32;                //0000 0000 0010 0000

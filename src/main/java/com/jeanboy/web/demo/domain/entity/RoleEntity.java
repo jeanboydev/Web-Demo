@@ -10,7 +10,9 @@ public class RoleEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     @Column(nullable = false)
-    private int name;
+    private String name;
+    @Column(name = "permission_identity", nullable = false)
+    private int permissionIdentity;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
 
@@ -22,12 +24,20 @@ public class RoleEntity implements Serializable {
         this.id = id;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
+    }
+
+    public int getPermissionIdentity() {
+        return permissionIdentity;
+    }
+
+    public void setPermissionIdentity(int permissionIdentity) {
+        this.permissionIdentity = permissionIdentity;
     }
 
     public long getCreateTime() {

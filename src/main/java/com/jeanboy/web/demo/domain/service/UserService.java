@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService implements UserContract.Service{
+public class UserService implements UserContract.Service {
 
     private final UserContract.Repository repository;
 
@@ -18,6 +18,11 @@ public class UserService implements UserContract.Service{
     @Override
     public UserEntity get(Long id) {
         return repository.get(id);
+    }
+
+    @Override
+    public UserEntity findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 
     @Override
