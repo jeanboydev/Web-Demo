@@ -2,13 +2,18 @@ package com.jeanboy.web.demo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
+import com.jeanboy.web.demo.constants.ErrorCode;
+import com.jeanboy.web.demo.constants.HttpStatus;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.UserService;
+import com.jeanboy.web.demo.exceptions.ServerException;
+import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -20,6 +25,18 @@ public class UsersController extends BaseController {
     @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
+    }
+
+
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseBody
+    public String signUp(@RequestParam("username") String username,
+                         @RequestParam("password") String password) {
+        if (StringUtil.isEmpty(username)) {
+            throw new ServerException(HttpStatus.STATUS_400).addError(ErrorCode.CODE_TOKEN_INVALID);
+        }
+        UserEntity userEntity = userService.findByUsername(username);
+        return "";
     }
 
 
