@@ -18,7 +18,7 @@ public class StringUtil {
     }
 
     /**
-     * 生成 MD5
+     * 生成 32 位的 MD5 字符串
      *
      * @param message
      * @return
@@ -35,7 +35,7 @@ public class StringUtil {
             return bytesToHex(buff);
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return "";
         }
     }
 

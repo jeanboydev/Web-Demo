@@ -2,19 +2,19 @@ package com.jeanboy.web.demo.exceptions.info;
 
 public class ErrorInfo {
 
-    private long code;
+    private int code;
     private String description;
 
-    public ErrorInfo(long code, String description) {
+    public ErrorInfo(int code, String description) {
         this.code = code;
         this.description = description;
     }
 
-    public long getCode() {
+    public int getCode() {
         return code;
     }
 
-    public void setCode(long code) {
+    public void setCode(int code) {
         this.code = code;
     }
 

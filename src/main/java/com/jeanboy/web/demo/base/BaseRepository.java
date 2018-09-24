@@ -44,9 +44,6 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
 //            e.printStackTrace();
 //            return null;
 //        }
-//        异常参考解决方式
-//        Optional<T> optionalT = session.createQuery(query).uniqueResultOptional();
-//        return optionalT == Optional.empty() ? null : optionalT.get();
     }
 
     protected T findByWhere(Map<String, Object> whereParams) {
@@ -72,9 +69,6 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
 //            e.printStackTrace();
 //            return null;
 //        }
-//        异常参考解决方式
-//        Optional<T> optionalT = session.createQuery(query).uniqueResultOptional();
-//        return optionalT == Optional.empty() ? null : optionalT.get();
     }
 
     @Override

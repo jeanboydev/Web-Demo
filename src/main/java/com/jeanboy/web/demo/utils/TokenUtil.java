@@ -9,8 +9,6 @@ import java.util.UUID;
 public class TokenUtil {
 
     public static final long EXPIRES_IN = 2 * 60 * 60;//2小时
-    public static final String TYPE = "Bearer";
-    public static final String HEADER_PREFIX = TYPE + " ";
 
     /**
      * 返回 10 位数字，不够前面补 0

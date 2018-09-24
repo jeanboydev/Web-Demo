@@ -8,6 +8,7 @@ import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.PermissionService;
 import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.domain.service.UserService;
+import com.jeanboy.web.demo.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,7 +67,8 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             userManager = new UserEntity();
             userManager.setUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
             userManager.setRealName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
-            userManager.setPassword(AccountConfig.MANAGER_DEFAULT_PASSWORD);
+            String md5Password = StringUtil.getMD5(AccountConfig.MANAGER_DEFAULT_PASSWORD);
+            userManager.setPassword(md5Password);
             userManager.setUpdateTime(System.currentTimeMillis());
             userManager.setCreateTime(System.currentTimeMillis());
             userManager.setRoleId(roleManager.getId());

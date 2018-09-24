@@ -1,38 +1,56 @@
 package com.jeanboy.web.demo.constants;
 
-import java.util.HashMap;
-import java.util.Map;
+import org.springframework.http.HttpStatus;
 
-public class ErrorCode {
+public enum ErrorCode {
 
     /**
-     * 400 请求出错，参数缺失，不支持的请求
-     * 401 未授权，没有登录，refreshToken失效，已存在
-     * 403 没有权限，禁止访问 accessToken失效，权限不足，参数失效
+     * 400 请求错误：API 使用方式不正确/参数缺少/参数错误
      */
+    PARAMETER_ERROR(400001, "参数错误"),
+
+    /**
+     * 401 请求正确但没有权限：令牌失效/没有权限
+     */
+    PERMISSION_DENIED(401001, "没有权限"),
+    TOKEN_INVALID(401002, "令牌失效"),
+    ACCOUNT_NOT_FOUND(401003, "账户不存在"),
+    ACCOUNT_ALREADY_EXISTS(401004, "账户已存在"),
+    PASSWORD_ERROR(401005, "密码错误"),
+
+    /**
+     * 403 有权限但禁止访问：禁止访问/账户被停用
+     */
+    REQUEST_TOO_FREQUENTLY(403001, "请求太频繁"),
+    ACCOUNT_IS_LOCKED(403002, "账户已被停用");
 
 
-    public static long CODE_TOKEN_INVALID = 1001;// 令牌失效-401
-    public static long CODE_PERMISSION_DENIED = 1002;// 没有权限-403
-    public static long CODE_PARAMETER_ERROR = 1003;// 参数错误-400
-    public static long CODE_ACCOUNT_NOT_FOUND = 1004;// 账户不存在-401
-    public static long CODE_ACCOUNT_ALREADY_EXISTS = 1005;// 账户已存在-401
-    public static long CODE_PASSWORD_ERROR = 1006;// 密码错误-401
+    private final int value;
 
+    private final String reasonPhrase;
 
-    private static Map<Long, String> messageMap = new HashMap<>();
-
-    static {
-        messageMap.put(CODE_TOKEN_INVALID, "令牌失效");
-        messageMap.put(CODE_PERMISSION_DENIED, "没有权限");
-        messageMap.put(CODE_PARAMETER_ERROR, "参数错误");
-        messageMap.put(CODE_ACCOUNT_NOT_FOUND, "账户不存在");
-        messageMap.put(CODE_ACCOUNT_ALREADY_EXISTS, "账户已存在");
-        messageMap.put(CODE_PASSWORD_ERROR, "密码错误");
+    ErrorCode(int value, String reasonPhrase) {
+        this.value = value;
+        this.reasonPhrase = reasonPhrase;
     }
 
-    public static String getMessage(long code){
-        return messageMap.get(code);
+    public int value() {
+        return this.value;
     }
 
+    public String getReasonPhrase() {
+        return this.reasonPhrase;
+    }
+
+    public boolean is400Error() {
+        return this.value >= 400000 && this.value < 401000;
+    }
+
+    public boolean is401Error() {
+        return this.value >= 401000 && this.value < 402000;
+    }
+
+    public boolean is403Error() {
+        return this.value >= 403000 && this.value < 404000;
+    }
 }
