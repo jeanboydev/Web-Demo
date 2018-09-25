@@ -2,9 +2,13 @@ package com.jeanboy.web.demo.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
+import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
+import com.jeanboy.web.demo.domain.PermissionContract;
+import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.model.TokenModel;
+import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.exceptions.ServerException;
 import com.jeanboy.web.demo.utils.StringUtil;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -26,12 +31,14 @@ import java.util.Map;
 public class UsersController extends BaseController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
     private static Map<String, UserEntity> tokenMap = new HashMap<>();
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @RequestMapping
@@ -56,10 +63,11 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        UserEntity userEntity = userService.findByUsername(username);
-        if (userEntity == null) {
+        List<UserEntity> userList = userService.findByUsername(username);
+        if (userList.isEmpty()) {
             throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
+        UserEntity userEntity = userList.get(0);
         String cachePassword = userEntity.getPassword();
         if (!password.toUpperCase().equals(cachePassword)) {
             throw new ServerException(ErrorCode.PASSWORD_ERROR);
@@ -94,11 +102,11 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        UserEntity userEntity = userService.findByUsername(username);
-        if (userEntity != null) {
+        List<UserEntity> userList = userService.findByUsername(username);
+        if (!userList.isEmpty()) {
             throw new ServerException(ErrorCode.ACCOUNT_ALREADY_EXISTS);
         }
-        userEntity = new UserEntity();
+        UserEntity userEntity = new UserEntity();
         userEntity.setUsername(username);
         userEntity.setRealName(realName);
         userEntity.setPassword(password);
@@ -133,6 +141,13 @@ public class UsersController extends BaseController {
             return JSON.toJSONString(userEntity);
         } else {
             int roleId = userEntity.getRoleId();
+            RoleEntity roleEntity = roleService.get(roleId);
+            if (roleEntity == null) {
+                throw new ServerException(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+//            int identity = roleEntity.getPermissionIdentity();
+//            int tableIdentity = identity & PermissionConfig.TABLE_USER;
+//            if (tableIdentity == PermissionConfig.TABLE_USER) ;
         }
         return "";
     }

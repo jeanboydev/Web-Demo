@@ -14,9 +14,4 @@ public class RoleRepository extends BaseRepository<Integer, RoleEntity> implemen
     protected Class<RoleEntity> getClazz() {
         return RoleEntity.class;
     }
-
-    @Override
-    public RoleEntity findByIdentity(Integer identity) {
-        return findByWhere("permissionIdentity", identity);
-    }
 }

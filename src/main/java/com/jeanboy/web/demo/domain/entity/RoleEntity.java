@@ -11,8 +11,6 @@ public class RoleEntity implements Serializable {
     private int id;
     @Column(nullable = false)
     private String name;
-    @Column(name = "permission_identity", nullable = false)
-    private int permissionIdentity;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
 
@@ -30,14 +28,6 @@ public class RoleEntity implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getPermissionIdentity() {
-        return permissionIdentity;
-    }
-
-    public void setPermissionIdentity(int permissionIdentity) {
-        this.permissionIdentity = permissionIdentity;
     }
 
     public long getCreateTime() {

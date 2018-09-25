@@ -4,8 +4,10 @@ import com.jeanboy.web.demo.config.AccountConfig;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.entity.PermissionEntity;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
+import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.PermissionService;
+import com.jeanboy.web.demo.domain.service.RolePermissionService;
 import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.utils.StringUtil;
@@ -25,12 +27,17 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
 
     private final PermissionService permissionService;
     private final RoleService roleService;
+    private final RolePermissionService rolePermissionService;
     private final UserService userService;
 
     @Autowired
-    public ServerInitializeComponent(PermissionService permissionService, RoleService roleService, UserService userService) {
+    public ServerInitializeComponent(PermissionService permissionService,
+                                     RoleService roleService,
+                                     RolePermissionService rolePermissionService,
+                                     UserService userService) {
         this.permissionService = permissionService;
         this.roleService = roleService;
+        this.rolePermissionService = rolePermissionService;
         this.userService = userService;
     }
 
@@ -50,15 +57,26 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             }
         }
 
-        RoleEntity roleManager = roleService.findByIdentity(PermissionConfig.MASTER);
-        if (roleManager == null) {
+        List<RolePermissionEntity> permissionList = rolePermissionService.findByIdentity(PermissionConfig.MASTER);
+        int roleManagerId = 0;
+        if (permissionList.isEmpty()) {
             logger.info("======================初始化角色表信息======================");
-            roleManager = new RoleEntity();
+            RoleEntity roleManager = new RoleEntity();
             roleManager.setName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
-            roleManager.setPermissionIdentity(PermissionConfig.MASTER);
             roleManager.setCreateTime(System.currentTimeMillis());
-            int roleManagerId = roleService.save(roleManager);
+            roleManagerId = roleService.save(roleManager);
             roleManager.setId(roleManagerId);
+
+            for (Integer key : PermissionConfig.tableMap.keySet()) {
+                RolePermissionEntity rolePermissionEntity = new RolePermissionEntity();
+                rolePermissionEntity.setRoleId(roleManagerId);
+                rolePermissionEntity.setPermissionIdentity(PermissionConfig.MASTER);
+                rolePermissionEntity.setCreateTime(System.currentTimeMillis());
+                rolePermissionService.save(rolePermissionEntity);
+            }
+        } else {
+            RolePermissionEntity rolePermissionEntity = permissionList.get(0);
+            roleManagerId = rolePermissionEntity.getRoleId();
         }
 
         UserEntity userManager = userService.findByUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
@@ -71,7 +89,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             userManager.setPassword(md5Password);
             userManager.setUpdateTime(System.currentTimeMillis());
             userManager.setCreateTime(System.currentTimeMillis());
-            userManager.setRoleId(roleManager.getId());
+            userManager.setRoleId(roleManagerId);
             userService.save(userManager);
         }
 

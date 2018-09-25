@@ -7,14 +7,11 @@ public interface RoleContract {
 
     interface Repository extends BaseContract<Integer, RoleEntity> {
 
-        RoleEntity findByIdentity(Integer identity);
     }
 
     interface Service {
 
         RoleEntity get(Integer id);
-
-        RoleEntity findByIdentity(Integer identity);
 
         Integer save(RoleEntity model);
 

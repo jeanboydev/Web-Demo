@@ -21,11 +21,6 @@ public class RoleService implements RoleContract.Service {
     }
 
     @Override
-    public RoleEntity findByIdentity(Integer identity) {
-        return repository.findByIdentity(identity);
-    }
-
-    @Override
     public Integer save(RoleEntity model) {
         return repository.save(model);
     }

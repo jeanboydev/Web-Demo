@@ -6,6 +6,8 @@ import com.jeanboy.web.demo.domain.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 @Repository
 public class UserRepository extends BaseRepository<Long, UserEntity> implements UserContract.Repository {
@@ -16,7 +18,7 @@ public class UserRepository extends BaseRepository<Long, UserEntity> implements 
     }
 
     @Override
-    public UserEntity findByUsername(String username) {
+    public List<UserEntity> findByUsername(String username) {
         return findByWhere("username", username);
     }
 }

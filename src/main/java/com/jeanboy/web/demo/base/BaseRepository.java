@@ -29,25 +29,23 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
 
     protected abstract Class<T> getClazz();
 
-    protected T findByWhere(String name, Object value) {
-//        try {
+    protected List<T> findByWhere(String name, Object value) {
+        try {
             Session session = getCurrentSession();
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = builder.createQuery(getClazz());
             Root<T> from = query.from(getClazz());
             query.select(from);
             query.where(builder.equal(from.get(name), value));
-//            return session.createQuery(query).getSingleResult();
-            Optional<T> optional = session.createQuery(query).uniqueResultOptional();
-            return optional.orElse(null);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
+            return session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
-    protected T findByWhere(Map<String, Object> whereParams) {
-//        try {
+    protected List<T> findByWhere(Map<String, Object> whereParams) {
+        try {
             Session session = getCurrentSession();
             CriteriaBuilder builder = session.getCriteriaBuilder();
             CriteriaQuery<T> query = builder.createQuery(getClazz());
@@ -62,13 +60,11 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
                 predicateArray[i] = predicateList.get(i);
             }
             query.where(builder.and(predicateArray));
-//            return session.createQuery(query).getSingleResult();
-            Optional<T> optional = session.createQuery(query).uniqueResultOptional();
-            return optional.orElse(null);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
+            return session.createQuery(query).getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 
     @Override

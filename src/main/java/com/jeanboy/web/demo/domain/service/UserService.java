@@ -5,6 +5,8 @@ import com.jeanboy.web.demo.domain.entity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserContract.Service {
 
@@ -21,7 +23,7 @@ public class UserService implements UserContract.Service {
     }
 
     @Override
-    public UserEntity findByUsername(String username) {
+    public List<UserEntity> findByUsername(String username) {
         return repository.findByUsername(username);
     }
 
