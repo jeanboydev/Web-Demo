@@ -4,13 +4,16 @@ import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
-import com.jeanboy.web.demo.domain.PermissionContract;
+import com.jeanboy.web.demo.domain.entity.PermissionEntity;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
+import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.model.TokenModel;
+import com.jeanboy.web.demo.domain.service.RolePermissionService;
 import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.exceptions.ServerException;
+import com.jeanboy.web.demo.utils.PermissionUtil;
 import com.jeanboy.web.demo.utils.StringUtil;
 import com.jeanboy.web.demo.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.persistence.Column;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +36,17 @@ public class UsersController extends BaseController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final RolePermissionService rolePermissionService;
 
     private static Map<String, UserEntity> tokenMap = new HashMap<>();
 
     @Autowired
-    public UsersController(UserService userService, RoleService roleService) {
+    public UsersController(UserService userService,
+                           RoleService roleService,
+                           RolePermissionService rolePermissionService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.rolePermissionService = rolePermissionService;
     }
 
     @RequestMapping
@@ -80,7 +88,7 @@ public class UsersController extends BaseController {
 
     /**
      * 注册
-     * /users/signIn
+     * /users/signUp
      * POST
      *
      * @param username
@@ -126,7 +134,7 @@ public class UsersController extends BaseController {
      * @param userId
      * @return
      */
-    @RequestMapping(value = "/", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public String getUserInfo(@RequestParam("token") String token,
                               @RequestParam("id") long userId) {
@@ -138,6 +146,7 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
         if (userEntity.getId() == userId) {
+            userEntity.setPassword("");
             return JSON.toJSONString(userEntity);
         } else {
             int roleId = userEntity.getRoleId();
@@ -145,29 +154,95 @@ public class UsersController extends BaseController {
             if (roleEntity == null) {
                 throw new ServerException(HttpStatus.INTERNAL_SERVER_ERROR);
             }
-//            int identity = roleEntity.getPermissionIdentity();
-//            int tableIdentity = identity & PermissionConfig.TABLE_USER;
-//            if (tableIdentity == PermissionConfig.TABLE_USER) ;
+
+            List<RolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(roleId);
+            boolean hadPermission = PermissionUtil.check(rolePermissionList, PermissionConfig.TABLE_USER,
+                    PermissionConfig.IDENTITY_SELECT);
+            if (!hadPermission) {
+                throw new ServerException(ErrorCode.PERMISSION_DENIED);
+            }
+            UserEntity findUser = userService.get(userId);
+            if (findUser == null) {
+                throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
+            }
+            findUser.setPassword("");
+            return JSON.toJSONString(findUser);
         }
-        return "";
     }
 
-//    @RequestMapping(method = RequestMethod.GET)
-//    @ResponseBody
-//    public String test() {
-//        UserEntity userModel = new UserEntity();
-//        userModel.setUsername("test");
-//        userModel.setPassword("123");
-////        userModel.setNickname("测试昵称");
-//        userModel.setUpdateTime(System.currentTimeMillis());
-//        userService.save(userModel);
-//        return "hello world";
-//    }
-//
-//    @RequestMapping(value = "get", method = RequestMethod.GET)
-//    @ResponseBody
-//    public String test2() {
-//        UserEntity userModel = userService.get(1L);
-//        return JSON.toJSONString(userModel);
-//    }
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateInfo(@RequestParam("token") String token,
+                             @RequestParam("id") long userId,
+                             @RequestParam(value = "password", required = false) String password,
+                             @RequestParam(value = "real_name", required = false) String realName,
+                             @RequestParam(value = "gender", required = false) int gender,
+                             @RequestParam(value = "birthday", required = false) long birthday,
+                             @RequestParam(value = "education_level", required = false) int educationLevel,
+                             @RequestParam(value = "import_time", required = false) long importTime,
+                             @RequestParam(value = "job_id", required = false) int jobId,
+                             @RequestParam(value = "department_id", required = false) int departmentId,
+                             @RequestParam(value = "role_id", required = false) int roleId) {
+        
+        if (StringUtil.isEmpty(token) || userId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        }
+        UserEntity updateUser = null;
+        UserEntity userEntity = tokenMap.get(token);
+        if (userEntity == null) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        }
+        if (userEntity.getId() == userId) {
+            updateUser = userEntity;
+        } else {
+            int onlineRoleId = userEntity.getRoleId();
+            RoleEntity roleEntity = roleService.get(onlineRoleId);
+            if (roleEntity == null) {
+                throw new ServerException(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            List<RolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(onlineRoleId);
+            boolean hadPermission = PermissionUtil.check(rolePermissionList, PermissionConfig.TABLE_USER,
+                    PermissionConfig.IDENTITY_SELECT);
+            if (!hadPermission) {
+                throw new ServerException(ErrorCode.PERMISSION_DENIED);
+            }
+            UserEntity findUser = userService.get(userId);
+            if (findUser == null) {
+                throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
+            }
+            updateUser = findUser;
+        }
+
+        if (!StringUtil.isEmpty(password)) {
+            updateUser.setPassword(password);
+        }
+        if (!StringUtil.isEmpty(realName)) {
+            updateUser.setRealName(realName);
+        }
+        if (gender != 0) {
+            updateUser.setGender(gender);
+        }
+        if (birthday != 0) {
+            updateUser.setBirthday(birthday);
+        }
+        if (educationLevel != 0) {
+            updateUser.setEducationLevel(educationLevel);
+        }
+        if (importTime != 0) {
+            updateUser.setImportTime(importTime);
+        }
+        if (jobId != 0) {
+            updateUser.setJobId(jobId);
+        }
+        if (departmentId != 0) {
+            updateUser.setDepartmentId(departmentId);
+        }
+        if (roleId != 0) {
+            updateUser.setRoleId(roleId);
+        }
+        updateUser.setUpdateTime(System.currentTimeMillis());
+        userService.update(updateUser);
+        return "";
+    }
 }

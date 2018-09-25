@@ -23,8 +23,8 @@ public class RolePermissionService implements RolePermissionContract.Service {
     }
 
     @Override
-    public List<RolePermissionEntity> findByIdentity(Integer identity) {
-        return repository.findByIdentity(identity);
+    public List<RolePermissionEntity> findByRoleId(Integer roleId) {
+        return repository.findByRoleId(roleId);
     }
 
     @Override

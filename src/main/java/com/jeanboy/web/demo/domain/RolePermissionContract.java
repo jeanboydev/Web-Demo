@@ -9,14 +9,14 @@ public interface RolePermissionContract {
 
     interface Repository extends BaseContract<Long, RolePermissionEntity> {
 
-        List<RolePermissionEntity> findByIdentity(Integer identity);
+        List<RolePermissionEntity> findByRoleId(Integer roleId);
     }
 
     interface Service {
 
         RolePermissionEntity get(Long id);
 
-        List<RolePermissionEntity> findByIdentity(Integer identity);
+        List<RolePermissionEntity> findByRoleId(Integer roleId);
 
         Long save(RolePermissionEntity model);
 

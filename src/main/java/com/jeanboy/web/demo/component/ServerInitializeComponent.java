@@ -57,7 +57,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             }
         }
 
-        List<RolePermissionEntity> permissionList = rolePermissionService.findByIdentity(PermissionConfig.MASTER);
+        List<RolePermissionEntity> permissionList = rolePermissionService.findByRoleId(PermissionConfig.MASTER);
         int roleManagerId = 0;
         if (permissionList.isEmpty()) {
             logger.info("======================初始化角色表信息======================");
@@ -79,10 +79,10 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             roleManagerId = rolePermissionEntity.getRoleId();
         }
 
-        UserEntity userManager = userService.findByUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
-        if (userManager == null) {
+        List<UserEntity> userList = userService.findByUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
+        if (userList.isEmpty()) {
             logger.info("======================初始化用户表信息======================");
-            userManager = new UserEntity();
+            UserEntity userManager = new UserEntity();
             userManager.setUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
             userManager.setRealName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
             String md5Password = StringUtil.getMD5(AccountConfig.MANAGER_DEFAULT_PASSWORD);

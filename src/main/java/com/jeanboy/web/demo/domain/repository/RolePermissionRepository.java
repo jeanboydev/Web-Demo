@@ -18,7 +18,7 @@ public class RolePermissionRepository extends BaseRepository<Long, RolePermissio
     }
 
     @Override
-    public List<RolePermissionEntity> findByIdentity(Integer identity) {
-        return findByWhere("permissionIdentity", identity);
+    public List<RolePermissionEntity> findByRoleId(Integer roleId) {
+        return findByWhere("roleId", roleId);
     }
 }
