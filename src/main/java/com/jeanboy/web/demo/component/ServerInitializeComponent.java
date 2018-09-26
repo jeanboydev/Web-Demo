@@ -57,9 +57,19 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             }
         }
 
-        List<RolePermissionEntity> permissionList = rolePermissionService.findByRoleId(PermissionConfig.MASTER);
+        List<RolePermissionEntity> permissionList = rolePermissionService.findAll();
         int roleManagerId = 0;
-        if (permissionList.isEmpty()) {
+        boolean isMasterReady = false;
+        if (!permissionList.isEmpty()) {
+            for (RolePermissionEntity entity : permissionList) {
+                if (entity.getPermissionIdentity() == PermissionConfig.MASTER) {
+                    isMasterReady = true;
+                    roleManagerId = entity.getRoleId();
+                    break;
+                }
+            }
+        }
+        if(!isMasterReady){
             logger.info("======================初始化角色表信息======================");
             RoleEntity roleManager = new RoleEntity();
             roleManager.setName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
@@ -67,16 +77,11 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             roleManagerId = roleService.save(roleManager);
             roleManager.setId(roleManagerId);
 
-            for (Integer key : PermissionConfig.tableMap.keySet()) {
-                RolePermissionEntity rolePermissionEntity = new RolePermissionEntity();
-                rolePermissionEntity.setRoleId(roleManagerId);
-                rolePermissionEntity.setPermissionIdentity(PermissionConfig.MASTER);
-                rolePermissionEntity.setCreateTime(System.currentTimeMillis());
-                rolePermissionService.save(rolePermissionEntity);
-            }
-        } else {
-            RolePermissionEntity rolePermissionEntity = permissionList.get(0);
-            roleManagerId = rolePermissionEntity.getRoleId();
+            RolePermissionEntity rolePermissionEntity = new RolePermissionEntity();
+            rolePermissionEntity.setRoleId(roleManagerId);
+            rolePermissionEntity.setPermissionIdentity(PermissionConfig.MASTER);
+            rolePermissionEntity.setCreateTime(System.currentTimeMillis());
+            rolePermissionService.save(rolePermissionEntity);
         }
 
         List<UserEntity> userList = userService.findByUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);

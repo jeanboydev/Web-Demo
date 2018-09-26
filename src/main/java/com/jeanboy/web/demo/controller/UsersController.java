@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
-import com.jeanboy.web.demo.domain.entity.PermissionEntity;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.persistence.Column;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,7 +141,7 @@ public class UsersController extends BaseController {
         }
         UserEntity userEntity = tokenMap.get(token);
         if (userEntity == null) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            throw new ServerException(ErrorCode.TOKEN_INVALID);
         }
         if (userEntity.getId() == userId) {
             userEntity.setPassword("");
@@ -183,14 +181,14 @@ public class UsersController extends BaseController {
                              @RequestParam(value = "job_id", required = false) int jobId,
                              @RequestParam(value = "department_id", required = false) int departmentId,
                              @RequestParam(value = "role_id", required = false) int roleId) {
-        
+
         if (StringUtil.isEmpty(token) || userId == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
         UserEntity updateUser = null;
         UserEntity userEntity = tokenMap.get(token);
         if (userEntity == null) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            throw new ServerException(ErrorCode.TOKEN_INVALID);
         }
         if (userEntity.getId() == userId) {
             updateUser = userEntity;

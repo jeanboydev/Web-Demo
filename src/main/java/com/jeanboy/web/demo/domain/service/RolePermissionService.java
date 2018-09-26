@@ -28,6 +28,11 @@ public class RolePermissionService implements RolePermissionContract.Service {
     }
 
     @Override
+    public List<RolePermissionEntity> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public Long save(RolePermissionEntity model) {
         return repository.save(model);
     }
