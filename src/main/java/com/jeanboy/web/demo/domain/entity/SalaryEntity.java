@@ -9,8 +9,8 @@ public class SalaryEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
-    @Column(name = "monthly_count", nullable = false)
-    private long monthlyCount;
+    @Column(name = "monthly_value", nullable = false)
+    private long monthlyValue;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
     @Column(name = "job_id", nullable = false)
@@ -32,12 +32,12 @@ public class SalaryEntity implements Serializable {
         this.jobId = jobId;
     }
 
-    public long getMonthlyCount() {
-        return monthlyCount;
+    public long getMonthlyValue() {
+        return monthlyValue;
     }
 
-    public void setMonthlyCount(long monthlyCount) {
-        this.monthlyCount = monthlyCount;
+    public void setMonthlyValue(long monthlyValue) {
+        this.monthlyValue = monthlyValue;
     }
 
     public long getCreateTime() {
