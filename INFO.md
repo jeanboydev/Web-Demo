@@ -4,82 +4,459 @@
 - MySQL：5.7.23
 - Tomcat：8.5.34
 
+
 ## 接口
 
-## /auth
+## /authorize
 
-- PUT：注册
-
-```javascript
-params={
-  "username":"",
-  "real_name":"",
-  "password":"",
-  "role_id":0
-}
-```
-
-- POST：登录
+- POST
 
 ```javascript
 params={
-  "username":"",
-  "password":""
+    username:"",
+    password:""
 }
 ```
 
 ## /users
 
-- GET：获取用户信息
+- PUT
 
 ```javascript
-URL=/{id}
 header={
-  "token":""
-}
-```
-
-- POST：修改用户信息
-
-```javascript
-URL=/{id}
-header={
-  "token":""
+    token:""
 }
 params={
-  "username":"",
-  "real_name":"",
-  "password":"",
-  "role_id":0
+    username:"",
+    password:"",
+    role_id:0
 }
 ```
 
-- DELETE：删除用户信息
+- POST
 
 ```javascript
 URL=/{id}
 header={
-  "token":""
+    token:""
+}
+params={
+    password:"",
+    role_id:0
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+
+## /users/info
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    user_id:0,
+    real_name:"",
+    gender:0,
+    birthday:0,
+    education_level:0,
+    import_time:0,
+    update_time:0,
+    job_id:0,
+    department_id:0
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    real_name:"",
+    gender:0,
+    birthday:0,
+    education_level:0,
+    import_time:0,
+    update_time:0,
+    job_id:0,
+    department_id:0
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
 }
 ```
 
 ## /role
 
-
-- GET：获取角色信息
+- PUT
 
 ```javascript
-URL=/{id}
 header={
-  "token":""
+    token:""
+}
+params={
+    name:""
 }
 ```
 
-- DELETE：删除角色信息
+- GET
 
 ```javascript
 URL=/{id}
 header={
-  "token":""
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+## /permission
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    role_id:0,
+    permission_identity:0
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    role_id:0,
+    permission_identity:0
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+## /permission
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    role_id:0,
+    permission_identity:0
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    role_id:0,
+    permission_identity:0
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+
+## /department
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    name:""
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    name:""
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+## /job
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    name:""
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    name:""
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+## /salary
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    monthly_value:0,
+    job_id:0
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    monthly_value:0,
+    job_id:0
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+## /attendance/type
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    name:""
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    name:""
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+## /attendance
+
+- PUT
+
+```javascript
+header={
+    token:""
+}
+params={
+    user_id:0,
+    start_time:0,
+    end_time:0,
+    create_date:0,
+    attendance_type_id:0
+}
+```
+
+- POST
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+params={
+    user_id:0,
+    start_time:0,
+    end_time:0,
+    create_date:0,
+    attendance_type_id:0
+}
+```
+- GET
+
+```javascript
+URL=/{id}
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL=/{id}
+header={
+    token:""
 }
 ```
