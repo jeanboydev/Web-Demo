@@ -6,7 +6,6 @@ import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.PermissionEntity;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
-import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.PermissionService;
 import com.jeanboy.web.demo.domain.service.RolePermissionService;
 import com.jeanboy.web.demo.domain.service.RoleService;

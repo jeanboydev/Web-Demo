@@ -36,4 +36,9 @@ public class UserService implements UserContract.Service {
     public void update(UserEntity model) {
         repository.update(model);
     }
+
+    @Override
+    public void delete(Long id) {
+        repository.delete(id);
+    }
 }

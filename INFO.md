@@ -7,17 +7,6 @@
 
 ## 接口
 
-## /authorize
-
-- POST
-
-```javascript
-params={
-    username:"",
-    password:""
-}
-```
-
 ## /users
 
 - PUT
@@ -30,6 +19,19 @@ params={
     username:"",
     password:"",
     role_id:0
+}
+```
+
+- POST
+
+```javascript
+params={
+    username:"",
+    password:""
+}
+
+response={
+    token:""
 }
 ```
 
@@ -78,8 +80,6 @@ params={
     gender:0,
     birthday:0,
     education_level:0,
-    import_time:0,
-    update_time:0,
     job_id:0,
     department_id:0
 }

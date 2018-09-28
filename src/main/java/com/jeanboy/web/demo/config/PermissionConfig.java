@@ -20,8 +20,9 @@ public class PermissionConfig {
     public static final int TABLE_JOB = 256;                //0000 0001 0000 0000
     public static final int TABLE_SALARY = 512;             //0000 0010 0000 0000
     public static final int TABLE_USER = 1024;              //0000 0100 0000 0000
-    public static final int TABLE_ATTENDANCE_TYPE = 2048;   //0000 1000 0000 0000
-    public static final int TABLE_ATTENDANCE = 4096;        //0001 0000 0000 0000
+    public static final int TABLE_USER_INFO = 2048;         //0000 1000 0000 0000
+    public static final int TABLE_ATTENDANCE_TYPE = 4096;   //0001 0000 0000 0000
+    public static final int TABLE_ATTENDANCE = 8192;        //0010 0000 0000 0000
 
     public static final Map<Integer, String> tableMap = new HashMap<>();
 
@@ -33,6 +34,7 @@ public class PermissionConfig {
         tableMap.put(TABLE_JOB, "职位表");
         tableMap.put(TABLE_SALARY, "薪资表");
         tableMap.put(TABLE_USER, "用户表");
+        tableMap.put(TABLE_USER_INFO, "用户信息表");
         tableMap.put(TABLE_ATTENDANCE_TYPE, "考勤-类型表");
         tableMap.put(TABLE_ATTENDANCE, "考勤表");
     }

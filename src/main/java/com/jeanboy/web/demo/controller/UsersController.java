@@ -6,20 +6,18 @@ import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
+import com.jeanboy.web.demo.domain.entity.UserInfoEntity;
 import com.jeanboy.web.demo.domain.model.TokenModel;
+import com.jeanboy.web.demo.domain.service.UserInfoService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.exceptions.ServerException;
-import com.jeanboy.web.demo.utils.PermissionUtil;
 import com.jeanboy.web.demo.utils.StringUtil;
 import com.jeanboy.web.demo.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,11 +26,13 @@ import java.util.List;
 public class UsersController extends BaseController {
 
     private final UserService userService;
+    private final UserInfoService userInfoService;
 
 
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, UserInfoService userInfoService) {
         this.userService = userService;
+        this.userInfoService = userInfoService;
     }
 
     @RequestMapping
@@ -41,15 +41,49 @@ public class UsersController extends BaseController {
     }
 
     /**
+     * 注册
+     * /users
+     * PUT
+     *
+     * @param token
+     * @param username
+     * @param password
+     * @param roleId
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseBody
+    public String signUp(@RequestHeader("token") String token,
+                         @RequestParam("username") String username,
+                         @RequestParam("password") String password,
+                         @RequestParam("role_id") int roleId) {
+        if (StringUtil.isEmpty(token)
+                || StringUtil.isEmpty(username)
+                || StringUtil.isEmpty(password)
+                || roleId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        }
+
+        checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_INSERT);
+        UserEntity userEntity = new UserEntity();
+        userEntity.setUsername(username);
+        userEntity.setPassword(password);
+        userEntity.setCreateTime(System.currentTimeMillis());
+        userEntity.setRoleId(roleId);
+        userService.save(userEntity);
+        return "";
+    }
+
+    /**
      * 登录
-     * /users/signIn
+     * /users
      * POST
      *
      * @param username
      * @param password
      * @return
      */
-    @RequestMapping(value = "/signIn", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     public String signIn(@RequestParam("username") String username,
                          @RequestParam("password") String password) {
@@ -73,46 +107,50 @@ public class UsersController extends BaseController {
     }
 
     /**
-     * 注册
-     * /users/signUp
+     * 更新用户注册信息
+     * /users
      * POST
      *
-     * @param username
-     * @param realName
+     * @param token
+     * @param userId
      * @param password
      * @param roleId
      * @return
      */
-    @RequestMapping(value = "/signUp", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
-    public String signUp(@RequestParam("username") String username,
-                         @RequestParam("real_name") String realName,
-                         @RequestParam("password") String password,
-                         @RequestParam("role_id") int roleId) {
-        if (StringUtil.isEmpty(username)
-                || StringUtil.isEmpty(realName)
-                || StringUtil.isEmpty(password)
-                || roleId == 0) {
+    public String updateUser(@RequestHeader("token") String token,
+                             @PathVariable("id") long userId,
+                             @RequestParam(value = "password", required = false) String password,
+                             @RequestParam(value = "role_id", required = false) int roleId) {
+        if (StringUtil.isEmpty(token)
+                || (StringUtil.isEmpty(password) && roleId == 0)) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        List<UserEntity> userList = userService.findByUsername(username);
-        if (!userList.isEmpty()) {
-            throw new ServerException(ErrorCode.ACCOUNT_ALREADY_EXISTS);
+        UserEntity userEntity = checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_UPDATE);
+        UserEntity resultUser;
+        if (userEntity.getId() == userId) {
+            resultUser = userEntity;
+        } else {
+            resultUser = userService.get(userId);
         }
-        UserEntity userEntity = new UserEntity();
-        userEntity.setUsername(username);
-        userEntity.setRealName(realName);
-        userEntity.setPassword(password);
-        userEntity.setUpdateTime(System.currentTimeMillis());
-        userEntity.setCreateTime(System.currentTimeMillis());
-        userEntity.setRoleId(roleId);
-        userService.save(userEntity);
+        if (resultUser == null) {
+            throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+        if (!StringUtil.isEmpty(password)) {
+            resultUser.setPassword(password);
+        }
+        if (roleId != 0) {
+            resultUser.setRoleId(roleId);
+        }
+        userService.update(resultUser);
         return "";
     }
 
     /**
-     * 获取用户信息
+     * 获取用户注册信息
      * /users
      * POST
      *
@@ -120,103 +158,211 @@ public class UsersController extends BaseController {
      * @param userId
      * @return
      */
-    @RequestMapping(value = "/getInfo", method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String getUserInfo(@RequestParam("token") String token,
-                              @RequestParam("id") long userId) {
+    public String getUser(@RequestHeader("token") String token,
+                          @PathVariable("id") long userId) {
         if (StringUtil.isEmpty(token) || userId == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
-        if (userEntity == null) {
-            throw new ServerException(ErrorCode.TOKEN_INVALID);
-        }
+
+        UserEntity userEntity = checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT);
+        UserEntity resultUser;
         if (userEntity.getId() == userId) {
-            userEntity.setPassword("");
-            return JSON.toJSONString(userEntity);
+            resultUser = userEntity;
         } else {
-            int roleId = userEntity.getRoleId();
-            boolean hadPermission = PermissionUtil.check(roleId, PermissionConfig.TABLE_ROLE,
-                    PermissionConfig.IDENTITY_SELECT);
-            if (!hadPermission) {
-                throw new ServerException(ErrorCode.PERMISSION_DENIED);
-            }
-            UserEntity findUser = userService.get(userId);
-            if (findUser == null) {
-                throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
-            }
-            findUser.setPassword("");
-            return JSON.toJSONString(findUser);
+            resultUser = userService.get(userId);
         }
+        return JSON.toJSONString(resultUser);
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
-    @ResponseBody
-    public String updateInfo(@RequestParam("token") String token,
-                             @RequestParam("id") long userId,
-                             @RequestParam(value = "password", required = false) String password,
-                             @RequestParam(value = "real_name", required = false) String realName,
-                             @RequestParam(value = "gender", required = false) int gender,
-                             @RequestParam(value = "birthday", required = false) long birthday,
-                             @RequestParam(value = "education_level", required = false) int educationLevel,
-                             @RequestParam(value = "import_time", required = false) long importTime,
-                             @RequestParam(value = "job_id", required = false) int jobId,
-                             @RequestParam(value = "department_id", required = false) int departmentId,
-                             @RequestParam(value = "role_id", required = false) int roleId) {
 
+    /**
+     * 删除用户注册信息
+     * /users
+     * POST
+     *
+     * @param token
+     * @param userId
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String deleteUser(@RequestHeader("token") String token,
+                             @PathVariable("id") long userId) {
         if (StringUtil.isEmpty(token) || userId == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        UserEntity updateUser = null;
-        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
-        if (userEntity == null) {
-            throw new ServerException(ErrorCode.TOKEN_INVALID);
+        checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_DELETE);
+        List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userId);
+        if (userInfoList.size() > 0) {
+            UserInfoEntity userInfoEntity = userInfoList.get(0);
+            userInfoService.delete(userInfoEntity.getId());
         }
-        if (userEntity.getId() == userId) {
-            updateUser = userEntity;
-        } else {
-            int onlineRoleId = userEntity.getRoleId();
-            boolean hadPermission = PermissionUtil.check(onlineRoleId, PermissionConfig.TABLE_ROLE,
-                    PermissionConfig.IDENTITY_SELECT);
-            if (!hadPermission) {
-                throw new ServerException(ErrorCode.PERMISSION_DENIED);
-            }
-            UserEntity findUser = userService.get(userId);
-            if (findUser == null) {
-                throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
-            }
-            updateUser = findUser;
+        userService.delete(userId);
+        return "";
+    }
+
+    /**
+     * 添加用户详情信息
+     * /users/info
+     * PUT
+     *
+     * @param token
+     * @param userId
+     * @param realName
+     * @param gender
+     * @param birthday
+     * @param educationLevel
+     * @param jobId
+     * @param departmentId
+     * @return
+     */
+    @RequestMapping(value = "/info", method = RequestMethod.PUT)
+    @ResponseBody
+    public String addUserInfo(@RequestHeader("token") String token,
+                              @RequestParam("id") long userId,
+                              @RequestParam("real_name") String realName,
+                              @RequestParam("gender") int gender,
+                              @RequestParam("birthday") long birthday,
+                              @RequestParam("education_level") int educationLevel,
+                              @RequestParam("job_id") int jobId,
+                              @RequestParam("department_id") int departmentId) {
+
+        if (StringUtil.isEmpty(token)
+                || userId == 0
+                || StringUtil.isEmpty(realName)
+                || gender == 0
+                || birthday == 0
+                || educationLevel == 0
+                || jobId == 0
+                || departmentId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        if (!StringUtil.isEmpty(password)) {
-            updateUser.setPassword(password);
+        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_INSERT);
+        UserInfoEntity userInfoEntity = new UserInfoEntity();
+        userInfoEntity.setUserId(userId);
+        userInfoEntity.setRealName(realName);
+        userInfoEntity.setGender(gender);
+        userInfoEntity.setBirthday(birthday);
+        userInfoEntity.setEducationLevel(educationLevel);
+        userInfoEntity.setJobId(jobId);
+        userInfoEntity.setDepartmentId(departmentId);
+        userInfoEntity.setImportTime(System.currentTimeMillis());
+        userInfoEntity.setUpdateTime(System.currentTimeMillis());
+        userInfoService.save(userInfoEntity);
+        return "";
+    }
+
+    /**
+     * 更新用户详情信息
+     * /users/info
+     * POST
+     *
+     * @param token
+     * @param userInfoId
+     * @param realName
+     * @param gender
+     * @param birthday
+     * @param educationLevel
+     * @param jobId
+     * @param departmentId
+     * @return
+     */
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public String updateUserInfo(@RequestHeader("token") String token,
+                                 @PathVariable("id") long userInfoId,
+                                 @RequestParam(value = "real_name", required = false) String realName,
+                                 @RequestParam(value = "gender", required = false) int gender,
+                                 @RequestParam(value = "birthday", required = false) long birthday,
+                                 @RequestParam(value = "education_level", required = false) int educationLevel,
+                                 @RequestParam(value = "job_id", required = false) int jobId,
+                                 @RequestParam(value = "department_id", required = false) int departmentId) {
+
+        if (StringUtil.isEmpty(token)
+                || userInfoId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        if (!StringUtil.isEmpty(realName)) {
-            updateUser.setRealName(realName);
+
+        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_UPDATE);
+        List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userInfoId);
+        if (userInfoList.size() > 0) {
+            UserInfoEntity userInfoEntity = userInfoList.get(0);
+            if (!StringUtil.isEmpty(realName)) {
+                userInfoEntity.setRealName(realName);
+            }
+            if (gender != 0) {
+                userInfoEntity.setGender(gender);
+            }
+            if (birthday != 0) {
+                userInfoEntity.setBirthday(birthday);
+            }
+            if (educationLevel != 0) {
+                userInfoEntity.setEducationLevel(educationLevel);
+            }
+            if (jobId != 0) {
+                userInfoEntity.setJobId(jobId);
+            }
+            if (departmentId != 0) {
+                userInfoEntity.setDepartmentId(departmentId);
+            }
+            userInfoEntity.setUpdateTime(System.currentTimeMillis());
+            userInfoService.update(userInfoEntity);
         }
-        if (gender != 0) {
-            updateUser.setGender(gender);
+        return "";
+    }
+
+
+    /**
+     * 获取用户详情信息
+     * /users/info
+     * GET
+     *
+     * @param token
+     * @param userInfoId
+     * @return
+     */
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public String getUserInfo(@RequestHeader("token") String token,
+                              @PathVariable("id") long userInfoId) {
+        if (StringUtil.isEmpty(token)
+                || userInfoId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        if (birthday != 0) {
-            updateUser.setBirthday(birthday);
+
+        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT);
+        List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userInfoId);
+        if (userInfoList.isEmpty()) {
+            throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
-        if (educationLevel != 0) {
-            updateUser.setEducationLevel(educationLevel);
+        UserInfoEntity userInfoEntity = userInfoList.get(0);
+        return JSON.toJSONString(userInfoEntity);
+    }
+
+
+    /**
+     * 删除用户详情信息
+     * /users/info
+     * DELETE
+     *
+     * @param token
+     * @param userInfoId
+     * @return
+     */
+    @RequestMapping(value = "/info/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String updateUserInfo(@RequestHeader("token") String token,
+                                 @PathVariable("id") long userInfoId) {
+        if (StringUtil.isEmpty(token)
+                || userInfoId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        if (importTime != 0) {
-            updateUser.setImportTime(importTime);
-        }
-        if (jobId != 0) {
-            updateUser.setJobId(jobId);
-        }
-        if (departmentId != 0) {
-            updateUser.setDepartmentId(departmentId);
-        }
-        if (roleId != 0) {
-            updateUser.setRoleId(roleId);
-        }
-        updateUser.setUpdateTime(System.currentTimeMillis());
-        userService.update(updateUser);
+
+        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_DELETE);
+        userInfoService.delete(userInfoId);
         return "";
     }
 }

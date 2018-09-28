@@ -21,5 +21,7 @@ public interface UserContract {
         Long save(UserEntity model);
 
         void update(UserEntity model);
+
+        void delete(Long id);
     }
 }
