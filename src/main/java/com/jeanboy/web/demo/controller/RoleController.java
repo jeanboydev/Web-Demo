@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,44 +36,56 @@ public class RoleController extends BaseController {
     }
 
 
-    @RequestMapping(value = "/getRoles", method = RequestMethod.POST)
+    /**
+     * 添加角色信息
+     * /role
+     * PUT
+     *
+     * @param token
+     * @param name
+     * @return
+     */
+    @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public String getRoles(@RequestParam("token") String token) {
+    public String addRole(@RequestHeader("token") String token,
+                          @RequestParam("name") String name) {
+        if (StringUtil.isEmpty(token)
+                || StringUtil.isEmpty(name)) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        }
+
+        checkPermission(token, PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_INSERT);
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setName(name);
+        roleEntity.setCreateTime(System.currentTimeMillis());
+        roleService.save(roleEntity);
+        return "";
+    }
+
+    /**
+     * 获取角色信息
+     * role/{id}
+     * GET
+     *
+     * @param token
+     * @param roleId
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public String deleteRole(@RequestHeader("token") String token,
+                             @PathVariable(value = "id", required = false) int roleId) {
         if (StringUtil.isEmpty(token)) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
-        if (userEntity == null) {
-            throw new ServerException(ErrorCode.TOKEN_INVALID);
-        }
-        int roleId = userEntity.getRoleId();
-        boolean hadPermission = PermissionUtil.check(roleId, PermissionConfig.TABLE_ROLE,
-                PermissionConfig.IDENTITY_SELECT);
-        if (!hadPermission) {
-            throw new ServerException(ErrorCode.PERMISSION_DENIED);
-        }
-        List<RoleEntity> roleList = roleService.findAll();
-        return JSON.toJSONString(roleList);
-    }
 
-    @RequestMapping(value = "/deleteRole", method = RequestMethod.POST)
-    @ResponseBody
-    public String deleteRole(@RequestParam("token") String token,
-                             @RequestParam("role_id") int roleId) {
-        if (StringUtil.isEmpty(token) || roleId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        checkPermission(token, PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT);
+        if (roleId == 0) {
+            List<RoleEntity> roleList = roleService.findAll();
+            return JSON.toJSONString(roleList);
+        } else {
+            RoleEntity roleEntity = roleService.get(roleId);
+            return JSON.toJSONString(roleEntity);
         }
-        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
-        if (userEntity == null) {
-            throw new ServerException(ErrorCode.TOKEN_INVALID);
-        }
-        int onlineRoleId = userEntity.getRoleId();
-        boolean hadPermission = PermissionUtil.check(onlineRoleId, PermissionConfig.TABLE_ROLE,
-                PermissionConfig.IDENTITY_DELETE);
-        if (!hadPermission) {
-            throw new ServerException(ErrorCode.PERMISSION_DENIED);
-        }
-        roleService.delete(roleId);
-        return "";
     }
 }

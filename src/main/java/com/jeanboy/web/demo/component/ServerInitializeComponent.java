@@ -6,6 +6,7 @@ import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.PermissionEntity;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
+import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.PermissionService;
 import com.jeanboy.web.demo.domain.service.RolePermissionService;
 import com.jeanboy.web.demo.domain.service.RoleService;
@@ -62,7 +63,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
         boolean isMasterReady = false;
         if (!permissionList.isEmpty()) {
             for (RolePermissionEntity entity : permissionList) {
-                if (entity.getPermissionIdentity() == PermissionConfig.MASTER) {
+                if (entity.getPermissionIdentity() == PermissionConfig.ROLE_MASTER) {
                     isMasterReady = true;
                     roleManagerId = entity.getRoleId();
                     break;
@@ -79,7 +80,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
 
             RolePermissionEntity rolePermissionEntity = new RolePermissionEntity();
             rolePermissionEntity.setRoleId(roleManagerId);
-            rolePermissionEntity.setPermissionIdentity(PermissionConfig.MASTER);
+            rolePermissionEntity.setPermissionIdentity(PermissionConfig.ROLE_MASTER);
             rolePermissionEntity.setCreateTime(System.currentTimeMillis());
             rolePermissionService.save(rolePermissionEntity);
         }
@@ -89,10 +90,8 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             logger.info("======================初始化用户表信息======================");
             UserEntity userManager = new UserEntity();
             userManager.setUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
-            userManager.setRealName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
             String md5Password = StringUtil.getMD5(AccountConfig.MANAGER_DEFAULT_PASSWORD);
             userManager.setPassword(md5Password);
-            userManager.setUpdateTime(System.currentTimeMillis());
             userManager.setCreateTime(System.currentTimeMillis());
             userManager.setRoleId(roleManagerId);
             userService.save(userManager);

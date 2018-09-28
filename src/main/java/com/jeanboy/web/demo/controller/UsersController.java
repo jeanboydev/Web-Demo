@@ -228,7 +228,6 @@ public class UsersController extends BaseController {
                               @RequestParam("education_level") int educationLevel,
                               @RequestParam("job_id") int jobId,
                               @RequestParam("department_id") int departmentId) {
-
         if (StringUtil.isEmpty(token)
                 || userId == 0
                 || StringUtil.isEmpty(realName)
@@ -317,7 +316,7 @@ public class UsersController extends BaseController {
 
     /**
      * 获取用户详情信息
-     * /users/info
+     * /users/info/{id}
      * GET
      *
      * @param token
