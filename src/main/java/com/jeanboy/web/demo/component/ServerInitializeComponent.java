@@ -2,6 +2,7 @@ package com.jeanboy.web.demo.component;
 
 import com.jeanboy.web.demo.config.AccountConfig;
 import com.jeanboy.web.demo.config.PermissionConfig;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.PermissionEntity;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
@@ -69,7 +70,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
                 }
             }
         }
-        if(!isMasterReady){
+        if (!isMasterReady) {
             logger.info("======================初始化角色表信息======================");
             RoleEntity roleManager = new RoleEntity();
             roleManager.setName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
@@ -96,6 +97,17 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             userManager.setCreateTime(System.currentTimeMillis());
             userManager.setRoleId(roleManagerId);
             userService.save(userManager);
+        }
+
+
+        List<RoleEntity> roleList = roleService.findAll();
+        for (RoleEntity entity : roleList) {
+            MemoryCache.getRoleMap().put(entity.getId(), entity);
+        }
+
+        List<RolePermissionEntity> rolePermissionList = rolePermissionService.findAll();
+        for (RolePermissionEntity entity : rolePermissionList) {
+            MemoryCache.getPermissionMap().put(entity.getId(), entity);
         }
 
     }

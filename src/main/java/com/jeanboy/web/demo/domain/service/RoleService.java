@@ -5,6 +5,8 @@ import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RoleService implements RoleContract.Service {
 
@@ -21,6 +23,11 @@ public class RoleService implements RoleContract.Service {
     }
 
     @Override
+    public List<RoleEntity> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public Integer save(RoleEntity model) {
         return repository.save(model);
     }
@@ -28,5 +35,10 @@ public class RoleService implements RoleContract.Service {
     @Override
     public void update(RoleEntity model) {
         repository.update(model);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        repository.delete(id);
     }
 }

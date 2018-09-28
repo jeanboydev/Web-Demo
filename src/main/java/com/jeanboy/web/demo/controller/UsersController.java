@@ -4,12 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
-import com.jeanboy.web.demo.domain.entity.RoleEntity;
-import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.model.TokenModel;
-import com.jeanboy.web.demo.domain.service.RolePermissionService;
-import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.exceptions.ServerException;
 import com.jeanboy.web.demo.utils.PermissionUtil;
@@ -24,27 +21,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/users", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 public class UsersController extends BaseController {
 
     private final UserService userService;
-    private final RoleService roleService;
-    private final RolePermissionService rolePermissionService;
 
-    private static Map<String, UserEntity> tokenMap = new HashMap<>();
 
     @Autowired
-    public UsersController(UserService userService,
-                           RoleService roleService,
-                           RolePermissionService rolePermissionService) {
+    public UsersController(UserService userService) {
         this.userService = userService;
-        this.roleService = roleService;
-        this.rolePermissionService = rolePermissionService;
     }
 
     @RequestMapping
@@ -79,7 +67,7 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PASSWORD_ERROR);
         }
         String token = TokenUtil.getToken(userEntity.getId());
-        tokenMap.put(token, userEntity);
+        MemoryCache.getTokenMap().put(token, userEntity);
         TokenModel tokenModel = new TokenModel(token);
         return JSON.toJSONString(tokenModel);
     }
@@ -132,14 +120,14 @@ public class UsersController extends BaseController {
      * @param userId
      * @return
      */
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/getInfo", method = RequestMethod.POST)
     @ResponseBody
     public String getUserInfo(@RequestParam("token") String token,
                               @RequestParam("id") long userId) {
         if (StringUtil.isEmpty(token) || userId == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        UserEntity userEntity = tokenMap.get(token);
+        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
         if (userEntity == null) {
             throw new ServerException(ErrorCode.TOKEN_INVALID);
         }
@@ -148,13 +136,7 @@ public class UsersController extends BaseController {
             return JSON.toJSONString(userEntity);
         } else {
             int roleId = userEntity.getRoleId();
-            RoleEntity roleEntity = roleService.get(roleId);
-            if (roleEntity == null) {
-                throw new ServerException(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            List<RolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(roleId);
-            boolean hadPermission = PermissionUtil.check(rolePermissionList, PermissionConfig.TABLE_USER,
+            boolean hadPermission = PermissionUtil.check(roleId, PermissionConfig.TABLE_ROLE,
                     PermissionConfig.IDENTITY_SELECT);
             if (!hadPermission) {
                 throw new ServerException(ErrorCode.PERMISSION_DENIED);
@@ -186,7 +168,7 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
         UserEntity updateUser = null;
-        UserEntity userEntity = tokenMap.get(token);
+        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
         if (userEntity == null) {
             throw new ServerException(ErrorCode.TOKEN_INVALID);
         }
@@ -194,13 +176,7 @@ public class UsersController extends BaseController {
             updateUser = userEntity;
         } else {
             int onlineRoleId = userEntity.getRoleId();
-            RoleEntity roleEntity = roleService.get(onlineRoleId);
-            if (roleEntity == null) {
-                throw new ServerException(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            List<RolePermissionEntity> rolePermissionList = rolePermissionService.findByRoleId(onlineRoleId);
-            boolean hadPermission = PermissionUtil.check(rolePermissionList, PermissionConfig.TABLE_USER,
+            boolean hadPermission = PermissionUtil.check(onlineRoleId, PermissionConfig.TABLE_ROLE,
                     PermissionConfig.IDENTITY_SELECT);
             if (!hadPermission) {
                 throw new ServerException(ErrorCode.PERMISSION_DENIED);
