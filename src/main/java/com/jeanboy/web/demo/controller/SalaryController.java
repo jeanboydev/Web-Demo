@@ -4,10 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
-import com.jeanboy.web.demo.domain.entity.JobEntity;
-import com.jeanboy.web.demo.domain.entity.RoleEntity;
+import com.jeanboy.web.demo.domain.entity.SalaryEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
-import com.jeanboy.web.demo.domain.service.JobService;
+import com.jeanboy.web.demo.domain.service.SalaryService;
 import com.jeanboy.web.demo.exceptions.ServerException;
 import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +18,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/job", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-public class JobController extends BaseController {
+@RequestMapping(value = "/salary", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+public class SalaryController extends BaseController {
 
-    private final JobService jobService;
+    private final SalaryService salaryService;
 
     @Autowired
-    public JobController(JobService jobService) {
-        this.jobService = jobService;
+    public SalaryController(SalaryService salaryService) {
+        this.salaryService = salaryService;
     }
 
     @RequestMapping
@@ -36,65 +35,72 @@ public class JobController extends BaseController {
 
 
     /**
-     * 增加职位信息
-     * /job
+     * 增加薪资信息
+     * /salary
      * PUT
      *
      * @param token
-     * @param name
+     * @param monthlyValue
+     * @param jobId
      * @return
      */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public String put(@RequestHeader("token") String token,
-                      @RequestParam("name") String name) {
+                      @RequestParam("job_id") int jobId,
+                      @RequestParam("monthly_value") long monthlyValue) {
         if (StringUtil.isEmpty(token)
-                || StringUtil.isEmpty(name)) {
+                || jobId == 0
+                || monthlyValue == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_INSERT, true);
-        JobEntity jobEntity = new JobEntity();
-        jobEntity.setName(name);
-        jobEntity.setCreateTime(System.currentTimeMillis());
-        jobService.save(jobEntity);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_INSERT, true);
+        SalaryEntity salaryEntity = new SalaryEntity();
+        salaryEntity.setJobId(jobId);
+        salaryEntity.setMonthlyValue(monthlyValue);
+        salaryEntity.setCreateTime(System.currentTimeMillis());
+        salaryService.save(salaryEntity);
         return "";
     }
 
     /**
-     * 更新职位信息
-     * /job
+     * 更新薪资信息
+     * /salary
      * POST
      *
      * @param token
      * @param id
-     * @param name
+     * @param monthlyValue
+     * @param jobId
      * @return
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String post(@RequestHeader("token") String token,
                        @PathVariable("id") int id,
-                       @RequestParam("name") String name) {
+                       @RequestParam("job_id") int jobId,
+                       @RequestParam("monthly_value") long monthlyValue) {
         if (StringUtil.isEmpty(token)
-                || id == 0
-                || StringUtil.isEmpty(name)) {
+                || jobId == 0
+                || monthlyValue == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_UPDATE, true);
-        JobEntity jobEntity = jobService.get(id);
-        jobEntity.setName(name);
-        jobEntity.setCreateTime(System.currentTimeMillis());
-        jobService.update(jobEntity);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_UPDATE, true);
+        SalaryEntity salaryEntity = salaryService.get(id);
+        salaryEntity.setJobId(jobId);
+        salaryEntity.setMonthlyValue(monthlyValue);
+        salaryEntity.setCreateTime(System.currentTimeMillis());
+        salaryService.update(salaryEntity);
         return "";
     }
 
     /**
-     * 获取职位信息
-     * /job
+     * 获取薪资信息
+     * /salary
      * GET
      *
      * @param token
@@ -110,19 +116,19 @@ public class JobController extends BaseController {
         }
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, true);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
         if (id == 0) {
-            List<JobEntity> roleList = jobService.findAll();
-            return JSON.toJSONString(roleList);
+            List<SalaryEntity> salaryList = salaryService.findAll();
+            return JSON.toJSONString(salaryList);
         } else {
-            JobEntity jobEntity = jobService.get(id);
-            return JSON.toJSONString(jobEntity);
+            SalaryEntity salaryEntity = salaryService.get(id);
+            return JSON.toJSONString(salaryEntity);
         }
     }
 
     /**
-     * 删除职位信息
-     * /job
+     * 删除薪资信息
+     * /salary
      * DELETE
      *
      * @param token
@@ -139,8 +145,8 @@ public class JobController extends BaseController {
         }
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_DELETE, true);
-        jobService.delete(id);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_DELETE, true);
+        salaryService.delete(id);
         return "";
     }
 }
