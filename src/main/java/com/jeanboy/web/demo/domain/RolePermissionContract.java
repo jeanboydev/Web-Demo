@@ -23,5 +23,7 @@ public interface RolePermissionContract {
         Long save(RolePermissionEntity model);
 
         void update(RolePermissionEntity model);
+
+        void delete(Long id);
     }
 }

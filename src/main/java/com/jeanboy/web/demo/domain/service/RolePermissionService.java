@@ -41,4 +41,9 @@ public class RolePermissionService implements RolePermissionContract.Service {
     public void update(RolePermissionEntity model) {
         repository.update(model);
     }
+
+    @Override
+    public void delete(Long id) {
+        repository.delete(id);
+    }
 }

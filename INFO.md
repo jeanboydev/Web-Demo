@@ -38,7 +38,7 @@ response={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -50,7 +50,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -59,7 +59,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -88,7 +88,7 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -106,7 +106,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -115,7 +115,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -137,7 +137,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -146,7 +146,57 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
+header={
+    token:""
+}
+```
+
+## /permission
+
+- PUT
+
+```javascript
+URL="/relation"
+header={
+    token:""
+}
+params={
+    role_id:0,
+    permission_identity:0
+}
+```
+
+- POST
+
+```javascript
+URL="/relation/{id}"
+header={
+    token:""
+}
+params={
+    role_id:0,
+    permission_identity:0
+}
+```
+- GET
+
+```javascript
+URL="/relation/{id}"
+header={
+    token:""
+}
+```
+```javascript
+header={
+    token:""
+}
+```
+
+- DELETE
+
+```javascript
+URL="/relation/{id}"
 header={
     token:""
 }
@@ -169,19 +219,18 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
 params={
-    role_id:0,
     permission_identity:0
 }
 ```
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -190,51 +239,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
-header={
-    token:""
-}
-```
-
-## /permission
-
-- PUT
-
-```javascript
-header={
-    token:""
-}
-params={
-    role_id:0,
-    permission_identity:0
-}
-```
-
-- POST
-
-```javascript
-URL=/{id}
-header={
-    token:""
-}
-params={
-    role_id:0,
-    permission_identity:0
-}
-```
-- GET
-
-```javascript
-URL=/{id}
-header={
-    token:""
-}
-```
-
-- DELETE
-
-```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -257,7 +262,7 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -268,7 +273,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -277,7 +282,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -299,7 +304,7 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -310,7 +315,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -319,7 +324,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -342,7 +347,7 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -354,7 +359,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -363,7 +368,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -385,7 +390,7 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -396,7 +401,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -405,7 +410,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -431,7 +436,7 @@ params={
 - POST
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -446,7 +451,7 @@ params={
 - GET
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }
@@ -455,7 +460,7 @@ header={
 - DELETE
 
 ```javascript
-URL=/{id}
+URL="/{id}"
 header={
     token:""
 }

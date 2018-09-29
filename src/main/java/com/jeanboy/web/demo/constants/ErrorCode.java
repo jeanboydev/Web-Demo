@@ -8,6 +8,7 @@ public enum ErrorCode {
      * 400 请求错误：API 使用方式不正确/参数缺少/参数错误
      */
     PARAMETER_ERROR(400001, "参数错误"),
+    DATA_NOT_FOUND(400002, "数据未找到"),
 
     /**
      * 401 请求正确但没有权限：令牌失效/没有权限

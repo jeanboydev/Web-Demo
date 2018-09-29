@@ -4,12 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
-import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.exceptions.ServerException;
-import com.jeanboy.web.demo.utils.PermissionUtil;
 import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +45,7 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
-    public String addRole(@RequestHeader("token") String token,
+    public String put(@RequestHeader("token") String token,
                           @RequestParam("name") String name) {
         if (StringUtil.isEmpty(token)
                 || StringUtil.isEmpty(name)) {
@@ -74,8 +72,8 @@ public class RoleController extends BaseController {
      */
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public String deleteRole(@RequestHeader("token") String token,
-                             @PathVariable(value = "id", required = false) int roleId) {
+    public String get(@RequestHeader("token") String token,
+                          @PathVariable(value = "id", required = false) int roleId) {
         if (StringUtil.isEmpty(token)) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
@@ -89,5 +87,29 @@ public class RoleController extends BaseController {
             RoleEntity roleEntity = roleService.get(roleId);
             return JSON.toJSONString(roleEntity);
         }
+    }
+
+    /**
+     * 删除角色信息
+     * role/{id}
+     * DELETE
+     *
+     * @param token
+     * @param roleId
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public String delete(@RequestHeader("token") String token,
+                             @PathVariable("id") int roleId) {
+        if (StringUtil.isEmpty(token)
+                || roleId == 0) {
+            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        }
+
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_DELETE, true);
+        roleService.delete(roleId);
+        return "";
     }
 }

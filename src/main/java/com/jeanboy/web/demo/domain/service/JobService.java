@@ -7,6 +7,8 @@ import com.jeanboy.web.demo.domain.entity.JobEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class JobService implements JobContract.Service {
 
@@ -23,6 +25,11 @@ public class JobService implements JobContract.Service {
     }
 
     @Override
+    public List<JobEntity> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
     public Integer save(JobEntity model) {
         return repository.save(model);
     }
@@ -30,5 +37,10 @@ public class JobService implements JobContract.Service {
     @Override
     public void update(JobEntity model) {
         repository.update(model);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        repository.delete(id);
     }
 }
