@@ -64,7 +64,8 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_INSERT);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_INSERT, true);
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(username);
         userEntity.setPassword(password);
@@ -129,11 +130,12 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        UserEntity userEntity = checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_UPDATE);
+        UserEntity onlineUser = getOnlineUser(token);
         UserEntity resultUser;
-        if (userEntity.getId() == userId) {
-            resultUser = userEntity;
+        if (onlineUser.getId() == userId) {
+            resultUser = onlineUser;
         } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_UPDATE, true);
             resultUser = userService.get(userId);
         }
         if (resultUser == null) {
@@ -166,11 +168,12 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        UserEntity userEntity = checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT);
+        UserEntity onlineUser = getOnlineUser(token);
         UserEntity resultUser;
-        if (userEntity.getId() == userId) {
-            resultUser = userEntity;
+        if (onlineUser.getId() == userId) {
+            resultUser = onlineUser;
         } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
             resultUser = userService.get(userId);
         }
         return JSON.toJSONString(resultUser);
@@ -193,7 +196,8 @@ public class UsersController extends BaseController {
         if (StringUtil.isEmpty(token) || userId == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-        checkPermission(token, PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_DELETE);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_DELETE, true);
         List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userId);
         if (userInfoList.size() > 0) {
             UserInfoEntity userInfoEntity = userInfoList.get(0);
@@ -238,8 +242,8 @@ public class UsersController extends BaseController {
                 || departmentId == 0) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
-
-        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_INSERT);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_INSERT, true);
         UserInfoEntity userInfoEntity = new UserInfoEntity();
         userInfoEntity.setUserId(userId);
         userInfoEntity.setRealName(realName);
@@ -285,7 +289,8 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_UPDATE);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_UPDATE, true);
         List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userInfoId);
         if (userInfoList.size() > 0) {
             UserInfoEntity userInfoEntity = userInfoList.get(0);
@@ -332,13 +337,18 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT);
+        UserEntity onlineUser = getOnlineUser(token);
         List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userInfoId);
         if (userInfoList.isEmpty()) {
             throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
         }
         UserInfoEntity userInfoEntity = userInfoList.get(0);
-        return JSON.toJSONString(userInfoEntity);
+        if (userInfoEntity.getUserId() == onlineUser.getId()) {
+            return JSON.toJSONString(userInfoEntity);
+        } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
+            return JSON.toJSONString(userInfoEntity);
+        }
     }
 
 
@@ -360,7 +370,8 @@ public class UsersController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        checkPermission(token, PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_DELETE);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_DELETE, true);
         userInfoService.delete(userInfoId);
         return "";
     }

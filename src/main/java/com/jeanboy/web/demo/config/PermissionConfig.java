@@ -5,24 +5,24 @@ import java.util.Map;
 
 public class PermissionConfig {
 
-    public static final int ROLE_MASTER = 65535;            //1111 1111 1111 1111
+    public static final int ROLE_MASTER = 1048575;          //1111 1111 1111 1111 1111
 
-    public static final int IDENTITY_SELECT = 1;            //0000 0000 0000 0001
-    public static final int IDENTITY_INSERT = 2;            //0000 0000 0000 0010
-    public static final int IDENTITY_UPDATE = 4;            //0000 0000 0000 0100
-    public static final int IDENTITY_DELETE = 8;            //0000 0000 0000 1000
-    public static final int IDENTITY_MANAGER = 32768;       //1000 0000 0000 0000
+    public static final int IDENTITY_FACTOR = 4;
+    public static final int IDENTITY_SELECT = 1;            //0000 0000 0000 0000 0001
+    public static final int IDENTITY_INSERT = 1 << 1;       //0000 0000 0000 0000 0010
+    public static final int IDENTITY_UPDATE = 1 << 2;       //0000 0000 0000 0000 0100
+    public static final int IDENTITY_DELETE = 1 << 3;       //0000 0000 0000 0000 1000
 
-    public static final int TABLE_PERMISSION = 16;          //0000 0000 0001 0000
-    public static final int TABLE_ROLE = 32;                //0000 0000 0010 0000
-    public static final int TABLE_ROLE_PERMISSION = 64;     //0000 0000 0100 0000
-    public static final int TABLE_DEPARTMENT = 128;         //0000 0000 1000 0000
-    public static final int TABLE_JOB = 256;                //0000 0001 0000 0000
-    public static final int TABLE_SALARY = 512;             //0000 0010 0000 0000
-    public static final int TABLE_USER = 1024;              //0000 0100 0000 0000
-    public static final int TABLE_USER_INFO = 2048;         //0000 1000 0000 0000
-    public static final int TABLE_ATTENDANCE_TYPE = 4096;   //0001 0000 0000 0000
-    public static final int TABLE_ATTENDANCE = 8192;        //0010 0000 0000 0000
+    public static final int TABLE_PERMISSION = 1 << 8;      //0000 0000 0001 0000 0000
+    public static final int TABLE_ROLE = 1 << 9;            //0000 0000 0010 0000 0000
+    public static final int TABLE_ROLE_PERMISSION = 1 << 10;//0000 0000 0100 0000 0000
+    public static final int TABLE_DEPARTMENT = 1 << 11;     //0000 0000 1000 0000 0000
+    public static final int TABLE_JOB = 1 << 12;            //0000 0001 0000 0000 0000
+    public static final int TABLE_SALARY = 1 << 13;         //0000 0010 0000 0000 0000
+    public static final int TABLE_USER = 1 << 14;           //0000 0100 0000 0000 0000
+    public static final int TABLE_USER_INFO = 1 << 15;      //0000 1000 0000 0000 0000
+    public static final int TABLE_ATTENDANCE_TYPE = 1 << 16;//0001 0000 0000 0000 0000
+    public static final int TABLE_ATTENDANCE = 1 << 17;     //0010 0000 0000 0000 0000
 
     public static final Map<Integer, String> tableMap = new HashMap<>();
 

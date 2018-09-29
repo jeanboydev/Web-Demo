@@ -54,7 +54,8 @@ public class RoleController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        checkPermission(token, PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_INSERT);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_INSERT, true);
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setName(name);
         roleEntity.setCreateTime(System.currentTimeMillis());
@@ -79,7 +80,8 @@ public class RoleController extends BaseController {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
         }
 
-        checkPermission(token, PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT);
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
         if (roleId == 0) {
             List<RoleEntity> roleList = roleService.findAll();
             return JSON.toJSONString(roleList);

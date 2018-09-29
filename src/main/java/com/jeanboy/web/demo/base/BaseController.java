@@ -12,15 +12,19 @@ public class BaseController {
 
     protected Logger logger = LoggerFactory.getLogger(BaseController.class);
 
-    protected UserEntity checkPermission(String token, int table, int identity) {
+
+    protected UserEntity getOnlineUser(String token) {
         UserEntity userEntity = MemoryCache.getTokenMap().get(token);
         if (userEntity == null) {
             throw new ServerException(ErrorCode.TOKEN_INVALID);
         }
-        boolean hadPermission = PermissionUtil.check(userEntity.getRoleId(), table, identity);
+        return userEntity;
+    }
+
+    protected void checkPermission(int roleId, int table, int identity, boolean isPrivileged) {
+        boolean hadPermission = PermissionUtil.check(roleId, table, identity, isPrivileged);
         if (!hadPermission) {
             throw new ServerException(ErrorCode.PERMISSION_DENIED);
         }
-        return userEntity;
     }
 }
