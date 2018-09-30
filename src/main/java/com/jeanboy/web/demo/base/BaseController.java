@@ -5,7 +5,6 @@ import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.exceptions.ServerException;
 import com.jeanboy.web.demo.utils.PermissionUtil;
-import com.jeanboy.web.demo.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,15 +21,23 @@ public class BaseController {
         return userEntity;
     }
 
-    protected void checkParam(String param) {
-        if (StringUtil.isEmpty(param)) {
+    protected void checkParam(Object param) {
+        if (param == null) {
             throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
-    }
-
-    protected void checkParam(long param) {
-        if (param == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
+        } else if (param instanceof String) {
+            if (((String) param).isEmpty()) {
+                throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            }
+        } else if (param instanceof Number) {
+            if (((Number) param).intValue() == 0) {
+                throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            } else if (((Number) param).longValue() == 0) {
+                throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            } else if (((Number) param).doubleValue() == 0) {
+                throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            } else if (((Number) param).floatValue() == 0) {
+                throw new ServerException(ErrorCode.PARAMETER_ERROR);
+            }
         }
     }
 

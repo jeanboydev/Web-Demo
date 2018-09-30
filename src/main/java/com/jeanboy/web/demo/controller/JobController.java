@@ -47,10 +47,8 @@ public class JobController extends BaseController {
     @ResponseBody
     public String put(@RequestHeader("token") String token,
                       @RequestParam("name") String name) {
-        if (StringUtil.isEmpty(token)
-                || StringUtil.isEmpty(name)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+        checkParam(token);
+        checkParam(name);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_INSERT, true);
@@ -74,13 +72,11 @@ public class JobController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String post(@RequestHeader("token") String token,
-                       @PathVariable("id") int id,
+                       @PathVariable("id") Integer id,
                        @RequestParam("name") String name) {
-        if (StringUtil.isEmpty(token)
-                || id == 0
-                || StringUtil.isEmpty(name)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+        checkParam(token);
+        checkParam(id);
+        checkParam(name);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_UPDATE, true);
@@ -103,17 +99,16 @@ public class JobController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String get(@RequestHeader("token") String token,
-                      @PathVariable(value = "id", required = false) int id) {
-        if (StringUtil.isEmpty(token)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @PathVariable(value = "id", required = false) Integer id) {
+        checkParam(token);
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, true);
-        if (id == 0) {
+        if (id == null || id == 0) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, true);
             List<JobEntity> roleList = jobService.getAll();
             return JSON.toJSONString(roleList);
         } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, false);
             JobEntity jobEntity = jobService.get(id);
             return JSON.toJSONString(jobEntity);
         }
@@ -131,11 +126,9 @@ public class JobController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String delete(@RequestHeader("token") String token,
-                         @PathVariable("id") int id) {
-        if (StringUtil.isEmpty(token)
-                || id == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                         @PathVariable("id") Integer id) {
+        checkParam(token);
+        checkParam(id);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_DELETE, true);

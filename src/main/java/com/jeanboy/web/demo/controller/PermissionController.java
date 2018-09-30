@@ -9,7 +9,6 @@ import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.PermissionService;
 import com.jeanboy.web.demo.domain.service.RolePermissionService;
 import com.jeanboy.web.demo.exceptions.ServerException;
-import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -50,12 +49,11 @@ public class PermissionController extends BaseController {
     @RequestMapping(value = "/relation", method = RequestMethod.PUT)
     @ResponseBody
     public String put(@RequestHeader("token") String token,
-                      @RequestParam("role_id") int roleId,
-                      @RequestParam("permission_identity") int permissionIdentity) {
-        if (StringUtil.isEmpty(token)
-                || roleId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @RequestParam("role_id") Integer roleId,
+                      @RequestParam("permission_identity") Integer permissionIdentity) {
+        checkParam(token);
+        checkParam(roleId);
+        checkParam(permissionIdentity);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_INSERT, true);
@@ -80,11 +78,11 @@ public class PermissionController extends BaseController {
     @RequestMapping(value = "/relation/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String post(@RequestHeader("token") String token,
-                       @PathVariable("id") long id,
-                       @RequestParam("permission_identity") int permissionIdentity) {
-        if (StringUtil.isEmpty(token)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                       @PathVariable("id") Long id,
+                       @RequestParam("permission_identity") Integer permissionIdentity) {
+        checkParam(token);
+        checkParam(id);
+        checkParam(permissionIdentity);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_UPDATE, true);
@@ -110,14 +108,12 @@ public class PermissionController extends BaseController {
     @RequestMapping(value = "/relation/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String get(@RequestHeader("token") String token,
-                      @PathVariable(value = "id", required = false) long id) {
-        if (StringUtil.isEmpty(token)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @PathVariable(value = "id", required = false) Long id) {
+        checkParam(token);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_SELECT, true);
-        if (id == 0) {
+        if (id == null || id == 0) {
             List<RolePermissionEntity> rolePermissionList = rolePermissionService.getAll();
             return JSON.toJSONString(rolePermissionList);
         } else {
@@ -141,16 +137,11 @@ public class PermissionController extends BaseController {
     @RequestMapping(value = "/relation/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String delete(@RequestHeader("token") String token,
-                       @PathVariable("id") long id) {
-        if (StringUtil.isEmpty(token)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                         @PathVariable("id") Long id) {
+        checkParam(token);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_DELETE, true);
-        if (id == 0) {
-            throw new ServerException(ErrorCode.DATA_NOT_FOUND);
-        }
         rolePermissionService.delete(id);
         return "";
     }

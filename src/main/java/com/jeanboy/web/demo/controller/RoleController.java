@@ -3,12 +3,10 @@ package com.jeanboy.web.demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
-import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.RoleService;
 import com.jeanboy.web.demo.exceptions.ServerException;
-import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -46,11 +44,9 @@ public class RoleController extends BaseController {
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public String put(@RequestHeader("token") String token,
-                          @RequestParam("name") String name) {
-        if (StringUtil.isEmpty(token)
-                || StringUtil.isEmpty(name)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @RequestParam("name") String name) {
+        checkParam(token);
+        checkParam(name);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_INSERT, true);
@@ -73,17 +69,16 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String get(@RequestHeader("token") String token,
-                          @PathVariable(value = "id", required = false) int roleId) {
-        if (StringUtil.isEmpty(token)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @PathVariable(value = "id", required = false) Integer roleId) {
+        checkParam(token);
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
-        if (roleId == 0) {
+        if (roleId == null || roleId == 0) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
             List<RoleEntity> roleList = roleService.getAll();
             return JSON.toJSONString(roleList);
         } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, false);
             RoleEntity roleEntity = roleService.get(roleId);
             return JSON.toJSONString(roleEntity);
         }
@@ -101,11 +96,9 @@ public class RoleController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String delete(@RequestHeader("token") String token,
-                             @PathVariable("id") int roleId) {
-        if (StringUtil.isEmpty(token)
-                || roleId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                         @PathVariable("id") Integer roleId) {
+        checkParam(token);
+        checkParam(roleId);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_DELETE, true);

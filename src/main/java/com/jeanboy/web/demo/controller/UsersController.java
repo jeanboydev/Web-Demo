@@ -56,13 +56,11 @@ public class UsersController extends BaseController {
     public String signUp(@RequestHeader("token") String token,
                          @RequestParam("username") String username,
                          @RequestParam("password") String password,
-                         @RequestParam("role_id") int roleId) {
-        if (StringUtil.isEmpty(token)
-                || StringUtil.isEmpty(username)
-                || StringUtil.isEmpty(password)
-                || roleId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                         @RequestParam("role_id") Integer roleId) {
+        checkParam(token);
+        checkParam(username);
+        checkParam(password);
+        checkParam(roleId);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_INSERT, true);
@@ -88,9 +86,8 @@ public class UsersController extends BaseController {
     @ResponseBody
     public String signIn(@RequestParam("username") String username,
                          @RequestParam("password") String password) {
-        if (StringUtil.isEmpty(username) || StringUtil.isEmpty(password)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+        checkParam(username);
+        checkParam(password);
 
         List<UserEntity> userList = userService.findByUsername(username);
         if (userList.isEmpty()) {
@@ -122,17 +119,16 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String updateUser(@RequestHeader("token") String token,
-                             @PathVariable("id") long userId,
+                             @PathVariable("id") Long userId,
                              @RequestParam(value = "password", required = false) String password,
-                             @RequestParam(value = "role_id", required = false) int roleId) {
-        if (StringUtil.isEmpty(token)
-                || (StringUtil.isEmpty(password) && roleId == 0)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                             @RequestParam(value = "role_id", required = false) Integer roleId) {
+        checkParam(token);
+        checkParam(userId);
 
         UserEntity onlineUser = getOnlineUser(token);
         UserEntity resultUser;
         if (onlineUser.getId() == userId) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_UPDATE, false);
             resultUser = onlineUser;
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_UPDATE, true);
@@ -144,7 +140,7 @@ public class UsersController extends BaseController {
         if (!StringUtil.isEmpty(password)) {
             resultUser.setPassword(password);
         }
-        if (roleId != 0) {
+        if (roleId != null && roleId != 0) {
             resultUser.setRoleId(roleId);
         }
         userService.update(resultUser);
@@ -163,14 +159,14 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String getUser(@RequestHeader("token") String token,
-                          @PathVariable("id") long userId) {
-        if (StringUtil.isEmpty(token) || userId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                          @PathVariable("id") Long userId) {
+        checkParam(token);
+        checkParam(userId);
 
         UserEntity onlineUser = getOnlineUser(token);
         UserEntity resultUser;
         if (onlineUser.getId() == userId) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, false);
             resultUser = onlineUser;
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
@@ -192,10 +188,10 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String deleteUser(@RequestHeader("token") String token,
-                             @PathVariable("id") long userId) {
-        if (StringUtil.isEmpty(token) || userId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                             @PathVariable("id") Long userId) {
+        checkParam(token);
+        checkParam(userId);
+
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_DELETE, true);
         List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userId);
@@ -225,23 +221,22 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/info", method = RequestMethod.PUT)
     @ResponseBody
     public String addUserInfo(@RequestHeader("token") String token,
-                              @RequestParam("id") long userId,
+                              @RequestParam("id") Long userId,
                               @RequestParam("real_name") String realName,
-                              @RequestParam("gender") int gender,
-                              @RequestParam("birthday") long birthday,
-                              @RequestParam("education_level") int educationLevel,
-                              @RequestParam("job_id") int jobId,
-                              @RequestParam("department_id") int departmentId) {
-        if (StringUtil.isEmpty(token)
-                || userId == 0
-                || StringUtil.isEmpty(realName)
-                || gender == 0
-                || birthday == 0
-                || educationLevel == 0
-                || jobId == 0
-                || departmentId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                              @RequestParam("gender") Integer gender,
+                              @RequestParam("birthday") Long birthday,
+                              @RequestParam("education_level") Integer educationLevel,
+                              @RequestParam("job_id") Integer jobId,
+                              @RequestParam("department_id") Integer departmentId) {
+        checkParam(token);
+        checkParam(userId);
+        checkParam(realName);
+        checkParam(gender);
+        checkParam(birthday);
+        checkParam(educationLevel);
+        checkParam(jobId);
+        checkParam(departmentId);
+
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_INSERT, true);
         UserInfoEntity userInfoEntity = new UserInfoEntity();
@@ -276,18 +271,16 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/info/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String updateUserInfo(@RequestHeader("token") String token,
-                                 @PathVariable("id") long userInfoId,
+                                 @PathVariable("id") Long userInfoId,
                                  @RequestParam(value = "real_name", required = false) String realName,
-                                 @RequestParam(value = "gender", required = false) int gender,
-                                 @RequestParam(value = "birthday", required = false) long birthday,
-                                 @RequestParam(value = "education_level", required = false) int educationLevel,
-                                 @RequestParam(value = "job_id", required = false) int jobId,
-                                 @RequestParam(value = "department_id", required = false) int departmentId) {
+                                 @RequestParam(value = "gender", required = false) Integer gender,
+                                 @RequestParam(value = "birthday", required = false) Long birthday,
+                                 @RequestParam(value = "education_level", required = false) Integer educationLevel,
+                                 @RequestParam(value = "job_id", required = false) Integer jobId,
+                                 @RequestParam(value = "department_id", required = false) Integer departmentId) {
 
-        if (StringUtil.isEmpty(token)
-                || userInfoId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+        checkParam(token);
+        checkParam(userInfoId);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_UPDATE, true);
@@ -297,19 +290,19 @@ public class UsersController extends BaseController {
             if (!StringUtil.isEmpty(realName)) {
                 userInfoEntity.setRealName(realName);
             }
-            if (gender != 0) {
+            if (gender != null && gender != 0) {
                 userInfoEntity.setGender(gender);
             }
-            if (birthday != 0) {
+            if (birthday != null && birthday != 0) {
                 userInfoEntity.setBirthday(birthday);
             }
-            if (educationLevel != 0) {
+            if (educationLevel != null && educationLevel != 0) {
                 userInfoEntity.setEducationLevel(educationLevel);
             }
-            if (jobId != 0) {
+            if (jobId != null && jobId != 0) {
                 userInfoEntity.setJobId(jobId);
             }
-            if (departmentId != 0) {
+            if (departmentId != null && departmentId != 0) {
                 userInfoEntity.setDepartmentId(departmentId);
             }
             userInfoEntity.setUpdateTime(System.currentTimeMillis());
@@ -331,11 +324,9 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/info/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String getUserInfo(@RequestHeader("token") String token,
-                              @PathVariable("id") long userInfoId) {
-        if (StringUtil.isEmpty(token)
-                || userInfoId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                              @PathVariable("id") Long userInfoId) {
+        checkParam(token);
+        checkParam(userInfoId);
 
         UserEntity onlineUser = getOnlineUser(token);
         List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userInfoId);
@@ -344,6 +335,7 @@ public class UsersController extends BaseController {
         }
         UserInfoEntity userInfoEntity = userInfoList.get(0);
         if (userInfoEntity.getUserId() == onlineUser.getId()) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, false);
             return JSON.toJSONString(userInfoEntity);
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
@@ -364,11 +356,9 @@ public class UsersController extends BaseController {
     @RequestMapping(value = "/info/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String updateUserInfo(@RequestHeader("token") String token,
-                                 @PathVariable("id") long userInfoId) {
-        if (StringUtil.isEmpty(token)
-                || userInfoId == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                                 @PathVariable("id") Long userInfoId) {
+        checkParam(token);
+        checkParam(userInfoId);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_DELETE, true);

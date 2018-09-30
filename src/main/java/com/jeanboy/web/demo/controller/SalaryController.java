@@ -3,12 +3,10 @@ package com.jeanboy.web.demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
-import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.entity.SalaryEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.SalaryService;
 import com.jeanboy.web.demo.exceptions.ServerException;
-import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -47,13 +45,11 @@ public class SalaryController extends BaseController {
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     public String put(@RequestHeader("token") String token,
-                      @RequestParam("job_id") int jobId,
-                      @RequestParam("monthly_value") long monthlyValue) {
-        if (StringUtil.isEmpty(token)
-                || jobId == 0
-                || monthlyValue == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @RequestParam("job_id") Integer jobId,
+                      @RequestParam("monthly_value") Long monthlyValue) {
+        checkParam(token);
+        checkParam(jobId);
+        checkParam(monthlyValue);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_INSERT, true);
@@ -79,14 +75,12 @@ public class SalaryController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     public String post(@RequestHeader("token") String token,
-                       @PathVariable("id") int id,
-                       @RequestParam("job_id") int jobId,
-                       @RequestParam("monthly_value") long monthlyValue) {
-        if (StringUtil.isEmpty(token)
-                || jobId == 0
-                || monthlyValue == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                       @PathVariable("id") Integer id,
+                       @RequestParam("job_id") Integer jobId,
+                       @RequestParam("monthly_value") Long monthlyValue) {
+        checkParam(token);
+        checkParam(jobId);
+        checkParam(monthlyValue);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_UPDATE, true);
@@ -110,17 +104,16 @@ public class SalaryController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
     public String get(@RequestHeader("token") String token,
-                      @PathVariable(value = "id", required = false) int id) {
-        if (StringUtil.isEmpty(token)) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                      @PathVariable(value = "id", required = false) Integer id) {
+        checkParam(token);
 
         UserEntity onlineUser = getOnlineUser(token);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
-        if (id == 0) {
+        if (id == null || id == 0) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
             List<SalaryEntity> salaryList = salaryService.getAll();
             return JSON.toJSONString(salaryList);
         } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, false);
             SalaryEntity salaryEntity = salaryService.get(id);
             return JSON.toJSONString(salaryEntity);
         }
@@ -138,11 +131,9 @@ public class SalaryController extends BaseController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String delete(@RequestHeader("token") String token,
-                         @PathVariable("id") int id) {
-        if (StringUtil.isEmpty(token)
-                || id == 0) {
-            throw new ServerException(ErrorCode.PARAMETER_ERROR);
-        }
+                         @PathVariable("id") Integer id) {
+        checkParam(token);
+        checkParam(id);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_DELETE, true);

@@ -5,6 +5,8 @@ import com.jeanboy.web.demo.domain.entity.DepartmentEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DepartmentService implements DepartmentContract.Service {
 
@@ -21,6 +23,11 @@ public class DepartmentService implements DepartmentContract.Service {
     }
 
     @Override
+    public List<DepartmentEntity> getAll() {
+        return repository.getAll();
+    }
+
+    @Override
     public Integer save(DepartmentEntity model) {
         return repository.save(model);
     }
@@ -28,5 +35,10 @@ public class DepartmentService implements DepartmentContract.Service {
     @Override
     public void update(DepartmentEntity model) {
         repository.update(model);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        repository.delete(id);
     }
 }
