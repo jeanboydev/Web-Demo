@@ -1,8 +1,6 @@
 package com.jeanboy.web.demo.domain.service;
 
-import com.jeanboy.web.demo.domain.DepartmentContract;
 import com.jeanboy.web.demo.domain.JobContract;
-import com.jeanboy.web.demo.domain.entity.DepartmentEntity;
 import com.jeanboy.web.demo.domain.entity.JobEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,8 +23,8 @@ public class JobService implements JobContract.Service {
     }
 
     @Override
-    public List<JobEntity> findAll() {
-        return repository.findAll();
+    public List<JobEntity> getAll() {
+        return repository.getAll();
     }
 
     @Override

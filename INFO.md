@@ -441,11 +441,9 @@ header={
     token:""
 }
 params={
-    user_id:0,
     start_time:0,
     end_time:0,
     create_date:0,
-    attendance_type_id:0
 }
 ```
 - GET

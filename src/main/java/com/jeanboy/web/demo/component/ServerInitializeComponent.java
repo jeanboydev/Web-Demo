@@ -46,7 +46,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
     public void onApplicationEvent(ContextRefreshedEvent event) {
         logger.info("======================初始化配置信息======================");
 
-        List<PermissionEntity> permissionEntityList = permissionService.findAll();
+        List<PermissionEntity> permissionEntityList = permissionService.getAll();
         if (permissionEntityList.isEmpty()) {
             logger.info("======================初始化权限表信息======================");
             for (Integer key : PermissionConfig.tableMap.keySet()) {
@@ -58,7 +58,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             }
         }
 
-        List<RolePermissionEntity> permissionList = rolePermissionService.findAll();
+        List<RolePermissionEntity> permissionList = rolePermissionService.getAll();
         int roleManagerId = 0;
         boolean isMasterReady = false;
         if (!permissionList.isEmpty()) {
@@ -98,12 +98,12 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
         }
 
 
-        List<RoleEntity> roleList = roleService.findAll();
+        List<RoleEntity> roleList = roleService.getAll();
         for (RoleEntity entity : roleList) {
             MemoryCache.getRoleMap().put(entity.getId(), entity);
         }
 
-        List<RolePermissionEntity> rolePermissionList = rolePermissionService.findAll();
+        List<RolePermissionEntity> rolePermissionList = rolePermissionService.getAll();
         for (RolePermissionEntity entity : rolePermissionList) {
             MemoryCache.getPermissionMap().put(entity.getId(), entity);
         }

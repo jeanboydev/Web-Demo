@@ -81,7 +81,7 @@ public class RoleController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
         if (roleId == 0) {
-            List<RoleEntity> roleList = roleService.findAll();
+            List<RoleEntity> roleList = roleService.getAll();
             return JSON.toJSONString(roleList);
         } else {
             RoleEntity roleEntity = roleService.get(roleId);

@@ -15,7 +15,7 @@ public interface SalaryContract {
 
         SalaryEntity get(Integer id);
 
-        List<SalaryEntity> findAll();
+        List<SalaryEntity> getAll();
 
         Integer save(SalaryEntity model);
 

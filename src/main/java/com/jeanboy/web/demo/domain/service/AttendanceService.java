@@ -5,6 +5,8 @@ import com.jeanboy.web.demo.domain.entity.AttendanceEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AttendanceService implements AttendanceContract.Service {
 
@@ -21,6 +23,11 @@ public class AttendanceService implements AttendanceContract.Service {
     }
 
     @Override
+    public List<AttendanceEntity> getAll() {
+        return repository.getAll();
+    }
+
+    @Override
     public Long save(AttendanceEntity model) {
         return repository.save(model);
     }
@@ -28,5 +35,10 @@ public class AttendanceService implements AttendanceContract.Service {
     @Override
     public void update(AttendanceEntity model) {
         repository.update(model);
+    }
+
+    @Override
+    public void delete(Long id) {
+        repository.delete(id);
     }
 }

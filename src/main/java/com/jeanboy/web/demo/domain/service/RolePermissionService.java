@@ -28,8 +28,8 @@ public class RolePermissionService implements RolePermissionContract.Service {
     }
 
     @Override
-    public List<RolePermissionEntity> findAll() {
-        return repository.findAll();
+    public List<RolePermissionEntity> getAll() {
+        return repository.getAll();
     }
 
     @Override

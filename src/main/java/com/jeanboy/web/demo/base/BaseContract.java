@@ -8,6 +8,7 @@ public interface BaseContract<PK extends Serializable, T> {
     /**
      * 延迟加载，不执行 SQL 语句，只是获取到对象的 id；
      * 当使用这个对象时，才从数据库中查询。
+     *
      * @param id
      * @return
      */
@@ -15,12 +16,18 @@ public interface BaseContract<PK extends Serializable, T> {
 
     /**
      * 直接执行 SQL 语句查询对象。
+     *
      * @param id
      * @return
      */
     T get(PK id);
 
-    List<T> findAll();
+    /**
+     * 直接执行 SQL 语句查询所有对象。
+     *
+     * @return
+     */
+    List<T> getAll();
 
     /**
      * 立即执行 SQL 语句 insert into 返回一个主键值；
@@ -32,7 +39,6 @@ public interface BaseContract<PK extends Serializable, T> {
     PK save(T entity);
 
     /**
-     *
      * 将实体对象添加到持久化上下文中，实体后续改变也会被记录；
      * 提交事务或者调用 flush() 方法，实体对象后续改变也会被保存到数据库中；
      * 必须在事务内执行，才能够将数据插入数据库。如果不在事务范围内执行，数据将丢失；

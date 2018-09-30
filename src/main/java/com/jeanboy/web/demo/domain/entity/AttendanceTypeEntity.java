@@ -10,7 +10,7 @@ public class AttendanceTypeEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
     @Column(nullable = false)
-    private int name;
+    private String name;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
 
@@ -22,11 +22,11 @@ public class AttendanceTypeEntity implements Serializable {
         this.id = id;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
     }
 

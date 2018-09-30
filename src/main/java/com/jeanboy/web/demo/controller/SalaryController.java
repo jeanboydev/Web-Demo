@@ -118,7 +118,7 @@ public class SalaryController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
         if (id == 0) {
-            List<SalaryEntity> salaryList = salaryService.findAll();
+            List<SalaryEntity> salaryList = salaryService.getAll();
             return JSON.toJSONString(salaryList);
         } else {
             SalaryEntity salaryEntity = salaryService.get(id);

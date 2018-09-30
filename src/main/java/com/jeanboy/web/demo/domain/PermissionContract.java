@@ -15,7 +15,7 @@ public interface PermissionContract {
 
         PermissionEntity get(Integer id);
 
-        List<PermissionEntity> findAll();
+        List<PermissionEntity> getAll();
 
         Integer save(PermissionEntity model);
     }

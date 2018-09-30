@@ -18,7 +18,7 @@ public interface RolePermissionContract {
 
         List<RolePermissionEntity> findByRoleId(Integer roleId);
 
-        List<RolePermissionEntity> findAll();
+        List<RolePermissionEntity> getAll();
 
         Long save(RolePermissionEntity model);
 

@@ -15,7 +15,7 @@ public interface RoleContract {
 
         RoleEntity get(Integer id);
 
-        List<RoleEntity> findAll();
+        List<RoleEntity> getAll();
 
         Integer save(RoleEntity model);
 

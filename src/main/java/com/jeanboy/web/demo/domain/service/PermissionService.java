@@ -23,8 +23,8 @@ public class PermissionService implements PermissionContract.Service {
     }
 
     @Override
-    public List<PermissionEntity> findAll() {
-        return repository.findAll();
+    public List<PermissionEntity> getAll() {
+        return repository.getAll();
     }
 
     @Override

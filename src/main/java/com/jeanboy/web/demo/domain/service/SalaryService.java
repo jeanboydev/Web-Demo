@@ -23,8 +23,8 @@ public class SalaryService implements SalaryContract.Service {
     }
 
     @Override
-    public List<SalaryEntity> findAll() {
-        return repository.findAll();
+    public List<SalaryEntity> getAll() {
+        return repository.getAll();
     }
 
     @Override

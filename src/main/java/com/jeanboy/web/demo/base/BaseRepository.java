@@ -78,7 +78,7 @@ public abstract class BaseRepository<PK extends Serializable, T> implements Base
     }
 
     @Override
-    public List<T> findAll() {
+    public List<T> getAll() {
         Session session = getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<T> query = builder.createQuery(getClazz());

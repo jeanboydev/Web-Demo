@@ -15,7 +15,7 @@ public interface JobContract {
 
         JobEntity get(Integer id);
 
-        List<JobEntity> findAll();
+        List<JobEntity> getAll();
 
         Integer save(JobEntity model);
 

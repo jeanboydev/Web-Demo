@@ -5,7 +5,6 @@ import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.entity.JobEntity;
-import com.jeanboy.web.demo.domain.entity.RoleEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.JobService;
 import com.jeanboy.web.demo.exceptions.ServerException;
@@ -112,7 +111,7 @@ public class JobController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, true);
         if (id == 0) {
-            List<JobEntity> roleList = jobService.findAll();
+            List<JobEntity> roleList = jobService.getAll();
             return JSON.toJSONString(roleList);
         } else {
             JobEntity jobEntity = jobService.get(id);

@@ -5,6 +5,8 @@ import com.jeanboy.web.demo.domain.entity.AttendanceTypeEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class AttendanceTypeService implements AttendanceTypeContract.Service {
 
@@ -21,6 +23,11 @@ public class AttendanceTypeService implements AttendanceTypeContract.Service {
     }
 
     @Override
+    public List<AttendanceTypeEntity> getAll() {
+        return repository.getAll();
+    }
+
+    @Override
     public Integer save(AttendanceTypeEntity model) {
         return repository.save(model);
     }
@@ -28,5 +35,10 @@ public class AttendanceTypeService implements AttendanceTypeContract.Service {
     @Override
     public void update(AttendanceTypeEntity model) {
         repository.update(model);
+    }
+
+    @Override
+    public void delete(Integer id) {
+        repository.delete(id);
     }
 }

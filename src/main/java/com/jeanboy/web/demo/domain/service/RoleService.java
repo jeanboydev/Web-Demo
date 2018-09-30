@@ -23,8 +23,8 @@ public class RoleService implements RoleContract.Service {
     }
 
     @Override
-    public List<RoleEntity> findAll() {
-        return repository.findAll();
+    public List<RoleEntity> getAll() {
+        return repository.getAll();
     }
 
     @Override
