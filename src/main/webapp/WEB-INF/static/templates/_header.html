@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header(title,links,styles)">
+    <meta charset="UTF-8">
+    <title th:replace="${title}"></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.css}"/>
+
+    <th:block th:replace="${links}"/>
+    <th:block th:replace="${styles}"/>
+</head>
+<body>
+
+</body>
+</html>

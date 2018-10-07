@@ -15,7 +15,8 @@
     <mvc:annotation-driven/>
 
     <!-- 配置静态资源交给默认的 Servlet 处理 -->
-    <mvc:default-servlet-handler/>
+    <!--<mvc:default-servlet-handler/>-->
+    <mvc:resources mapping="/static/**" location="/WEB-INF/static/"/>
 
     <!-- 配置视图解析器 -->
     <!--<bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">-->
@@ -25,9 +26,8 @@
     <!--</bean>-->
 
     <!-- 配置 Thymeleaf 视图解析器 -->
-    <bean id="templateResolver"
-          class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
-        <property name="prefix" value="/WEB-INF/views/"/>
+    <bean id="templateResolver" class="org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver">
+        <property name="prefix" value="/WEB-INF/static/templates/"/>
         <property name="suffix" value=".html"/>
         <property name="templateMode" value="HTML5"/>
         <property name="cacheable" value="false"/>

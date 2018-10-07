@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_header::header(~{::title},~{::link},~{})">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/static/css/index.css}">
+</head>
+<body>
+
+<div class="container-center shadow-sm rounded col-lg-3 p-lg-4">
+        <h2 class="text-center">管理员登录</h2>
+        <form class="form">
+            <div class="form-group">
+                <label for="username">用户名：</label>
+                <input id="username" type="text" class="form-control" placeholder="请输入用户名"/>
+            </div>
+            <div class="form-group">
+                <label for="password">密码：</label>
+                <input id="password" type="password" class="form-control" placeholder="请输入密码"/>
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary btn-lg btn-block">登录</button>
+            </div>
+        </form>
+</div>
+
+<div th:replace="_footer::footer"></div>
+</body>
+</html>

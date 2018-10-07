@@ -37,7 +37,6 @@ public class TokenController extends BaseController {
         throw new ServerException(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-
     /**
      * 登录
      * /users

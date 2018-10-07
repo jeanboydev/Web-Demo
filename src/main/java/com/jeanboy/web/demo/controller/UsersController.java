@@ -41,6 +41,12 @@ public class UsersController extends BaseController {
         throw new ServerException(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
+//    @RequestMapping(value = "/test", method = RequestMethod.GET)
+//    public String test(Model model) {
+//        model.addAttribute("title", "|Hello thymeleaf|");
+//        return "test";
+//    }
+
     /**
      * 注册
      * /users
