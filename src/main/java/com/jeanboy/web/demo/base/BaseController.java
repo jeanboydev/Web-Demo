@@ -14,7 +14,7 @@ public class BaseController {
 
 
     protected UserEntity getOnlineUser(String token) {
-        UserEntity userEntity = MemoryCache.getTokenMap().get(token);
+        UserEntity userEntity = MemoryCache.getUserEntity(token);
         if (userEntity == null) {
             throw new ServerException(ErrorCode.TOKEN_INVALID);
         }

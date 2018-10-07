@@ -100,12 +100,12 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
 
         List<RoleEntity> roleList = roleService.getAll();
         for (RoleEntity entity : roleList) {
-            MemoryCache.getRoleMap().put(entity.getId(), entity);
+            MemoryCache.putRoleEntity(entity.getId(), entity);
         }
 
         List<RolePermissionEntity> rolePermissionList = rolePermissionService.getAll();
         for (RolePermissionEntity entity : rolePermissionList) {
-            MemoryCache.getPermissionMap().put(entity.getId(), entity);
+            MemoryCache.putRolePermissionEntity(entity.getRoleId(), entity);
         }
 
     }

@@ -7,7 +7,7 @@ import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
 public class PermissionUtil {
 
     public static boolean check(int roleId, int table, int identity, boolean isPrivileged) {
-        RolePermissionEntity rolePermissionEntity = MemoryCache.getPermissionMap().get(roleId);
+        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleId);
         if (rolePermissionEntity == null) return false;
         int permissionIdentity = rolePermissionEntity.getPermissionIdentity();
         System.out.println("=======check====permissionIdentity===" + permissionIdentity);

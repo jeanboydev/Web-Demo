@@ -115,7 +115,7 @@ public class AttendanceController extends BaseController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/type/{id}", method = RequestMethod.DELETE)
     @ResponseBody
     public String deleteType(@RequestHeader("token") String token,
                              @PathVariable("id") Integer id) {

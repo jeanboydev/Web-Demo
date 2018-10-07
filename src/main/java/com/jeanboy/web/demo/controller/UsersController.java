@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -71,37 +72,6 @@ public class UsersController extends BaseController {
         userEntity.setRoleId(roleId);
         userService.save(userEntity);
         return "";
-    }
-
-    /**
-     * 登录
-     * /users
-     * POST
-     *
-     * @param username
-     * @param password
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
-    public String signIn(@RequestParam("username") String username,
-                         @RequestParam("password") String password) {
-        checkParam(username);
-        checkParam(password);
-
-        List<UserEntity> userList = userService.findByUsername(username);
-        if (userList.isEmpty()) {
-            throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
-        }
-        UserEntity userEntity = userList.get(0);
-        String cachePassword = userEntity.getPassword();
-        if (!password.toUpperCase().equals(cachePassword)) {
-            throw new ServerException(ErrorCode.PASSWORD_ERROR);
-        }
-        String token = TokenUtil.getToken(userEntity.getId());
-        MemoryCache.getTokenMap().put(token, userEntity);
-        TokenModel tokenModel = new TokenModel(token);
-        return JSON.toJSONString(tokenModel);
     }
 
     /**
