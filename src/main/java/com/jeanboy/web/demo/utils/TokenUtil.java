@@ -42,6 +42,7 @@ public class TokenUtil {
             byte[] sha256 = md.digest(token.getBytes());
             BASE64Encoder encoder = new BASE64Encoder();
             String tokenEncode = encoder.encode(sha256);
+            System.out.println("==========tokenEncode============" + tokenEncode);
             return new TokenModel(tokenEncode, System.currentTimeMillis() + DURATION);
         } catch (Exception e) {
             e.printStackTrace();

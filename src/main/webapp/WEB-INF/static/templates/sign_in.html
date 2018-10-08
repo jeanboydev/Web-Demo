@@ -6,7 +6,8 @@
 </head>
 <body>
 
-<div class="container-center shadow-sm rounded col-lg-3 col-md-6 p-4">
+<div class="container-center shadow-sm rounded col-lg-3 col-md-6 col-sm-10 p-4">
+    <div id="toast"></div>
     <h2 class="text-center">管理员登录</h2>
     <form id="formSignIn">
         <div class="form-group">
@@ -23,7 +24,6 @@
         </div>
     </form>
 </div>
-
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/sign_in.js}"></script>
 </div>

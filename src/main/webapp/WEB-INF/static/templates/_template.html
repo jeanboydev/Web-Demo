@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_header::header(~{::title},~{::link},~{})">
+    <title>模板</title>
+    <link rel="stylesheet" th:href="@{/static/css/xxx.css}">
+</head>
+<body>
+
+<div th:replace="_footer::footer(~{::script})">
+    <script th:src="@{/static/js/xxx.js}"></script>
+</div>
+</body>
+</html>

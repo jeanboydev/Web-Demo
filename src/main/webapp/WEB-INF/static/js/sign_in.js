@@ -1,7 +1,12 @@
 function toSignIn() {
     var username = $("input[name='username']").val();
     var password = $("input[name='password']").val();
-    if (username === "" || password === "") {
+    if (username === "") {
+        showToast("用户名", "不能为空！");
+        return;
+    }
+    if (password === "") {
+        showToast("密码", "不能为空！");
         return;
     }
     $.ajax(host + "/token", {
@@ -12,7 +17,7 @@ function toSignIn() {
             password: md5(password)
         },
         success: function (data) {
-            console.warn(data);
+            $(location).attr('href', host + "/console?token=" + encodeURIComponent(data.token));
         },
         error: function (error) {
             console.error(error.responseText);

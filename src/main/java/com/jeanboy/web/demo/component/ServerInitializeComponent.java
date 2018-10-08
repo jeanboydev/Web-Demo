@@ -3,14 +3,8 @@ package com.jeanboy.web.demo.component;
 import com.jeanboy.web.demo.config.AccountConfig;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.cache.MemoryCache;
-import com.jeanboy.web.demo.domain.entity.PermissionEntity;
-import com.jeanboy.web.demo.domain.entity.RoleEntity;
-import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
-import com.jeanboy.web.demo.domain.entity.UserEntity;
-import com.jeanboy.web.demo.domain.service.PermissionService;
-import com.jeanboy.web.demo.domain.service.RolePermissionService;
-import com.jeanboy.web.demo.domain.service.RoleService;
-import com.jeanboy.web.demo.domain.service.UserService;
+import com.jeanboy.web.demo.domain.entity.*;
+import com.jeanboy.web.demo.domain.service.*;
 import com.jeanboy.web.demo.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +24,25 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
     private final RoleService roleService;
     private final RolePermissionService rolePermissionService;
     private final UserService userService;
+    private final UserInfoService userInfoService;
+    private final JobService jobService;
+    private final DepartmentService departmentService;
 
     @Autowired
     public ServerInitializeComponent(PermissionService permissionService,
                                      RoleService roleService,
                                      RolePermissionService rolePermissionService,
-                                     UserService userService) {
+                                     UserService userService,
+                                     UserInfoService userInfoService,
+                                     JobService jobService,
+                                     DepartmentService departmentService) {
         this.permissionService = permissionService;
         this.roleService = roleService;
         this.rolePermissionService = rolePermissionService;
         this.userService = userService;
+        this.userInfoService = userInfoService;
+        this.jobService = jobService;
+        this.departmentService = departmentService;
     }
 
     @Override
@@ -60,17 +63,15 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
 
         List<RolePermissionEntity> permissionList = rolePermissionService.getAll();
         int roleManagerId = 0;
-        boolean isMasterReady = false;
         if (!permissionList.isEmpty()) {
             for (RolePermissionEntity entity : permissionList) {
                 if (entity.getPermissionIdentity() == PermissionConfig.ROLE_MASTER) {
-                    isMasterReady = true;
                     roleManagerId = entity.getRoleId();
                     break;
                 }
             }
         }
-        if (!isMasterReady) {
+        if (roleManagerId == 0) {
             logger.info("======================初始化角色表信息======================");
             RoleEntity roleManager = new RoleEntity();
             roleManager.setName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
@@ -94,19 +95,36 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             userManager.setPassword(md5Password);
             userManager.setCreateTime(System.currentTimeMillis());
             userManager.setRoleId(roleManagerId);
-            userService.save(userManager);
+            long userManagerId = userService.save(userManager);
+
+            UserInfoEntity userManagerInfo = new UserInfoEntity();
+            userManagerInfo.setRealName(AccountConfig.MANAGER_DEFAULT_ROLE_NAME);
+            userManagerInfo.setUserId(userManagerId);
+            userManagerInfo.setImportTime(System.currentTimeMillis());
+            userManagerInfo.setUpdateTime(System.currentTimeMillis());
+            userManagerInfo.setCreateTime(System.currentTimeMillis());
+            userInfoService.save(userManagerInfo);
         }
 
 
         List<RoleEntity> roleList = roleService.getAll();
         for (RoleEntity entity : roleList) {
-            MemoryCache.putRoleEntity(entity.getId(), entity);
+            MemoryCache.putRoleEntity(entity);
         }
 
         List<RolePermissionEntity> rolePermissionList = rolePermissionService.getAll();
         for (RolePermissionEntity entity : rolePermissionList) {
-            MemoryCache.putRolePermissionEntity(entity.getRoleId(), entity);
+            MemoryCache.putRolePermissionEntity(entity);
         }
 
+        List<JobEntity> jobEntityList = jobService.getAll();
+        for (JobEntity entity : jobEntityList) {
+            MemoryCache.putJobEntity(entity);
+        }
+
+        List<DepartmentEntity> departmentEntityList = departmentService.getAll();
+        for (DepartmentEntity entity : departmentEntityList) {
+            MemoryCache.putDepartmentEntity(entity);
+        }
     }
 }
