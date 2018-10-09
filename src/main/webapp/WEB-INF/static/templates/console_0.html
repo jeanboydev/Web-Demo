@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_header::header(~{::title},~{::link},~{})">
+    <title>控制台</title>
+    <link rel="stylesheet" th:href="@{/static/css/console.css}">
+</head>
+<body>
+<!-- 导航栏 -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <a class="navbar-brand" href="#">DEMO</a>
+    <!-- 折叠导航栏 -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <!-- 左边 -->
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <div class="nav-text">欢迎您<span th:text="${user.role.name}"></span>！</div>
+            </li>
+        </ul>
+        <!-- 右边 -->
+        <ul class="navbar-nav my-2 my-lg-0">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+                    <span th:text="${user.username}"></span>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">退出登录</a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- 内容 -->
+<div class="container below-nav-bar row">
+    <!-- 左侧导航 -->
+    <div class="col-2">
+        <div class="nav flex-column nav-pills">
+            <a class="nav-link active">首页</a>
+            <a class="nav-link" th:href="@{'/console?tag=1&token='+${token}}">权限管理</a>
+            <a class="nav-link" th:href="@{'/console?tag=2&token='+${token}}">人事管理</a>
+            <a class="nav-link" th:href="@{'/console?tag=3&token='+${token}}">工资管理</a>
+            <a class="nav-link" th:href="@{'/console?tag=4&token='+${token}}">考勤管理</a>
+        </div>
+    </div>
+    <!-- 右侧内容 -->
+    <div class="tab-content col-10">
+        <div class="tab-pane fade show active">
+            <div class="tab-pane fade show active">
+                <div class="card" style="width: 18rem;" th:if="${userInfo!=null}">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${userInfo.realName}">未知</h5>
+                        <h6 class="card-subtitle mb-2 text-muted" th:text="${user.role.name}">未知</h6>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item" th:if="${userInfo.gender!=null}">
+                            <span th:text="'性别：'+${userInfo.gender.name}">性别：未知</span>
+                        </li>
+                        <li class="list-group-item" th:if="${userInfo.educationLevel!=null}">
+                            <span th:text="'学历：'+${userInfo.educationLevel.name}">学历：未知</span>
+                        </li>
+                        <li class="list-group-item" th:if="${userInfo.job!=null}">
+                            <span th:text="'部门：'+${userInfo.job.name}">部门：未知</span>
+                        </li>
+                        <li class="list-group-item" th:if="${userInfo.department!=null}">
+                            <span th:text="'职位：'+${userInfo.department.name}">职位：未知</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 底部 -->
+<div th:replace="_footer::footer(~{::script})">
+    <script th:src="@{/static/js/console.js}"></script>
+</div>
+</body>
+</html>
