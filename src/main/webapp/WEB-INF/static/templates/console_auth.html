@@ -50,10 +50,12 @@
             <div class="container-fluid row">
                 <ul class="nav nav-tabs col-10">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">角色表</a>
+                        <a th:class="${tab!=1}?'nav-link active':'nav-link'"
+                           th:href="@{'/console/auth?token='+${token}}">角色表</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">权限表</a>
+                        <a th:class="${tab==1}?'nav-link active':'nav-link'"
+                           th:href="@{'/console/auth?tab=1&token='+${token}}">权限表</a>
                     </li>
                 </ul>
                 <div class="col-2">
@@ -66,14 +68,16 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">ID</th>
-                        <th scope="col">角色名</th>
+                        <th scope="col" th:unless="${tab==1}">角色名</th>
+                        <th scope="col" th:if="${tab==1}">角色ID</th>
+                        <th scope="col" th:if="${tab==1}">权限标识</th>
                         <th scope="col">创建时间</th>
                         <th scope="col">操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="item,state:${dataList}">
-                        <th scope="row" th:text="${state.index}"></th>
+                    <tr th:each="item,state:${dataList}" th:unless="${tab==1}">
+                        <th scope="row" th:text="${state.index+1}"></th>
                         <td th:text="${item.id}"></td>
                         <td th:text="${item.name}"></td>
                         <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
@@ -82,25 +86,36 @@
                             <button type="button" class="btn btn-outline-danger btn-sm">删除</button>
                         </td>
                     </tr>
+                    <tr th:each="item,state:${dataList}" th:if="${tab==1}">
+                        <th scope="row" th:text="${state.index+1}"></th>
+                        <td th:text="${item.id}"></td>
+                        <td th:text="${item.roleId}"></td>
+                        <td th:text="${item.permissionIdentity}"></td>
+                        <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm">编辑</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm">删除</button>
+                        </td>
+                    </tr>
                     </tbody>
                     <!--<caption>-->
-                        <!--<ul class="pagination">-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#" aria-label="Previous">-->
-                                    <!--<span aria-hidden="true">&laquo;</span>-->
-                                    <!--<span class="sr-only">Previous</span>-->
-                                <!--</a>-->
-                            <!--</li>-->
-                            <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
-                            <!--<li class="page-item"><a class="page-link" href="#">2</a></li>-->
-                            <!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
-                            <!--<li class="page-item">-->
-                                <!--<a class="page-link" href="#" aria-label="Next">-->
-                                    <!--<span aria-hidden="true">&raquo;</span>-->
-                                    <!--<span class="sr-only">Next</span>-->
-                                <!--</a>-->
-                            <!--</li>-->
-                        <!--</ul>-->
+                    <!--<ul class="pagination">-->
+                    <!--<li class="page-item">-->
+                    <!--<a class="page-link" href="#" aria-label="Previous">-->
+                    <!--<span aria-hidden="true">&laquo;</span>-->
+                    <!--<span class="sr-only">Previous</span>-->
+                    <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">1</a></li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">2</a></li>-->
+                    <!--<li class="page-item"><a class="page-link" href="#">3</a></li>-->
+                    <!--<li class="page-item">-->
+                    <!--<a class="page-link" href="#" aria-label="Next">-->
+                    <!--<span aria-hidden="true">&raquo;</span>-->
+                    <!--<span class="sr-only">Next</span>-->
+                    <!--</a>-->
+                    <!--</li>-->
+                    <!--</ul>-->
                     <!--</caption>-->
                 </table>
             </div>

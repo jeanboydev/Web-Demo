@@ -1,6 +1,5 @@
 package com.jeanboy.web.demo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.cache.MemoryCache;
@@ -25,6 +24,7 @@ public class ViewController extends BaseController {
     private final UserService userService;
     private final UserInfoService userInfoService;
     private final RoleService roleService;
+    private final RolePermissionService rolePermissionService;
     private final SalaryService salaryService;
     private final AttendanceTypeService attendanceTypeService;
     private final AttendanceService attendanceService;
@@ -34,12 +34,13 @@ public class ViewController extends BaseController {
     public ViewController(UserService userService,
                           UserInfoService userInfoService,
                           RoleService roleService,
-                          SalaryService salaryService,
+                          RolePermissionService rolePermissionService, SalaryService salaryService,
                           AttendanceTypeService attendanceTypeService,
                           AttendanceService attendanceService) {
         this.userService = userService;
         this.userInfoService = userInfoService;
         this.roleService = roleService;
+        this.rolePermissionService = rolePermissionService;
         this.salaryService = salaryService;
         this.attendanceTypeService = attendanceTypeService;
         this.attendanceService = attendanceService;
@@ -95,7 +96,9 @@ public class ViewController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/console/auth", method = RequestMethod.GET)
-    public String consoleAuth(@RequestParam("token") String token, Model model) {
+    public String consoleAuth(@RequestParam("token") String token,
+                              @RequestParam(value = "tab", required = false) Integer tab,
+                              Model model) {
         UserEntity onlineUser = getOnlineUser(token);
         String tokenEncode = "";
         try {
@@ -109,9 +112,18 @@ public class ViewController extends BaseController {
         RoleModel roleModel = Mapper.transform(roleEntity);
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
-        List<RoleEntity> dataList = roleService.getAll();
-        model.addAttribute("dataList", dataList);
+
+        if (tab != null && tab == 1) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_SELECT, true);
+            List<RolePermissionEntity> dataList = rolePermissionService.getAll();
+            model.addAttribute("tab", 1);
+            model.addAttribute("dataList", dataList);
+        } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
+            List<RoleEntity> dataList = roleService.getAll();
+            model.addAttribute("tab", 0);
+            model.addAttribute("dataList", dataList);
+        }
         return "console_auth";
     }
 
