@@ -13,7 +13,7 @@ function onCreateSave(tab, token) {
     }
     $.ajax(host + "/role", {
         headers: {
-            token: encodeURIComponent(token)
+            token: decodeURIComponent(token)
         },
         method: "put",
         dataType: "json",
