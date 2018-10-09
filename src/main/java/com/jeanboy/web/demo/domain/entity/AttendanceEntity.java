@@ -16,7 +16,7 @@ public class AttendanceEntity implements Serializable {
     @Column(name = "create_date", length = 13, nullable = false)
     private long createDate;
     @Column(name = "attendance_type_id", nullable = false)
-    private int AttendanceType;
+    private int attendanceType;
     @Column(name = "create_time", length = 13, nullable = false)
     private long createTime;
     @Column(name = "user_id", nullable = false)
@@ -55,11 +55,11 @@ public class AttendanceEntity implements Serializable {
     }
 
     public int getAttendanceType() {
-        return AttendanceType;
+        return attendanceType;
     }
 
     public void setAttendanceType(int attendanceType) {
-        AttendanceType = attendanceType;
+        this.attendanceType = attendanceType;
     }
 
     public long getCreateTime() {

@@ -33,15 +33,15 @@
     </div>
 </nav>
 <!-- 内容 -->
-<div class="container below-nav-bar row">
+<div class="container-fluid below-nav-bar row">
     <!-- 左侧导航 -->
     <div class="col-2">
         <div class="nav flex-column nav-pills">
             <a class="nav-link active">首页</a>
-            <a class="nav-link" th:href="@{'/console?tag=1&token='+${token}}">权限管理</a>
-            <a class="nav-link" th:href="@{'/console?tag=2&token='+${token}}">人事管理</a>
-            <a class="nav-link" th:href="@{'/console?tag=3&token='+${token}}">工资管理</a>
-            <a class="nav-link" th:href="@{'/console?tag=4&token='+${token}}">考勤管理</a>
+            <a class="nav-link" th:href="@{'/console/auth?token='+${token}}">权限管理</a>
+            <a class="nav-link" th:href="@{'/console/profile?token='+${token}}">人事管理</a>
+            <a class="nav-link" th:href="@{'/console/salary?token='+${token}}">工资管理</a>
+            <a class="nav-link" th:href="@{'/console/record?token='+${token}}">考勤管理</a>
         </div>
     </div>
     <!-- 右侧内容 -->

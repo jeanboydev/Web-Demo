@@ -5,9 +5,8 @@ import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.cache.MemoryCache;
-import com.jeanboy.web.demo.domain.entity.UserEntity;
-import com.jeanboy.web.demo.domain.entity.UserInfoEntity;
-import com.jeanboy.web.demo.domain.model.TokenModel;
+import com.jeanboy.web.demo.domain.entity.*;
+import com.jeanboy.web.demo.domain.model.*;
 import com.jeanboy.web.demo.domain.service.UserInfoService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.exceptions.ServerException;
@@ -142,7 +141,10 @@ public class UsersController extends BaseController {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
             resultUser = userService.get(userId);
         }
-        return JSON.toJSONString(resultUser);
+        RoleEntity roleEntity = MemoryCache.getRoleEntity(resultUser.getRoleId());
+        RoleModel roleModel = Mapper.transform(roleEntity);
+        UserModel userModel = Mapper.transform(resultUser, roleModel);
+        return JSON.toJSONString(userModel);
     }
 
 
@@ -306,11 +308,15 @@ public class UsersController extends BaseController {
         UserInfoEntity userInfoEntity = userInfoList.get(0);
         if (userInfoEntity.getUserId() == onlineUser.getId()) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, false);
-            return JSON.toJSONString(userInfoEntity);
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
-            return JSON.toJSONString(userInfoEntity);
         }
+        JobEntity jobEntity = MemoryCache.getJobEntity(userInfoEntity.getJobId());
+        JobModel jobModel = Mapper.transform(jobEntity);
+        DepartmentEntity departmentEntity = MemoryCache.getDepartmentEntity(userInfoEntity.getDepartmentId());
+        DepartmentModel departmentModel = Mapper.transform(departmentEntity);
+        UserInfoModel userInfoModel = Mapper.transform(userInfoEntity, jobModel, departmentModel);
+        return JSON.toJSONString(userInfoModel);
     }
 
 

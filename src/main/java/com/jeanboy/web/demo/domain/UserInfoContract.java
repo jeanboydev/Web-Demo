@@ -17,6 +17,8 @@ public interface UserInfoContract {
 
         UserInfoEntity get(Long id);
 
+        List<UserInfoEntity> getAll();
+
         List<UserInfoEntity> findByUserId(long userId);
 
         Long save(UserInfoEntity model);

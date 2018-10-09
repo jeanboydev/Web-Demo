@@ -23,6 +23,11 @@ public class UserInfoService implements UserInfoContract.Service {
     }
 
     @Override
+    public List<UserInfoEntity> getAll() {
+        return repository.getAll();
+    }
+
+    @Override
     public List<UserInfoEntity> findByUserId(long userId) {
         return repository.findByUserId(userId);
     }

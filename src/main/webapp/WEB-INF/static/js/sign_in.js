@@ -17,7 +17,7 @@ function toSignIn() {
             password: md5(password)
         },
         success: function (data) {
-            $(location).attr('href', host + "/console?tag=0&token=" + encodeURIComponent(data.token));
+            $(location).attr('href', host + "/console?token=" + encodeURIComponent(data.token));
         },
         error: function (error) {
             console.error(error.responseText);

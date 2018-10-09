@@ -37,23 +37,26 @@
     <!-- 左侧导航 -->
     <div class="col-2">
         <div class="nav flex-column nav-pills">
-            <a class="nav-link" th:href="@{'/console?tag=0&token='+${token}}">首页</a>
-            <a class="nav-link active" th:href="@{'/console?tag=1&token='+${token}}">权限管理</a>
-            <a class="nav-link" th:href="@{'/console?tag=2&token='+${token}}">人事管理</a>
-            <a class="nav-link" th:href="@{'/console?tag=3&token='+${token}}">工资管理</a>
-            <a class="nav-link" th:href="@{'/console?tag=4&token='+${token}}">考勤管理</a>
+            <a class="nav-link" th:href="@{'/console?token='+${token}}">首页</a>
+            <a class="nav-link" th:href="@{'/console/auth?token='+${token}}">权限管理</a>
+            <a class="nav-link active">人事管理</a>
+            <a class="nav-link" th:href="@{'/console/salary?token='+${token}}">工资管理</a>
+            <a class="nav-link" th:href="@{'/console/record?token='+${token}}">考勤管理</a>
         </div>
     </div>
     <!-- 右侧内容 -->
     <div class="tab-content col-10">
         <div class="tab-pane fade show active">
-            <div class="row mx-1">
+            <div class="container-fluid row">
                 <ul class="nav nav-tabs col-10">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">角色表</a>
+                        <a class="nav-link active" href="#">员工信息表</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">权限表</a>
+                        <a class="nav-link" href="#">部门信息表</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">职位信息表</a>
                     </li>
                 </ul>
                 <div class="col-2">
@@ -62,12 +65,17 @@
             </div>
             <div class="table-responsive">
                 <table class="table">
-                    <thead>
+                    <thead class="thead-light">
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">ID</th>
-                        <th scope="col">角色名</th>
-                        <th scope="col">创建时间</th>
+                        <th scope="col">姓名</th>
+                        <th scope="col">性别</th>
+                        <th scope="col">出生日期</th>
+                        <th scope="col">教育程度</th>
+                        <th scope="col">职位</th>
+                        <th scope="col">部门</th>
+                        <th scope="col">入职时间</th>
                         <th scope="col">操作</th>
                     </tr>
                     </thead>
@@ -75,33 +83,19 @@
                     <tr th:each="item,state:${dataList}">
                         <th scope="row" th:text="${state.index}"></th>
                         <td th:text="${item.id}"></td>
-                        <td th:text="${item.name}"></td>
-                        <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${item.realName}"></td>
+                        <td th:text="${item.gender.name}"></td>
+                        <td th:text="${#dates.format(item.birthday,'yyyy-MM-dd')}"></td>
+                        <td th:text="${item.educationLevel.name}"></td>
+                        <td th:text="${item.job.name}"></td>
+                        <td th:text="${item.department.name}"></td>
+                        <td th:text="${#dates.format(item.importTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
                             <button type="button" class="btn btn-outline-primary btn-sm">编辑</button>
                             <button type="button" class="btn btn-outline-danger btn-sm">删除</button>
                         </td>
                     </tr>
                     </tbody>
-                    <caption>
-                        <ul class="pagination">
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                            </li>
-                            <li class="page-item"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </caption>
                 </table>
             </div>
         </div>
