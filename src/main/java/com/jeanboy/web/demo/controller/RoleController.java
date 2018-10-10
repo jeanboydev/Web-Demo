@@ -58,6 +58,32 @@ public class RoleController extends BaseController {
     }
 
     /**
+     * 修改角色信息
+     * /role
+     * POST
+     *
+     * @param token
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
+    @ResponseBody
+    public String post(@RequestHeader("token") String token,
+                       @PathVariable("id") Integer roleId,
+                       @RequestParam("name") String name) {
+        checkParam(token);
+        checkParam(roleId);
+        checkParam(name);
+
+        UserEntity onlineUser = getOnlineUser(token);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_UPDATE, true);
+        RoleEntity roleEntity = roleService.get(roleId);
+        roleEntity.setName(name);
+        roleService.update(roleEntity);
+        return "";
+    }
+
+    /**
      * 获取角色信息
      * role/{id}
      * GET

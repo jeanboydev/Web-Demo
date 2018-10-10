@@ -62,13 +62,6 @@ public class ViewController extends BaseController {
     @RequestMapping(value = "/console", method = RequestMethod.GET)
     public String console(@RequestParam("token") String token, Model model) {
         UserEntity onlineUser = getOnlineUser(token);
-        String tokenEncode = "";
-        try {
-            tokenEncode = URLEncoder.encode(token, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("token", tokenEncode);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
@@ -100,13 +93,6 @@ public class ViewController extends BaseController {
                               @RequestParam(value = "tab", required = false) Integer tab,
                               Model model) {
         UserEntity onlineUser = getOnlineUser(token);
-        String tokenEncode = "";
-        try {
-            tokenEncode = URLEncoder.encode(token, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("token", tokenEncode);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
@@ -137,13 +123,6 @@ public class ViewController extends BaseController {
     @RequestMapping(value = "/console/profile", method = RequestMethod.GET)
     public String consoleProfile(@RequestParam("token") String token, Model model) {
         UserEntity onlineUser = getOnlineUser(token);
-        String tokenEncode = "";
-        try {
-            tokenEncode = URLEncoder.encode(token, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("token", tokenEncode);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
@@ -165,13 +144,6 @@ public class ViewController extends BaseController {
     @RequestMapping(value = "/console/salary", method = RequestMethod.GET)
     public String consoleSalary(@RequestParam("token") String token, Model model) {
         UserEntity onlineUser = getOnlineUser(token);
-        String tokenEncode = "";
-        try {
-            tokenEncode = URLEncoder.encode(token, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("token", tokenEncode);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
@@ -193,13 +165,6 @@ public class ViewController extends BaseController {
     @RequestMapping(value = "/console/record", method = RequestMethod.GET)
     public String consoleRecord(@RequestParam("token") String token, Model model) {
         UserEntity onlineUser = getOnlineUser(token);
-        String tokenEncode = "";
-        try {
-            tokenEncode = URLEncoder.encode(token, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        model.addAttribute("token", tokenEncode);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
