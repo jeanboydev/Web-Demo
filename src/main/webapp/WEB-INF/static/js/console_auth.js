@@ -110,7 +110,7 @@ function toSubmitRoleCreate(token, roleName) {
             token: decodeURIComponent(token)
         },
         method: "put",
-        dataType: "text",
+        dataType: "json",
         data: {
             name: roleName
         },
@@ -136,7 +136,7 @@ function toSubmitRoleUpdate(token, roleId, roleName) {
             token: decodeURIComponent(token)
         },
         method: "post",
-        dataType: "text",
+        dataType: "json",
         data: {
             name: roleName
         },
@@ -158,7 +158,7 @@ function toSubmitRoleDelete(token, roleId) {
             token: decodeURIComponent(token)
         },
         method: "delete",
-        dataType: "text",
+        dataType: "json",
         data: {},
         success: function (data) {
             window.location.reload();
@@ -186,7 +186,7 @@ function toSubmitRolePermissionCreate(token, roleId, permissionIdentity) {
             token: decodeURIComponent(token)
         },
         method: "put",
-        dataType: "text",
+        dataType: "json",
         data: {
             role_id: parseInt(roleId),
             permission_identity: parseInt(permissionIdentity)
@@ -217,7 +217,7 @@ function toSubmitRolePermissionUpdate(token, rolePermissionId, roleId, permissio
             token: decodeURIComponent(token)
         },
         method: "post",
-        dataType: "text",
+        dataType: "json",
         data: {
             role_id: parseInt(roleId),
             permission_identity: parseInt(permissionIdentity)
@@ -240,7 +240,7 @@ function toSubmitRolePermissionDelete(token, rolePermissionId) {
             token: decodeURIComponent(token)
         },
         method: "delete",
-        dataType: "text",
+        dataType: "json",
         data: {},
         success: function (data) {
             window.location.reload();

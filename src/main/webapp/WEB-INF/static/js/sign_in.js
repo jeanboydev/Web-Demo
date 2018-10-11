@@ -23,7 +23,7 @@ function toSignIn() {
             console.error(error.responseText);
             if (error.responseJSON) {
                 var info = error.responseJSON.errors[0];
-                alert(info.description);
+                showToast("错误", info.description);
             }
         }
     });
