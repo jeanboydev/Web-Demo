@@ -77,7 +77,9 @@ public class ViewController extends BaseController {
 
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
+        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleEntity.getId());
         RoleModel roleModel = Mapper.transform(roleEntity);
+        roleModel.setIdentity(rolePermissionEntity.getPermissionIdentity());
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
@@ -117,7 +119,9 @@ public class ViewController extends BaseController {
 
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
+        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleEntity.getId());
         RoleModel roleModel = Mapper.transform(roleEntity);
+        roleModel.setIdentity(rolePermissionEntity.getPermissionIdentity());
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
 
@@ -158,7 +162,9 @@ public class ViewController extends BaseController {
 
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
+        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleEntity.getId());
         RoleModel roleModel = Mapper.transform(roleEntity);
+        roleModel.setIdentity(rolePermissionEntity.getPermissionIdentity());
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
 
@@ -207,7 +213,9 @@ public class ViewController extends BaseController {
 
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
+        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleEntity.getId());
         RoleModel roleModel = Mapper.transform(roleEntity);
+        roleModel.setIdentity(rolePermissionEntity.getPermissionIdentity());
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
@@ -238,7 +246,9 @@ public class ViewController extends BaseController {
 
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
+        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleEntity.getId());
         RoleModel roleModel = Mapper.transform(roleEntity);
+        roleModel.setIdentity(rolePermissionEntity.getPermissionIdentity());
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
         if (tab == 2) {

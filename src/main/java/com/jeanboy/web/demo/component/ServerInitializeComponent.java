@@ -91,8 +91,8 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
             logger.info("======================初始化用户表信息======================");
             UserEntity userManager = new UserEntity();
             userManager.setUsername(AccountConfig.MANAGER_DEFAULT_USERNAME);
-            String md5Password = StringUtil.getMD5(AccountConfig.MANAGER_DEFAULT_PASSWORD);
-            userManager.setPassword(md5Password);
+//            String md5Password = StringUtil.getMD5(AccountConfig.MANAGER_DEFAULT_PASSWORD);
+            userManager.setPassword(AccountConfig.MANAGER_DEFAULT_PASSWORD);
             userManager.setCreateTime(System.currentTimeMillis());
             userManager.setRoleId(roleManagerId);
             long userManagerId = userService.save(userManager);

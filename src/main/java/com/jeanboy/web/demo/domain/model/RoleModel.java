@@ -4,6 +4,7 @@ public class RoleModel {
 
     private int id;
     private String name;
+    private int identity;
 
     public int getId() {
         return id;
@@ -19,5 +20,13 @@ public class RoleModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(int identity) {
+        this.identity = identity;
     }
 }
