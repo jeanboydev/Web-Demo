@@ -58,7 +58,7 @@ public class SalaryController extends BaseController {
         salaryEntity.setMonthlyValue(monthlyValue);
         salaryEntity.setCreateTime(System.currentTimeMillis());
         salaryService.save(salaryEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -89,7 +89,7 @@ public class SalaryController extends BaseController {
         salaryEntity.setMonthlyValue(monthlyValue);
         salaryEntity.setCreateTime(System.currentTimeMillis());
         salaryService.update(salaryEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -111,11 +111,11 @@ public class SalaryController extends BaseController {
         if (id == null || id == 0) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
             List<SalaryEntity> salaryList = salaryService.getAll();
-            return JSON.toJSONString(salaryList);
+            return getResponseInfo(JSON.toJSONString(salaryList));
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, false);
             SalaryEntity salaryEntity = salaryService.get(id);
-            return JSON.toJSONString(salaryEntity);
+            return getResponseInfo(JSON.toJSONString(salaryEntity));
         }
     }
 
@@ -138,6 +138,6 @@ public class SalaryController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_DELETE, true);
         salaryService.delete(id);
-        return "";
+        return getResponseInfo("");
     }
 }

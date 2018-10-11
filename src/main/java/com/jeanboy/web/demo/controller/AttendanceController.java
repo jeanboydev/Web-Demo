@@ -50,7 +50,7 @@ public class AttendanceController extends BaseController {
         attendanceTypeEntity.setName(name);
         attendanceTypeEntity.setCreateTime(System.currentTimeMillis());
         attendanceTypeService.save(attendanceTypeEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -77,7 +77,7 @@ public class AttendanceController extends BaseController {
         AttendanceTypeEntity attendanceTypeEntity = attendanceTypeService.get(id);
         attendanceTypeEntity.setName(name);
         attendanceTypeService.update(attendanceTypeEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -99,10 +99,10 @@ public class AttendanceController extends BaseController {
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE_TYPE, PermissionConfig.IDENTITY_SELECT, false);
         if (id == null || id == 0) {
             List<AttendanceTypeEntity> attendanceTypeList = attendanceTypeService.getAll();
-            return JSON.toJSONString(attendanceTypeList);
+            return getResponseInfo(JSON.toJSONString(attendanceTypeList));
         } else {
             AttendanceTypeEntity attendanceTypeEntity = attendanceTypeService.get(id);
-            return JSON.toJSONString(attendanceTypeEntity);
+            return getResponseInfo(JSON.toJSONString(attendanceTypeEntity));
         }
     }
 
@@ -125,7 +125,7 @@ public class AttendanceController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE_TYPE, PermissionConfig.IDENTITY_DELETE, true);
         attendanceTypeService.delete(id);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -166,7 +166,7 @@ public class AttendanceController extends BaseController {
         attendanceEntity.setAttendanceType(attendanceTypeId);
         attendanceEntity.setCreateTime(System.currentTimeMillis());
         attendanceService.save(attendanceEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -205,7 +205,7 @@ public class AttendanceController extends BaseController {
         }
         attendanceEntity.setCreateTime(System.currentTimeMillis());
         attendanceService.save(attendanceEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -227,10 +227,10 @@ public class AttendanceController extends BaseController {
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, true);
         if (id == null || id == 0) {
             List<AttendanceEntity> attendanceList = attendanceService.getAll();
-            return JSON.toJSONString(attendanceList);
+            return getResponseInfo(JSON.toJSONString(attendanceList));
         } else {
             AttendanceEntity attendanceEntity = attendanceService.get(id);
-            return JSON.toJSONString(attendanceEntity);
+            return getResponseInfo(JSON.toJSONString(attendanceEntity));
         }
     }
 
@@ -253,6 +253,6 @@ public class AttendanceController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_DELETE, true);
         attendanceService.delete(id);
-        return "";
+        return getResponseInfo("");
     }
 }

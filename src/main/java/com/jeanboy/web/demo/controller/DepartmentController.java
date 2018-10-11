@@ -54,7 +54,7 @@ public class DepartmentController extends BaseController {
         departmentEntity.setName(name);
         departmentEntity.setCreateTime(System.currentTimeMillis());
         departmentService.save(departmentEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -82,7 +82,7 @@ public class DepartmentController extends BaseController {
         departmentEntity.setName(name);
         departmentEntity.setCreateTime(System.currentTimeMillis());
         departmentService.update(departmentEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -104,11 +104,11 @@ public class DepartmentController extends BaseController {
         if (id == null || id == 0) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, true);
             List<DepartmentEntity> departmentList = departmentService.getAll();
-            return JSON.toJSONString(departmentList);
+            return getResponseInfo(JSON.toJSONString(departmentList));
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, false);
             DepartmentEntity departmentEntity = departmentService.get(id);
-            return JSON.toJSONString(departmentEntity);
+            return getResponseInfo(JSON.toJSONString(departmentEntity));
         }
     }
 
@@ -131,6 +131,6 @@ public class DepartmentController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, true);
         departmentService.delete(id);
-        return "";
+        return getResponseInfo("");
     }
 }

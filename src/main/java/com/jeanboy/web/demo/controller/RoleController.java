@@ -54,7 +54,7 @@ public class RoleController extends BaseController {
         roleEntity.setName(name);
         roleEntity.setCreateTime(System.currentTimeMillis());
         roleService.save(roleEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -80,7 +80,7 @@ public class RoleController extends BaseController {
         RoleEntity roleEntity = roleService.get(roleId);
         roleEntity.setName(name);
         roleService.update(roleEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -106,7 +106,7 @@ public class RoleController extends BaseController {
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, false);
             RoleEntity roleEntity = roleService.get(roleId);
-            return JSON.toJSONString(roleEntity);
+            return getResponseInfo(JSON.toJSONString(roleEntity));
         }
     }
 
@@ -129,6 +129,6 @@ public class RoleController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_DELETE, true);
         roleService.delete(roleId);
-        return "";
+        return getResponseInfo("");
     }
 }

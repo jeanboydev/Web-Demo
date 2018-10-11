@@ -62,7 +62,7 @@ public class PermissionController extends BaseController {
         rolePermissionEntity.setPermissionIdentity(permissionIdentity);
         rolePermissionEntity.setCreateTime(System.currentTimeMillis());
         rolePermissionService.save(rolePermissionEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -93,7 +93,7 @@ public class PermissionController extends BaseController {
         rolePermissionEntity.setPermissionIdentity(permissionIdentity);
         rolePermissionEntity.setCreateTime(System.currentTimeMillis());
         rolePermissionService.update(rolePermissionEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -121,7 +121,7 @@ public class PermissionController extends BaseController {
             if (rolePermissionEntity == null) {
                 throw new ServerException(ErrorCode.DATA_NOT_FOUND);
             }
-            return JSON.toJSONString(rolePermissionEntity);
+            return getResponseInfo(JSON.toJSONString(rolePermissionEntity));
         }
     }
 
@@ -143,6 +143,6 @@ public class PermissionController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_DELETE, true);
         rolePermissionService.delete(id);
-        return "";
+        return getResponseInfo("");
     }
 }

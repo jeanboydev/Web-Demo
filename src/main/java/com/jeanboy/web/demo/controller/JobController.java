@@ -56,7 +56,7 @@ public class JobController extends BaseController {
         jobEntity.setName(name);
         jobEntity.setCreateTime(System.currentTimeMillis());
         jobService.save(jobEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -84,7 +84,7 @@ public class JobController extends BaseController {
         jobEntity.setName(name);
         jobEntity.setCreateTime(System.currentTimeMillis());
         jobService.update(jobEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -110,7 +110,7 @@ public class JobController extends BaseController {
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, false);
             JobEntity jobEntity = jobService.get(id);
-            return JSON.toJSONString(jobEntity);
+            return getResponseInfo(JSON.toJSONString(jobEntity));
         }
     }
 
@@ -133,6 +133,6 @@ public class JobController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_DELETE, true);
         jobService.delete(id);
-        return "";
+        return getResponseInfo("");
     }
 }

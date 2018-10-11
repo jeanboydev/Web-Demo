@@ -1,8 +1,10 @@
 package com.jeanboy.web.demo.base;
 
+import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
+import com.jeanboy.web.demo.domain.model.ResponseModel;
 import com.jeanboy.web.demo.exceptions.ServerException;
 import com.jeanboy.web.demo.utils.PermissionUtil;
 import org.slf4j.Logger;
@@ -11,7 +13,6 @@ import org.slf4j.LoggerFactory;
 public class BaseController {
 
     protected Logger logger = LoggerFactory.getLogger(BaseController.class);
-
 
     protected UserEntity getOnlineUser(String token) {
         UserEntity userEntity = MemoryCache.getUserEntity(token);
@@ -46,5 +47,9 @@ public class BaseController {
         if (!hadPermission) {
             throw new ServerException(ErrorCode.PERMISSION_DENIED);
         }
+    }
+
+    protected String getResponseInfo(String data) {
+        return JSON.toJSONString(new ResponseModel(data));
     }
 }

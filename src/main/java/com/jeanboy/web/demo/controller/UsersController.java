@@ -70,7 +70,7 @@ public class UsersController extends BaseController {
         userEntity.setCreateTime(System.currentTimeMillis());
         userEntity.setRoleId(roleId);
         userService.save(userEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -113,7 +113,7 @@ public class UsersController extends BaseController {
             resultUser.setRoleId(roleId);
         }
         userService.update(resultUser);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -144,7 +144,7 @@ public class UsersController extends BaseController {
         RoleEntity roleEntity = MemoryCache.getRoleEntity(resultUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
         UserModel userModel = Mapper.transform(resultUser, roleModel);
-        return JSON.toJSONString(userModel);
+        return getResponseInfo(JSON.toJSONString(userModel));
     }
 
 
@@ -172,7 +172,7 @@ public class UsersController extends BaseController {
             userInfoService.delete(userInfoEntity.getId());
         }
         userService.delete(userId);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -222,7 +222,7 @@ public class UsersController extends BaseController {
         userInfoEntity.setImportTime(System.currentTimeMillis());
         userInfoEntity.setUpdateTime(System.currentTimeMillis());
         userInfoService.save(userInfoEntity);
-        return "";
+        return getResponseInfo("");
     }
 
     /**
@@ -280,7 +280,7 @@ public class UsersController extends BaseController {
             userInfoEntity.setUpdateTime(System.currentTimeMillis());
             userInfoService.update(userInfoEntity);
         }
-        return "";
+        return getResponseInfo("");
     }
 
 
@@ -316,7 +316,7 @@ public class UsersController extends BaseController {
         DepartmentEntity departmentEntity = MemoryCache.getDepartmentEntity(userInfoEntity.getDepartmentId());
         DepartmentModel departmentModel = Mapper.transform(departmentEntity);
         UserInfoModel userInfoModel = Mapper.transform(userInfoEntity, jobModel, departmentModel);
-        return JSON.toJSONString(userInfoModel);
+        return getResponseInfo(JSON.toJSONString(userInfoModel));
     }
 
 
@@ -339,6 +339,6 @@ public class UsersController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_DELETE, true);
         userInfoService.delete(userInfoId);
-        return "";
+        return getResponseInfo("");
     }
 }
