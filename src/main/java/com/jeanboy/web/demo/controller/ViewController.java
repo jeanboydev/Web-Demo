@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -195,7 +194,9 @@ public class ViewController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/console/salary", method = RequestMethod.GET)
-    public String consoleSalary(@RequestParam("token") String token, Model model) {
+    public String consoleSalary(@RequestParam("token") String token,
+                                @RequestParam(value = "tab") Integer tab,
+                                Model model) {
         UserEntity onlineUser;
         try {
             checkParam(token);
@@ -212,6 +213,7 @@ public class ViewController extends BaseController {
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
         List<SalaryEntity> dataList = salaryService.getAll();
         model.addAttribute("dataList", dataList);
+        model.addAttribute("tab", 1);
         return "console_salary";
     }
 
@@ -223,7 +225,9 @@ public class ViewController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/console/record", method = RequestMethod.GET)
-    public String consoleRecord(@RequestParam("token") String token, Model model) {
+    public String consoleRecord(@RequestParam("token") String token,
+                                @RequestParam(value = "tab") Integer tab,
+                                Model model) {
         UserEntity onlineUser;
         try {
             checkParam(token);
@@ -237,9 +241,17 @@ public class ViewController extends BaseController {
         RoleModel roleModel = Mapper.transform(roleEntity);
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
-        List<AttendanceEntity> dataList = attendanceService.getAll();
-        model.addAttribute("dataList", dataList);
+        if (tab == 2) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, true);
+            List<AttendanceEntity> dataList = attendanceService.getAll();
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 2);
+        } else {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE_TYPE, PermissionConfig.IDENTITY_SELECT, true);
+            List<AttendanceTypeEntity> dataList = attendanceTypeService.getAll();
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 1);
+        }
         return "console_record";
     }
 }

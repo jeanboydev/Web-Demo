@@ -64,7 +64,7 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">ID</th>
-                        <th scope="col" th:unless="${tab==2}">角色名</th>
+                        <th scope="col" th:if="${tab==1}">角色名</th>
                         <th scope="col" th:if="${tab==2}">角色ID</th>
                         <th scope="col" th:if="${tab==2}">权限标识</th>
                         <th scope="col">创建时间</th>
@@ -72,32 +72,20 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="item,state:${dataList}" th:unless="${tab==2}">
+                    <tr th:each="item,state:${dataList}">
                         <th scope="row" th:text="${state.index+1}"></th>
                         <td th:text="${item.id}"></td>
-                        <td th:text="${item.name}"></td>
+                        <td th:if="${tab==1}" th:text="${item.name}"></td>
+                        <td th:if="${tab==2}" th:text="${item.roleId}"></td>
+                        <td th:if="${tab==2}" th:text="${item.permissionIdentity}"></td>
                         <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm"
+                            <button th:if="${tab==1}" type="button" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
                                     th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-name=${item.name}">编辑
                             </button>
-                            <button type="button" class="btn btn-outline-danger btn-sm"
-                                    data-toggle="modal"
-                                    data-target="#actionModal"
-                                    th:attr="data-tab=${tab},data-action=2,data-id=${item.id}">删除
-                            </button>
-                        </td>
-                    </tr>
-                    <tr th:each="item,state:${dataList}" th:if="${tab==2}">
-                        <th scope="row" th:text="${state.index+1}"></th>
-                        <td th:text="${item.id}"></td>
-                        <td th:text="${item.roleId}"></td>
-                        <td th:text="${item.permissionIdentity}"></td>
-                        <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm"
+                            <button th:if="${tab==2}" type="button" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
                                     th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-roleid=${item.roleId},data-permissionidentity=${item.permissionIdentity}">

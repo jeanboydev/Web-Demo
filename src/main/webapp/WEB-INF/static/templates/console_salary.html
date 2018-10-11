@@ -43,14 +43,15 @@
             <div class="container-fluid row">
                 <ul class="nav nav-tabs col-10">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">角色表</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">权限表</a>
+                        <a th:class="${tab==1}?'nav-link active':'nav-link'" href="javascript:onTabClick(1);">薪资表</a>
                     </li>
                 </ul>
                 <div class="col-2">
-                    <button type="button" class="btn btn-primary px-4 float-right">新建</button>
+                    <button type="button" class="btn btn-primary px-4 float-right"
+                            data-toggle="modal"
+                            data-target="#actionModal"
+                            th:attr="data-tab=${tab},data-action=0">新建
+                    </button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -59,22 +60,32 @@
                     <tr>
                         <th scope="col">#</th>
                         <th scope="col">ID</th>
-                        <th scope="col">薪水（/月）</th>
-                        <th scope="col">职位</th>
+                        <th scope="col">薪水(元/月)</th>
+                        <th scope="col">职位ID</th>
                         <th scope="col">创建时间</th>
                         <th scope="col">操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="item,state:${dataList}">
-                        <th scope="row" th:text="${state.index}"></th>
+                        <th scope="row" th:text="${state.index+1}"></th>
                         <td th:text="${item.id}"></td>
                         <td th:text="${item.monthlyValue}"></td>
                         <td th:text="${item.jobId}"></td>
                         <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">编辑</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">删除</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                    data-toggle="modal"
+                                    data-target="#actionModal"
+                                    th:if="${tab==1}"
+                                    th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-monthlyvalue=${item.monthlyValue},
+                                    data-jobid=${item.jobId}">编辑
+                            </button>
+                            <button type="button" class="btn btn-outline-danger btn-sm"
+                                    data-toggle="modal"
+                                    data-target="#actionModal"
+                                    th:attr="data-tab=${tab},data-action=2,data-id=${item.id}">删除
+                            </button>
                         </td>
                     </tr>
                     </tbody>
@@ -83,9 +94,24 @@
         </div>
     </div>
 </div>
+<!-- 弹窗 -->
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer"></div>
+        </div>
+    </div>
+</div>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
-    <script th:src="@{/static/js/console.js}"></script>
+    <script th:src="@{/static/js/console_salary.js}"></script>
 </div>
 </body>
 </html>

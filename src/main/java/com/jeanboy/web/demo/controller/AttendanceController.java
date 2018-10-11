@@ -163,7 +163,7 @@ public class AttendanceController extends BaseController {
         attendanceEntity.setStartTime(startTime);
         attendanceEntity.setEndTime(endTime);
         attendanceEntity.setCreateDate(createDate);
-        attendanceEntity.setAttendanceType(attendanceTypeId);
+        attendanceEntity.setAttendanceTypeId(attendanceTypeId);
         attendanceEntity.setCreateTime(System.currentTimeMillis());
         attendanceService.save(attendanceEntity);
         return getResponseInfo("");
@@ -185,26 +185,29 @@ public class AttendanceController extends BaseController {
     @ResponseBody
     public String post(@RequestHeader("token") String token,
                        @PathVariable("id") Long id,
-                       @RequestParam(value = "start_time", required = false) Long startTime,
-                       @RequestParam(value = "end_time", required = false) Long endTime,
-                       @RequestParam(value = "create_date", required = false) Long createDate) {
+                       @RequestParam("user_id") Long userId,
+                       @RequestParam("start_time") Long startTime,
+                       @RequestParam("end_time") Long endTime,
+                       @RequestParam("create_date") Long createDate,
+                       @RequestParam("attendance_type_id") Integer attendanceTypeId) {
         checkParam(token);
         checkParam(id);
+        checkParam(userId);
+        checkParam(startTime);
+        checkParam(endTime);
+        checkParam(createDate);
+        checkParam(attendanceTypeId);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_UPDATE, true);
         AttendanceEntity attendanceEntity = attendanceService.get(id);
-        if (startTime != null && startTime != 0) {
-            attendanceEntity.setStartTime(startTime);
-        }
-        if (endTime != null && endTime != 0) {
-            attendanceEntity.setEndTime(endTime);
-        }
-        if (createDate != null && createDate != 0) {
-            attendanceEntity.setCreateDate(createDate);
-        }
+        attendanceEntity.setUserId(userId);
+        attendanceEntity.setStartTime(startTime);
+        attendanceEntity.setEndTime(endTime);
+        attendanceEntity.setCreateDate(createDate);
+        attendanceEntity.setAttendanceTypeId(attendanceTypeId);
         attendanceEntity.setCreateTime(System.currentTimeMillis());
-        attendanceService.save(attendanceEntity);
+        attendanceService.update(attendanceEntity);
         return getResponseInfo("");
     }
 
