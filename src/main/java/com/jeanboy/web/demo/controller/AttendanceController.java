@@ -227,10 +227,10 @@ public class AttendanceController extends BaseController {
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, true);
         if (id == null || id == 0) {
             List<AttendanceEntity> attendanceList = attendanceService.getAll();
-            return getResponseInfo(JSON.toJSONString(attendanceList));
+            return getResponseInfo(attendanceList);
         } else {
             AttendanceEntity attendanceEntity = attendanceService.get(id);
-            return getResponseInfo(JSON.toJSONString(attendanceEntity));
+            return getResponseInfo(attendanceEntity);
         }
     }
 

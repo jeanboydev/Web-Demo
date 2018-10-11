@@ -16,6 +16,8 @@ public interface UserContract {
 
         UserEntity get(Long id);
 
+        List<UserEntity> getAll();
+
         List<UserEntity> findByUsername(String username);
 
         Long save(UserEntity model);

@@ -115,13 +115,13 @@ public class PermissionController extends BaseController {
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_SELECT, true);
         if (id == null || id == 0) {
             List<RolePermissionEntity> rolePermissionList = rolePermissionService.getAll();
-            return JSON.toJSONString(rolePermissionList);
+            return getResponseInfo(rolePermissionList);
         } else {
             RolePermissionEntity rolePermissionEntity = rolePermissionService.get(id);
             if (rolePermissionEntity == null) {
                 throw new ServerException(ErrorCode.DATA_NOT_FOUND);
             }
-            return getResponseInfo(JSON.toJSONString(rolePermissionEntity));
+            return getResponseInfo(rolePermissionEntity);
         }
     }
 

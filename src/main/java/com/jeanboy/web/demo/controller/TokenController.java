@@ -68,6 +68,6 @@ public class TokenController extends BaseController {
         }
         MemoryCache.putTokenModel(tokenModel);
         MemoryCache.putUserEntity(tokenModel.getToken(), userEntity);
-        return getResponseInfo(JSON.toJSONString(tokenModel));
+        return getResponseInfo(tokenModel);
     }
 }

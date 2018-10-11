@@ -1,6 +1,5 @@
 package com.jeanboy.web.demo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.entity.SalaryEntity;
@@ -111,11 +110,11 @@ public class SalaryController extends BaseController {
         if (id == null || id == 0) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
             List<SalaryEntity> salaryList = salaryService.getAll();
-            return getResponseInfo(JSON.toJSONString(salaryList));
+            return getResponseInfo(salaryList);
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, false);
             SalaryEntity salaryEntity = salaryService.get(id);
-            return getResponseInfo(JSON.toJSONString(salaryEntity));
+            return getResponseInfo(salaryEntity);
         }
     }
 

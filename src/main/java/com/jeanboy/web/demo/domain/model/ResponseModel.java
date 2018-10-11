@@ -2,13 +2,13 @@ package com.jeanboy.web.demo.domain.model;
 
 import org.springframework.http.HttpStatus;
 
-public class ResponseModel {
+public class ResponseModel<T> {
 
     private int code;
     private String message;
-    private String data;
+    private T data;
 
-    public ResponseModel(String data) {
+    public ResponseModel(T data) {
         this.code = HttpStatus.OK.value();
         this.message = HttpStatus.OK.getReasonPhrase();
         this.data = data;
@@ -33,5 +33,13 @@ public class ResponseModel {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public T getData() {
+        return data;
+    }
+
+    public void setData(T data) {
+        this.data = data;
     }
 }

@@ -1,14 +1,11 @@
 package com.jeanboy.web.demo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
-import com.jeanboy.web.demo.constants.ErrorCode;
 import com.jeanboy.web.demo.domain.entity.JobEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.JobService;
 import com.jeanboy.web.demo.exceptions.ServerException;
-import com.jeanboy.web.demo.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -106,11 +103,11 @@ public class JobController extends BaseController {
         if (id == null || id == 0) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, true);
             List<JobEntity> roleList = jobService.getAll();
-            return JSON.toJSONString(roleList);
+            return getResponseInfo(roleList);
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, false);
             JobEntity jobEntity = jobService.get(id);
-            return getResponseInfo(JSON.toJSONString(jobEntity));
+            return getResponseInfo(jobEntity);
         }
     }
 

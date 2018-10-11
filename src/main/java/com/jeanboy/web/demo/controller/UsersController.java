@@ -11,12 +11,10 @@ import com.jeanboy.web.demo.domain.service.UserInfoService;
 import com.jeanboy.web.demo.domain.service.UserService;
 import com.jeanboy.web.demo.exceptions.ServerException;
 import com.jeanboy.web.demo.utils.StringUtil;
-import com.jeanboy.web.demo.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -89,6 +87,7 @@ public class UsersController extends BaseController {
     @ResponseBody
     public String updateUser(@RequestHeader("token") String token,
                              @PathVariable("id") Long userId,
+                             @RequestParam(value = "username", required = false) String username,
                              @RequestParam(value = "password", required = false) String password,
                              @RequestParam(value = "role_id", required = false) Integer roleId) {
         checkParam(token);
@@ -105,6 +104,9 @@ public class UsersController extends BaseController {
         }
         if (resultUser == null) {
             throw new ServerException(ErrorCode.ACCOUNT_NOT_FOUND);
+        }
+        if (!StringUtil.isEmpty(username)) {
+            resultUser.setUsername(username);
         }
         if (!StringUtil.isEmpty(password)) {
             resultUser.setPassword(password);
@@ -256,30 +258,30 @@ public class UsersController extends BaseController {
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_UPDATE, true);
-        List<UserInfoEntity> userInfoList = userInfoService.findByUserId(userInfoId);
-        if (userInfoList.size() > 0) {
-            UserInfoEntity userInfoEntity = userInfoList.get(0);
-            if (!StringUtil.isEmpty(realName)) {
-                userInfoEntity.setRealName(realName);
-            }
-            if (gender != null && gender != 0) {
-                userInfoEntity.setGender(gender);
-            }
-            if (birthday != null && birthday != 0) {
-                userInfoEntity.setBirthday(birthday);
-            }
-            if (educationLevel != null && educationLevel != 0) {
-                userInfoEntity.setEducationLevel(educationLevel);
-            }
-            if (jobId != null && jobId != 0) {
-                userInfoEntity.setJobId(jobId);
-            }
-            if (departmentId != null && departmentId != 0) {
-                userInfoEntity.setDepartmentId(departmentId);
-            }
-            userInfoEntity.setUpdateTime(System.currentTimeMillis());
-            userInfoService.update(userInfoEntity);
+        UserInfoEntity userInfoEntity = userInfoService.get(userInfoId);
+        if (userInfoEntity == null) {
+            throw new ServerException(ErrorCode.DATA_NOT_FOUND);
         }
+        if (!StringUtil.isEmpty(realName)) {
+            userInfoEntity.setRealName(realName);
+        }
+        if (gender != null && gender != 0) {
+            userInfoEntity.setGender(gender);
+        }
+        if (birthday != null && birthday != 0) {
+            userInfoEntity.setBirthday(birthday);
+        }
+        if (educationLevel != null && educationLevel != 0) {
+            userInfoEntity.setEducationLevel(educationLevel);
+        }
+        if (jobId != null && jobId != 0) {
+            userInfoEntity.setJobId(jobId);
+        }
+        if (departmentId != null && departmentId != 0) {
+            userInfoEntity.setDepartmentId(departmentId);
+        }
+        userInfoEntity.setUpdateTime(System.currentTimeMillis());
+        userInfoService.update(userInfoEntity);
         return getResponseInfo("");
     }
 

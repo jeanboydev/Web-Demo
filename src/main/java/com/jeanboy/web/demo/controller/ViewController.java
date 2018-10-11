@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -28,15 +27,20 @@ public class ViewController extends BaseController {
     private final SalaryService salaryService;
     private final AttendanceTypeService attendanceTypeService;
     private final AttendanceService attendanceService;
+    private final DepartmentService departmentService;
+    private final JobService jobService;
 
 
     @Autowired
     public ViewController(UserService userService,
                           UserInfoService userInfoService,
                           RoleService roleService,
-                          RolePermissionService rolePermissionService, SalaryService salaryService,
+                          RolePermissionService rolePermissionService,
+                          SalaryService salaryService,
                           AttendanceTypeService attendanceTypeService,
-                          AttendanceService attendanceService) {
+                          AttendanceService attendanceService,
+                          DepartmentService departmentService,
+                          JobService jobService) {
         this.userService = userService;
         this.userInfoService = userInfoService;
         this.roleService = roleService;
@@ -44,6 +48,8 @@ public class ViewController extends BaseController {
         this.salaryService = salaryService;
         this.attendanceTypeService = attendanceTypeService;
         this.attendanceService = attendanceService;
+        this.departmentService = departmentService;
+        this.jobService = jobService;
     }
 
     @RequestMapping
@@ -61,7 +67,15 @@ public class ViewController extends BaseController {
      */
     @RequestMapping(value = "/console", method = RequestMethod.GET)
     public String console(@RequestParam("token") String token, Model model) {
-        UserEntity onlineUser = getOnlineUser(token);
+
+        UserEntity onlineUser;
+        try {
+            checkParam(token);
+            onlineUser = getOnlineUser(token);
+        } catch (Exception e) {
+            return "sign_in";
+        }
+
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
@@ -90,25 +104,34 @@ public class ViewController extends BaseController {
      */
     @RequestMapping(value = "/console/auth", method = RequestMethod.GET)
     public String consoleAuth(@RequestParam("token") String token,
-                              @RequestParam(value = "tab", required = false) Integer tab,
+                              @RequestParam(value = "tab") Integer tab,
                               Model model) {
-        UserEntity onlineUser = getOnlineUser(token);
+        UserEntity onlineUser;
+        try {
+            checkParam(token);
+            onlineUser = getOnlineUser(token);
+        } catch (Exception e) {
+            return "sign_in";
+        }
+
+        checkParam(tab);
+
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
 
-        if (tab != null && tab == 1) {
+        if (tab == 2) {//角色权限表
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE_PERMISSION, PermissionConfig.IDENTITY_SELECT, true);
             List<RolePermissionEntity> dataList = rolePermissionService.getAll();
-            model.addAttribute("tab", 1);
             model.addAttribute("dataList", dataList);
-        } else {
+            model.addAttribute("tab", 2);
+        } else {//角色表
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
             List<RoleEntity> dataList = roleService.getAll();
-            model.addAttribute("tab", 0);
             model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 1);
         }
         return "console_auth";
     }
@@ -121,16 +144,46 @@ public class ViewController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/console/profile", method = RequestMethod.GET)
-    public String consoleProfile(@RequestParam("token") String token, Model model) {
-        UserEntity onlineUser = getOnlineUser(token);
+    public String consoleProfile(@RequestParam("token") String token,
+                                 @RequestParam(value = "tab") Integer tab,
+                                 Model model) {
+        UserEntity onlineUser;
+        try {
+            checkParam(token);
+            onlineUser = getOnlineUser(token);
+        } catch (Exception e) {
+            return "sign_in";
+        }
+
+        checkParam(tab);
+
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
         UserModel userModel = Mapper.transform(onlineUser, roleModel);
         model.addAttribute("user", userModel);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
-        List<UserInfoEntity> dataList = userInfoService.getAll();
-        model.addAttribute("dataList", dataList);
+
+        if (tab == 2) {//用户信息表
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
+            List<UserInfoEntity> dataList = userInfoService.getAll();
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 2);
+        } else if (tab == 3) {//部门信息表
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, true);
+            List<DepartmentEntity> dataList = departmentService.getAll();
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 3);
+        } else if (tab == 4) {//职位信息表
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_SELECT, true);
+            List<JobEntity> dataList = jobService.getAll();
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 4);
+        } else {//用户账号表
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
+            List<UserEntity> dataList = userService.getAll();
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("tab", 1);
+        }
         return "console_profile";
     }
 
@@ -143,7 +196,14 @@ public class ViewController extends BaseController {
      */
     @RequestMapping(value = "/console/salary", method = RequestMethod.GET)
     public String consoleSalary(@RequestParam("token") String token, Model model) {
-        UserEntity onlineUser = getOnlineUser(token);
+        UserEntity onlineUser;
+        try {
+            checkParam(token);
+            onlineUser = getOnlineUser(token);
+        } catch (Exception e) {
+            return "sign_in";
+        }
+
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);
@@ -164,7 +224,14 @@ public class ViewController extends BaseController {
      */
     @RequestMapping(value = "/console/record", method = RequestMethod.GET)
     public String consoleRecord(@RequestParam("token") String token, Model model) {
-        UserEntity onlineUser = getOnlineUser(token);
+        UserEntity onlineUser;
+        try {
+            checkParam(token);
+            onlineUser = getOnlineUser(token);
+        } catch (Exception e) {
+            return "sign_in";
+        }
+
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
         RoleEntity roleEntity = MemoryCache.getRoleEntity(onlineUser.getRoleId());
         RoleModel roleModel = Mapper.transform(roleEntity);

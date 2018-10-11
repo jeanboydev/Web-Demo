@@ -49,7 +49,7 @@ public class BaseController {
         }
     }
 
-    protected String getResponseInfo(String data) {
-        return JSON.toJSONString(new ResponseModel(data));
+    protected <T> String getResponseInfo(T data) {
+        return JSON.toJSONString(new ResponseModel<>(data));
     }
 }

@@ -1,6 +1,5 @@
 package com.jeanboy.web.demo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.entity.DepartmentEntity;
@@ -104,11 +103,11 @@ public class DepartmentController extends BaseController {
         if (id == null || id == 0) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, true);
             List<DepartmentEntity> departmentList = departmentService.getAll();
-            return getResponseInfo(JSON.toJSONString(departmentList));
+            return getResponseInfo(departmentList);
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, false);
             DepartmentEntity departmentEntity = departmentService.get(id);
-            return getResponseInfo(JSON.toJSONString(departmentEntity));
+            return getResponseInfo(departmentEntity);
         }
     }
 

@@ -1,6 +1,5 @@
 package com.jeanboy.web.demo.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.entity.RoleEntity;
@@ -102,11 +101,11 @@ public class RoleController extends BaseController {
         if (roleId == null || roleId == 0) {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, true);
             List<RoleEntity> roleList = roleService.getAll();
-            return JSON.toJSONString(roleList);
+            return getResponseInfo(roleList);
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ROLE, PermissionConfig.IDENTITY_SELECT, false);
             RoleEntity roleEntity = roleService.get(roleId);
-            return getResponseInfo(JSON.toJSONString(roleEntity));
+            return getResponseInfo(roleEntity);
         }
     }
 

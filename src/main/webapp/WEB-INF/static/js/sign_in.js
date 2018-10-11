@@ -16,8 +16,8 @@ function toSignIn() {
             username: username,
             password: md5(password)
         },
-        success: function (data) {
-            window.location.href = host + "/console?token=" + encodeURIComponent(data.token);
+        success: function (response) {
+            window.location.href = host + "/console?tab=1&token=" + encodeURIComponent(response.data.token);
         },
         error: function (error) {
             console.error(error.responseText);

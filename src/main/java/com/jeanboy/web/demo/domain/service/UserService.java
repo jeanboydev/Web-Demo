@@ -23,6 +23,11 @@ public class UserService implements UserContract.Service {
     }
 
     @Override
+    public List<UserEntity> getAll() {
+        return repository.getAll();
+    }
+
+    @Override
     public List<UserEntity> findByUsername(String username) {
         return repository.findByUsername(username);
     }
