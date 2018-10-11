@@ -35,14 +35,7 @@
 <!-- 内容 -->
 <div class="container-fluid below-nav-bar row">
     <!-- 左侧导航 -->
-    <div class="col-2">
-        <div class="nav flex-column nav-pills">
-            <a class="nav-link" th:href="@{'/console?token='+${token}}">首页</a>
-            <a class="nav-link" th:href="@{'/console/auth?token='+${token}}">权限管理</a>
-            <a class="nav-link" th:href="@{'/console/profile?token='+${token}}">人事管理</a>
-            <a class="nav-link active">工资管理</a>
-            <a class="nav-link" th:href="@{'/console/record?token='+${token}}">考勤管理</a>
-        </div>
+    <div class="col-2" id="leftNav">
     </div>
     <!-- 右侧内容 -->
     <div class="tab-content col-10">

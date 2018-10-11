@@ -35,14 +35,7 @@
 <!-- 内容 -->
 <div class="container-fluid below-nav-bar row">
     <!-- 左侧导航 -->
-    <div class="col-2">
-        <div class="nav flex-column nav-pills">
-            <a class="nav-link" th:href="@{'/console?token='+${token}}">首页</a>
-            <a class="nav-link active">权限管理</a>
-            <a class="nav-link" th:href="@{'/console/profile?token='+${token}}">人事管理</a>
-            <a class="nav-link" th:href="@{'/console/salary?token='+${token}}">工资管理</a>
-            <a class="nav-link" th:href="@{'/console/record?token='+${token}}">考勤管理</a>
-        </div>
+    <div class="col-2" id="leftNav">
     </div>
     <!-- 右侧内容 -->
     <div class="tab-content col-10">
@@ -50,12 +43,10 @@
             <div class="container-fluid row">
                 <ul class="nav nav-tabs col-10">
                     <li class="nav-item">
-                        <a th:class="${tab!=1}?'nav-link active':'nav-link'"
-                           th:href="@{'/console/auth?token='+${token}}">角色表</a>
+                        <a th:class="${tab!=1}?'nav-link active':'nav-link'" href="javascript:onTabClick(0);">角色表</a>
                     </li>
                     <li class="nav-item">
-                        <a th:class="${tab==1}?'nav-link active':'nav-link'"
-                           th:href="@{'/console/auth?tab=1&token='+${token}}">权限表</a>
+                        <a th:class="${tab==1}?'nav-link active':'nav-link'" href="javascript:onTabClick(1);">权限表</a>
                     </li>
                 </ul>
                 <div class="col-2">
@@ -109,7 +100,8 @@
                             <button type="button" class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
-                                    th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-name=${item.name}">编辑
+                                    th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-roleid=${item.roleId},data-permissionidentity=${item.permissionIdentity}">
+                                编辑
                             </button>
                             <button type="button" class="btn btn-outline-danger btn-sm"
                                     data-toggle="modal"
