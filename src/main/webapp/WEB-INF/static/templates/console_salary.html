@@ -16,7 +16,7 @@
         <!-- 左边 -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <div class="nav-text">欢迎您<span th:text="${user.role.name}"></span>！</div>
+                <div class="nav-text">欢迎您<span th:text="${user.roleName}"></span>！</div>
             </li>
         </ul>
         <!-- 右边 -->
@@ -112,6 +112,7 @@
     </div>
 </div>
 <input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
+<input id="jobList" type="text" th:value="${jobList}" hidden="hidden"/>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/console_salary.js}"></script>

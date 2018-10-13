@@ -19,9 +19,10 @@ $(function () {
             if (tab === 1) {
                 body += getFormInputGroup("角色名", "roleName", "");
             } else if (tab === 2) {
-                body += getFormInputGroup("角色ID", "roleId", "");
+                var roleList = $("#roleList").val();
+                body += getFormSelectGroup("所属角色", "roleId", roleList);
                 var tableList = $("#tableList").val();
-                body += getFormSelectGroup("表", "table", tableList);
+                body += getFormSelectGroup("所属表", "table", tableList);
                 body += getFormCheckGroup("查询", "select", 1, false);
                 body += getFormCheckGroup("添加", "insert", 2, false);
                 body += getFormCheckGroup("修改", "update", 4, false);
@@ -37,8 +38,9 @@ $(function () {
                 body += getFormInputGroup("角色名", "roleName", name);
             } else if (tab === 2) {
                 var roleId = button.data('roleid');
+                var roleList = $("#roleList").val();
+                body += getFormSelectGroup("所属角色", "roleId", roleList);
                 var permissionIdentity = button.data('permissionidentity');
-                body += getFormInputGroup("角色ID", "roleId", roleId);
                 var tableList = $("#tableList").val();
                 body += getFormSelectGroup("表", "table", tableList);
                 body += getFormCheckGroup("查询", "select", 1, false);

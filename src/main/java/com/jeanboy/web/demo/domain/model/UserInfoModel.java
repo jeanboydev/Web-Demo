@@ -3,15 +3,20 @@ package com.jeanboy.web.demo.domain.model;
 public class UserInfoModel {
 
     private long id;
+    private long userId;
     private String realName;
-    private EnumModel gender;
+    private int gender;
+    private String genderName;
     private long birthday;
-    private EnumModel educationLevel;
+    private int educationLevel;
+    private String educationLevelName;
     private long importTime;
     private long updateTime;
     private long createTime;
-    private JobModel job;
-    private DepartmentModel department;
+    private int jobId;
+    private String jobName;
+    private int departmentId;
+    private String departmentName;
 
     public long getId() {
         return id;
@@ -19,6 +24,14 @@ public class UserInfoModel {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getRealName() {
@@ -29,12 +42,20 @@ public class UserInfoModel {
         this.realName = realName;
     }
 
-    public EnumModel getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(EnumModel gender) {
+    public void setGender(int gender) {
         this.gender = gender;
+    }
+
+    public String getGenderName() {
+        return genderName;
+    }
+
+    public void setGenderName(String genderName) {
+        this.genderName = genderName;
     }
 
     public long getBirthday() {
@@ -45,12 +66,20 @@ public class UserInfoModel {
         this.birthday = birthday;
     }
 
-    public EnumModel getEducationLevel() {
+    public int getEducationLevel() {
         return educationLevel;
     }
 
-    public void setEducationLevel(EnumModel educationLevel) {
+    public void setEducationLevel(int educationLevel) {
         this.educationLevel = educationLevel;
+    }
+
+    public String getEducationLevelName() {
+        return educationLevelName;
+    }
+
+    public void setEducationLevelName(String educationLevelName) {
+        this.educationLevelName = educationLevelName;
     }
 
     public long getImportTime() {
@@ -77,19 +106,35 @@ public class UserInfoModel {
         this.createTime = createTime;
     }
 
-    public JobModel getJob() {
-        return job;
+    public int getJobId() {
+        return jobId;
     }
 
-    public void setJob(JobModel job) {
-        this.job = job;
+    public void setJobId(int jobId) {
+        this.jobId = jobId;
     }
 
-    public DepartmentModel getDepartment() {
-        return department;
+    public String getJobName() {
+        return jobName;
     }
 
-    public void setDepartment(DepartmentModel department) {
-        this.department = department;
+    public void setJobName(String jobName) {
+        this.jobName = jobName;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public String getDepartmentName() {
+        return departmentName;
+    }
+
+    public void setDepartmentName(String departmentName) {
+        this.departmentName = departmentName;
     }
 }

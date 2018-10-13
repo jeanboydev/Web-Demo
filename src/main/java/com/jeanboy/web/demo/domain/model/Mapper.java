@@ -2,6 +2,7 @@ package com.jeanboy.web.demo.domain.model;
 
 import com.jeanboy.web.demo.constants.EducationLevel;
 import com.jeanboy.web.demo.constants.Gender;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.*;
 import com.jeanboy.web.demo.domain.service.UserInfoService;
 
@@ -15,13 +16,15 @@ public class Mapper {
         return roleModel;
     }
 
-    public static UserModel transform(UserEntity userEntity, RoleModel roleModel) {
+    public static UserModel transform(UserEntity userEntity) {
         if (userEntity == null) return null;
         UserModel userModel = new UserModel();
         userModel.setId(userEntity.getId());
+        userModel.setRoleId(userEntity.getRoleId());
+        userModel.setRoleName(MemoryCache.getRoleEntity(userEntity.getRoleId()).getName());
         userModel.setUsername(userEntity.getUsername());
+        userModel.setPassword(userEntity.getPassword());
         userModel.setCreateTime(userEntity.getCreateTime());
-        userModel.setRole(roleModel);
         return userModel;
     }
 
@@ -41,10 +44,15 @@ public class Mapper {
         return departmentModel;
     }
 
-    public static UserInfoModel transform(UserInfoEntity userInfoEntity, JobModel jobModel, DepartmentModel departmentModel) {
+    public static UserInfoModel transform(UserInfoEntity userInfoEntity) {
         if (userInfoEntity == null) return null;
+
+        JobModel jobModel = transform(MemoryCache.getJobEntity(userInfoEntity.getJobId()));
+        DepartmentModel departmentModel = transform(MemoryCache.getDepartmentEntity(userInfoEntity.getDepartmentId()));
+
         UserInfoModel userInfoModel = new UserInfoModel();
         userInfoModel.setId(userInfoEntity.getId());
+        userInfoModel.setUserId(userInfoEntity.getUserId());
         userInfoModel.setRealName(userInfoEntity.getRealName());
         Gender gender = Gender.UNKNOWN;
         if (userInfoEntity.getGender() == Gender.FEMALE.getValue()) {
@@ -52,7 +60,8 @@ public class Mapper {
         } else if (userInfoEntity.getGender() == Gender.MALE.getValue()) {
             gender = Gender.MALE;
         }
-        userInfoModel.setGender(new EnumModel(gender.getValue(), gender.getName()));
+        userInfoModel.setGender(gender.getValue());
+        userInfoModel.setGenderName(gender.getName());
         userInfoModel.setBirthday(userInfoEntity.getBirthday());
         EducationLevel educationLevel = EducationLevel.UNKNOWN;
         if (userInfoEntity.getEducationLevel() == EducationLevel.PRIMARY_SCHOOL.getValue()) {
@@ -70,12 +79,25 @@ public class Mapper {
         } else if (userInfoEntity.getEducationLevel() == EducationLevel.DOCTOR.getValue()) {
             educationLevel = EducationLevel.DOCTOR;
         }
-        userInfoModel.setEducationLevel(new EnumModel(educationLevel.getValue(), educationLevel.getName()));
+        userInfoModel.setEducationLevel(educationLevel.getValue());
+        userInfoModel.setEducationLevelName(educationLevel.getName());
         userInfoModel.setImportTime(userInfoEntity.getImportTime());
         userInfoModel.setUpdateTime(userInfoEntity.getUpdateTime());
         userInfoModel.setCreateTime(userInfoEntity.getCreateTime());
-        userInfoModel.setJob(jobModel);
-        userInfoModel.setDepartment(departmentModel);
+        userInfoModel.setJobId(userInfoEntity.getJobId());
+        userInfoModel.setJobName(jobModel != null ? jobModel.getName() : "未知");
+        userInfoModel.setDepartmentId(userInfoEntity.getDepartmentId());
+        userInfoModel.setDepartmentName(departmentModel != null ? departmentModel.getName() : "未知");
         return userInfoModel;
+    }
+
+    public static RolePermissionModel transform(RolePermissionEntity rolePermissionEntity) {
+        RolePermissionModel rolePermissionModel = new RolePermissionModel();
+        rolePermissionModel.setId(rolePermissionEntity.getId());
+        rolePermissionModel.setRoleId(rolePermissionEntity.getRoleId());
+        rolePermissionModel.setRoleName(MemoryCache.getRoleEntity(rolePermissionEntity.getRoleId()).getName());
+        rolePermissionModel.setPermissionIdentity(rolePermissionEntity.getPermissionIdentity());
+        rolePermissionModel.setCreateTime(rolePermissionModel.getCreateTime());
+        return rolePermissionModel;
     }
 }

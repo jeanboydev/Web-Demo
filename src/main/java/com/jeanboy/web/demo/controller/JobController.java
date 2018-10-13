@@ -2,6 +2,7 @@ package com.jeanboy.web.demo.controller;
 
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.JobEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.JobService;
@@ -52,7 +53,9 @@ public class JobController extends BaseController {
         JobEntity jobEntity = new JobEntity();
         jobEntity.setName(name);
         jobEntity.setCreateTime(System.currentTimeMillis());
-        jobService.save(jobEntity);
+        Integer id = jobService.save(jobEntity);
+        jobEntity.setId(id);
+        MemoryCache.putJobEntity(jobEntity);
         return getResponseInfo("");
     }
 
@@ -81,6 +84,7 @@ public class JobController extends BaseController {
         jobEntity.setName(name);
         jobEntity.setCreateTime(System.currentTimeMillis());
         jobService.update(jobEntity);
+        MemoryCache.putJobEntity(jobEntity);
         return getResponseInfo("");
     }
 
@@ -130,6 +134,7 @@ public class JobController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_JOB, PermissionConfig.IDENTITY_DELETE, true);
         jobService.delete(id);
+        MemoryCache.removeJobEntity(id);
         return getResponseInfo("");
     }
 }

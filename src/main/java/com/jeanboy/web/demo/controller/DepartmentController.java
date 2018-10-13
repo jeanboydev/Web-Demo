@@ -2,6 +2,7 @@ package com.jeanboy.web.demo.controller;
 
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.DepartmentEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.DepartmentService;
@@ -52,7 +53,9 @@ public class DepartmentController extends BaseController {
         DepartmentEntity departmentEntity = new DepartmentEntity();
         departmentEntity.setName(name);
         departmentEntity.setCreateTime(System.currentTimeMillis());
-        departmentService.save(departmentEntity);
+        Integer id = departmentService.save(departmentEntity);
+        departmentEntity.setId(id);
+        MemoryCache.putDepartmentEntity(departmentEntity);
         return getResponseInfo("");
     }
 
@@ -81,6 +84,7 @@ public class DepartmentController extends BaseController {
         departmentEntity.setName(name);
         departmentEntity.setCreateTime(System.currentTimeMillis());
         departmentService.update(departmentEntity);
+        MemoryCache.putDepartmentEntity(departmentEntity);
         return getResponseInfo("");
     }
 
@@ -130,6 +134,7 @@ public class DepartmentController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_DEPARTMENT, PermissionConfig.IDENTITY_SELECT, true);
         departmentService.delete(id);
+        MemoryCache.removeDepartmentEntity(id);
         return getResponseInfo("");
     }
 }

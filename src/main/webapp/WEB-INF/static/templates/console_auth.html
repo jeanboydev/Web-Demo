@@ -16,7 +16,7 @@
         <!-- 左边 -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <div class="nav-text">欢迎您<span th:text="${user.role.name}"></span>！</div>
+                <div class="nav-text">欢迎您<span th:text="${user.roleName}"></span>！</div>
             </li>
         </ul>
         <!-- 右边 -->
@@ -68,6 +68,7 @@
                         <th scope="col">ID</th>
                         <th scope="col" th:if="${tab==1}">角色名</th>
                         <th scope="col" th:if="${tab==2}">角色ID</th>
+                        <th scope="col" th:if="${tab==2}">角色名称</th>
                         <th scope="col" th:if="${tab==2}">权限标识</th>
                         <th scope="col">创建时间</th>
                         <th scope="col">操作</th>
@@ -79,10 +80,11 @@
                         <td th:text="${item.id}"></td>
                         <td th:if="${tab==1}" th:text="${item.name}"></td>
                         <td th:if="${tab==2}" th:text="${item.roleId}"></td>
+                        <td th:if="${tab==2}" th:text="${item.roleName}"></td>
                         <td th:if="${tab==2}" th:text="${item.permissionIdentity}"></td>
                         <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
-                            <button th:if="${tab==1&&page.shownAction>=4}" type="button"
+                            <button th:if="${tab==1&&page.shownAction>=4&&state.index>0}" type="button"
                                     class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
@@ -99,7 +101,7 @@
                                     data-toggle="modal"
                                     data-target="#actionModal"
                                     th:attr="data-tab=${tab},data-action=8,data-id=${item.id}"
-                                    th:if="${page.shownAction>=8&&(tab==1?true:item.permissionIdentity!=1048575)}">删除
+                                    th:if="${page.shownAction>=8&&(tab==1?state.index>0:item.permissionIdentity!=1048575)}">删除
                             </button>
                         </td>
                     </tr>
@@ -126,6 +128,7 @@
 </div>
 <input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
 <input id="tableList" type="text" th:value="${tableList}" hidden="hidden"/>
+<input id="roleList" type="text" th:value="${roleList}" hidden="hidden"/>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/console_auth.js}"></script>

@@ -1,12 +1,11 @@
 package com.jeanboy.web.demo.domain.model;
 
-public class UserModel {
+public class RolePermissionModel {
 
     private long id;
-    private String username;
-    private String password;
     private int roleId;
     private String roleName;
+    private int permissionIdentity;
     private long createTime;
 
     public long getId() {
@@ -15,22 +14,6 @@ public class UserModel {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public int getRoleId() {
@@ -47,6 +30,14 @@ public class UserModel {
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
+    }
+
+    public int getPermissionIdentity() {
+        return permissionIdentity;
+    }
+
+    public void setPermissionIdentity(int permissionIdentity) {
+        this.permissionIdentity = permissionIdentity;
     }
 
     public long getCreateTime() {

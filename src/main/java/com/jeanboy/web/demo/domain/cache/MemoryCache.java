@@ -47,12 +47,20 @@ public class MemoryCache {
         jobMap.put(jobEntity.getId(), jobEntity);
     }
 
+    public static void removeJobEntity(Integer jobId) {
+        jobMap.remove(jobId);
+    }
+
     public static DepartmentEntity getDepartmentEntity(Integer departmentId) {
         return departmentMap.get(departmentId);
     }
 
     public static void putDepartmentEntity(DepartmentEntity departmentEntity) {
         departmentMap.put(departmentEntity.getId(), departmentEntity);
+    }
+
+    public static void removeDepartmentEntity(Integer departmentId) {
+        departmentMap.remove(departmentId);
     }
 
     public static UserEntity getUserEntity(String token) {

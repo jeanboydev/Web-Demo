@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.constants.ErrorCode;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.RolePermissionEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
 import com.jeanboy.web.demo.domain.service.PermissionService;
@@ -61,7 +62,9 @@ public class PermissionController extends BaseController {
         rolePermissionEntity.setRoleId(roleId);
         rolePermissionEntity.setPermissionIdentity(permissionIdentity);
         rolePermissionEntity.setCreateTime(System.currentTimeMillis());
-        rolePermissionService.save(rolePermissionEntity);
+        Long id = rolePermissionService.save(rolePermissionEntity);
+        rolePermissionEntity.setId(id);
+        MemoryCache.putRolePermissionEntity(rolePermissionEntity);
         return getResponseInfo("");
     }
 
@@ -93,6 +96,7 @@ public class PermissionController extends BaseController {
         rolePermissionEntity.setPermissionIdentity(permissionIdentity);
         rolePermissionEntity.setCreateTime(System.currentTimeMillis());
         rolePermissionService.update(rolePermissionEntity);
+        MemoryCache.putRolePermissionEntity(rolePermissionEntity);
         return getResponseInfo("");
     }
 

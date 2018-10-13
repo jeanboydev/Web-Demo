@@ -143,9 +143,7 @@ public class UsersController extends BaseController {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
             resultUser = userService.get(userId);
         }
-        RoleEntity roleEntity = MemoryCache.getRoleEntity(resultUser.getRoleId());
-        RoleModel roleModel = Mapper.transform(roleEntity);
-        UserModel userModel = Mapper.transform(resultUser, roleModel);
+        UserModel userModel = Mapper.transform(resultUser);
         return getResponseInfo(JSON.toJSONString(userModel));
     }
 
@@ -205,11 +203,6 @@ public class UsersController extends BaseController {
         checkParam(token);
         checkParam(userId);
         checkParam(realName);
-        checkParam(gender);
-        checkParam(birthday);
-        checkParam(educationLevel);
-        checkParam(jobId);
-        checkParam(departmentId);
 
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_INSERT, true);
@@ -265,21 +258,11 @@ public class UsersController extends BaseController {
         if (!StringUtil.isEmpty(realName)) {
             userInfoEntity.setRealName(realName);
         }
-        if (gender != null && gender != 0) {
-            userInfoEntity.setGender(gender);
-        }
-        if (birthday != null && birthday != 0) {
-            userInfoEntity.setBirthday(birthday);
-        }
-        if (educationLevel != null && educationLevel != 0) {
-            userInfoEntity.setEducationLevel(educationLevel);
-        }
-        if (jobId != null && jobId != 0) {
-            userInfoEntity.setJobId(jobId);
-        }
-        if (departmentId != null && departmentId != 0) {
-            userInfoEntity.setDepartmentId(departmentId);
-        }
+        userInfoEntity.setGender(gender);
+        userInfoEntity.setBirthday(birthday);
+        userInfoEntity.setEducationLevel(educationLevel);
+        userInfoEntity.setJobId(jobId);
+        userInfoEntity.setDepartmentId(departmentId);
         userInfoEntity.setUpdateTime(System.currentTimeMillis());
         userInfoService.update(userInfoEntity);
         return getResponseInfo("");
@@ -313,11 +296,7 @@ public class UsersController extends BaseController {
         } else {
             checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
         }
-        JobEntity jobEntity = MemoryCache.getJobEntity(userInfoEntity.getJobId());
-        JobModel jobModel = Mapper.transform(jobEntity);
-        DepartmentEntity departmentEntity = MemoryCache.getDepartmentEntity(userInfoEntity.getDepartmentId());
-        DepartmentModel departmentModel = Mapper.transform(departmentEntity);
-        UserInfoModel userInfoModel = Mapper.transform(userInfoEntity, jobModel, departmentModel);
+        UserInfoModel userInfoModel = Mapper.transform(userInfoEntity);
         return getResponseInfo(JSON.toJSONString(userInfoModel));
     }
 

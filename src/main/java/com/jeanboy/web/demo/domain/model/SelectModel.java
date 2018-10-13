@@ -1,14 +1,14 @@
 package com.jeanboy.web.demo.domain.model;
 
-public class EnumModel {
+public class SelectModel {
 
     private int id;
     private String name;
 
-    public EnumModel() {
+    public SelectModel() {
     }
 
-    public EnumModel(int id, String name) {
+    public SelectModel(int id, String name) {
         this.id = id;
         this.name = name;
     }

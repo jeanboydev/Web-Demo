@@ -20,15 +20,20 @@ $(function () {
             if (tab === 1) {
                 body += getFormInputGroup("用户名", "username", "");
                 body += getFormInputGroup("密码", "password", "");
-                body += getFormInputGroup("角色ID", "roleId", "");
+                var roleList = $("#roleList").val();
+                body += getFormSelectGroup("角色", "roleId", roleList);
             } else if (tab === 2) {
                 body += getFormInputGroup("用户ID", "userId", "");
                 body += getFormInputGroup("真实姓名", "realName", "");
-                body += getFormInputGroup("性别", "gender", "");
+                var genderList = $("#genderList").val();
+                body += getFormSelectGroup("性别", "gender", genderList);
                 body += getFormInputGroup("出生日期", "birthday", "");
-                body += getFormInputGroup("教育程度", "educationLevel", "");
-                body += getFormInputGroup("职位ID", "job", "");
-                body += getFormInputGroup("部门ID", "department", "");
+                var educationLevelList = $("#educationLevelList").val();
+                body += getFormSelectGroup("教育程度", "educationLevel", educationLevelList);
+                var jobList = $("#jobList").val();
+                body += getFormSelectGroup("职位ID", "job", jobList);
+                var departmentList = $("#departmentList").val();
+                body += getFormSelectGroup("部门ID", "department", departmentList);
             } else if (tab === 4) {
                 body += getFormInputGroup("部门名称", "name", "");
             } else if (tab === 8) {
@@ -45,7 +50,8 @@ $(function () {
                 var roleId = button.data('roleid');
                 body += getFormInputGroup("用户名", "username", username);
                 body += getFormInputGroup("密码", "password", password);
-                body += getFormInputGroup("角色ID", "roleId", roleId);
+                var roleList = $("#roleList").val();
+                body += getFormSelectGroup("角色", "roleId", roleList);
             } else if (tab === 2) {
                 var userId = button.data('userid');
                 var realName = button.data('realname');
@@ -56,11 +62,15 @@ $(function () {
                 var departmentId = button.data('departmentid');
                 body += getFormInputGroup("用户ID", "userId", userId);
                 body += getFormInputGroup("真实姓名", "realName", realName);
-                body += getFormInputGroup("性别", "gender", gender);
-                body += getFormInputGroup("出生日期", "birthday", birthday);
-                body += getFormInputGroup("教育程度", "educationLevel", educationLevel);
-                body += getFormInputGroup("职位", "job", jobId);
-                body += getFormInputGroup("部门", "department", departmentId);
+                var genderList = $("#genderList").val();
+                body += getFormSelectGroup("性别", "gender", genderList);
+                body += getFormInputGroup("出生日期", "birthday", "");
+                var educationLevelList = $("#educationLevelList").val();
+                body += getFormSelectGroup("教育程度", "educationLevel", educationLevelList);
+                var jobList = $("#jobList").val();
+                body += getFormSelectGroup("职位ID", "job", jobList);
+                var departmentList = $("#departmentList").val();
+                body += getFormSelectGroup("部门ID", "department", departmentList);
             } else if (tab === 4) {
                 var name = button.data('name');
                 body += getFormInputGroup("部门名称", "name", name);

@@ -18,7 +18,8 @@ $(function () {
             title = "新建";
             if (tab === 1) {
                 body += getFormInputGroup("薪水(元/月)", "monthlyValue", "");
-                body += getFormInputGroup("职位ID", "jobId", "");
+                var jobList = $("#jobList").val();
+                body += getFormSelectGroup("职位ID", "job", jobList);
             }
         } else if (action === 4) {//编辑
             var id = button.data('id');
@@ -29,7 +30,8 @@ $(function () {
                 var monthlyValue = button.data('monthlyvalue');
                 var jobId = button.data('jobid');
                 body += getFormInputGroup("薪水(元/月)", "monthlyValue", monthlyValue);
-                body += getFormInputGroup("职位ID", "jobId", jobId);
+                var jobList = $("#jobList").val();
+                body += getFormSelectGroup("职位ID", "job", jobList);
             }
         } else if (action === 8) {//删除
             title = "提示";
@@ -50,9 +52,9 @@ function onTabClick(tab) {
 function onConfirmClick(tab, action) {
     if (tab === 1) {
         if (action === 2) {//新建
-            toSubmitSalaryCreate(currentToken, $("#monthlyValue").val(), $("#jobId").val());
+            toSubmitSalaryCreate(currentToken, $("#monthlyValue").val(), $("#job").val());
         } else if (action === 4) {//编辑
-            toSubmitSalaryUpdate(currentToken, $("#idMark").val(), $("#monthlyValue").val(), $("#jobId").val());
+            toSubmitSalaryUpdate(currentToken, $("#idMark").val(), $("#monthlyValue").val(), $("#job").val());
         } else if (action === 8) {//删除
             toSubmitSalaryDelete(currentToken, $("#idMark").val());
         }

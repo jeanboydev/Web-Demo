@@ -16,7 +16,7 @@
         <!-- 左边 -->
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <div class="nav-text">欢迎您<span th:text="${user.role.name}"></span>！</div>
+                <div class="nav-text">欢迎您<span th:text="${user.roleName}"></span>！</div>
             </li>
         </ul>
         <!-- 右边 -->
@@ -77,12 +77,13 @@
                         <th scope="col" th:if="${tab==1}">用户名</th>
                         <th scope="col" th:if="${tab==1}">密码</th>
                         <th scope="col" th:if="${tab==1}">角色ID</th>
+                        <th scope="col" th:if="${tab==1}">角色名称</th>
                         <th scope="col" th:if="${tab==2}">姓名</th>
                         <th scope="col" th:if="${tab==2}">性别</th>
                         <th scope="col" th:if="${tab==2}">出生日期</th>
                         <th scope="col" th:if="${tab==2}">教育程度</th>
-                        <th scope="col" th:if="${tab==2}">职位ID</th>
-                        <th scope="col" th:if="${tab==2}">部门ID</th>
+                        <th scope="col" th:if="${tab==2}">职位</th>
+                        <th scope="col" th:if="${tab==2}">部门</th>
                         <th scope="col" th:if="${tab==2}">入职日期</th>
                         <th scope="col" th:if="${tab==4}">部门名称</th>
                         <th scope="col" th:if="${tab==8}">职位名称</th>
@@ -97,12 +98,13 @@
                         <td th:if="${tab==1}" th:text="${item.username}"></td>
                         <td th:if="${tab==1}" th:text="${item.password}"></td>
                         <td th:if="${tab==1}" th:text="${item.roleId}"></td>
+                        <td th:if="${tab==1}" th:text="${item.roleName}"></td>
                         <td th:if="${tab==2}" th:text="${item.realName}"></td>
-                        <td th:if="${tab==2}" th:text="${item.gender}"></td>
+                        <td th:if="${tab==2}" th:text="${item.genderName}"></td>
                         <td th:if="${tab==2}" th:text="${#dates.format(item.birthday,'yyyy-MM-dd')}"></td>
-                        <td th:if="${tab==2}" th:text="${item.educationLevel}"></td>
-                        <td th:if="${tab==2}" th:text="${item.jobId}"></td>
-                        <td th:if="${tab==2}" th:text="${item.departmentId}"></td>
+                        <td th:if="${tab==2}" th:text="${item.educationLevelName}"></td>
+                        <td th:if="${tab==2}" th:text="${item.jobName}"></td>
+                        <td th:if="${tab==2}" th:text="${item.departmentName}"></td>
                         <td th:if="${tab==2}" th:text="${#dates.format(item.importTime,'yyyy-MM-dd')}"></td>
                         <td th:if="${tab==4||tab==8}" th:text="${item.name}"></td>
                         <td th:if="${tab==1||tab==4||tab==8}"
@@ -159,6 +161,11 @@
     </div>
 </div>
 <input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
+<input id="roleList" type="text" th:value="${roleList}" hidden="hidden"/>
+<input id="genderList" type="text" th:value="${genderList}" hidden="hidden"/>
+<input id="educationLevelList" type="text" th:value="${educationLevelList}" hidden="hidden"/>
+<input id="jobList" type="text" th:value="${jobList}" hidden="hidden"/>
+<input id="departmentList" type="text" th:value="${departmentList}" hidden="hidden"/>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/console_profile.js}"></script>

@@ -60,10 +60,10 @@ function getFormIDGroup(value) {
 
 function getFormSelectGroup(label, idName, value) {
     var valueList = JSON.parse(value);
-    var content = "<option>请选择表</option>";
+    var content = "";
     for (var i = 0; i < valueList.length; i++) {
         var item = valueList[i];
-        content += "<option value='" + item.identity + "'>" + item.name + "</option>";
+        content += "<option value='" + item.id + "'>" + item.name + "</option>";
     }
     return "<div class='form-group row'>\n" +
         "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
