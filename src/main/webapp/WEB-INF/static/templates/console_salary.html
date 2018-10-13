@@ -64,6 +64,7 @@
                         <th scope="col">ID</th>
                         <th scope="col">薪水(元/月)</th>
                         <th scope="col">职位ID</th>
+                        <th scope="col">职位名称</th>
                         <th scope="col">创建时间</th>
                         <th scope="col">操作</th>
                     </tr>
@@ -74,6 +75,7 @@
                         <td th:text="${item.id}"></td>
                         <td th:text="${item.monthlyValue}"></td>
                         <td th:text="${item.jobId}"></td>
+                        <td th:text="${item.jobName}"></td>
                         <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
                             <button type="button" class="btn btn-outline-primary btn-sm"
@@ -86,7 +88,8 @@
                             <button type="button" class="btn btn-outline-danger btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
-                                    th:attr="data-tab=${tab},data-action=8,data-id=${item.id}">删除
+                                    th:attr="data-tab=${tab},data-action=8,data-id=${item.id}"
+                                    th:if="${page.shownAction>=8}">删除
                             </button>
                         </td>
                     </tr>

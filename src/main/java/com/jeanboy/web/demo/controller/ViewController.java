@@ -217,8 +217,14 @@ public class ViewController extends BaseController {
         model.addAttribute("user", userModel);
 
         if (tab == 2) {//用户信息表
-            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
-            List<UserInfoEntity> entityList = userInfoService.getAll();
+            List<UserInfoEntity> entityList;
+            try {
+                checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, true);
+                entityList = userInfoService.getAll();
+            } catch (Exception e) {
+                checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER_INFO, PermissionConfig.IDENTITY_SELECT, false);
+                entityList = userInfoService.findByUserId(onlineUser.getId());
+            }
 
             List<UserInfoModel> dataList = new ArrayList<>();
             for (UserInfoEntity entity : entityList) {
@@ -302,8 +308,14 @@ public class ViewController extends BaseController {
             PageModel pageModel = new PageModel(shownMenu, shownTab, showAction);
             model.addAttribute("page", pageModel);
         } else {//用户账号表
-            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
-            List<UserEntity> entityList = userService.getAll();
+            List<UserEntity> entityList;
+            try {
+                checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
+                entityList = userService.getAll();
+            } catch (Exception e) {
+                checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, false);
+                entityList = userService.findByUsername(onlineUser.getUsername());
+            }
 
             List<UserModel> dataList = new ArrayList<>();
             for (UserEntity entity : entityList) {
@@ -349,11 +361,28 @@ public class ViewController extends BaseController {
             return "sign_in";
         }
 
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, false);
         UserModel userModel = Mapper.transform(onlineUser);
         model.addAttribute("user", userModel);
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
-        List<SalaryEntity> dataList = salaryService.getAll();
+
+        List<SalaryEntity> salaryList = new ArrayList<>();
+        try {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, true);
+            salaryList = salaryService.getAll();
+        } catch (Exception e) {
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_SALARY, PermissionConfig.IDENTITY_SELECT, false);
+            List<UserInfoEntity> userInfoList = userInfoService.findByUserId(onlineUser.getId());
+            if (userInfoList.size() > 0) {
+                UserInfoEntity userInfoEntity = userInfoList.get(0);
+                salaryList = salaryService.findByJobId(userInfoEntity.getJobId());
+            }
+        }
+        List<SalaryModel> dataList = new ArrayList<>();
+        for (SalaryEntity entity : salaryList) {
+            SalaryModel salaryModel = Mapper.transform(entity);
+            dataList.add(salaryModel);
+        }
+
         model.addAttribute("dataList", dataList);
         model.addAttribute("tab", 1);
 
@@ -393,15 +422,20 @@ public class ViewController extends BaseController {
             return "sign_in";
         }
 
-        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, true);
+        checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_USER, PermissionConfig.IDENTITY_SELECT, false);
         UserModel userModel = Mapper.transform(onlineUser);
         model.addAttribute("user", userModel);
         if (tab == 2) {//考勤表
-            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, true);
-            List<AttendanceEntity> dataList = attendanceService.getAll();
+            List<AttendanceEntity> dataList;
+            try {
+                checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, true);
+                dataList = attendanceService.getAll();
+            } catch (Exception e) {
+                checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, false);
+                dataList = attendanceService.findByUserId(onlineUser.getId());
+            }
             model.addAttribute("dataList", dataList);
             model.addAttribute("tab", 2);
-
 
             List<SelectModel> attendanceTypeList = new ArrayList<>();
             List<AttendanceTypeEntity> jobEntityList = attendanceTypeService.getAll();
@@ -419,7 +453,7 @@ public class ViewController extends BaseController {
             PageModel pageModel = new PageModel(shownMenu, shownTab, showAction);
             model.addAttribute("page", pageModel);
         } else {//考勤类型表
-            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE_TYPE, PermissionConfig.IDENTITY_SELECT, true);
+            checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE_TYPE, PermissionConfig.IDENTITY_SELECT, false);
             List<AttendanceTypeEntity> dataList = attendanceTypeService.getAll();
             model.addAttribute("dataList", dataList);
             model.addAttribute("tab", 1);

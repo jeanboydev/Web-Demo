@@ -10,6 +10,7 @@ public interface AttendanceContract {
 
     interface Repository extends BaseContract<Long, AttendanceEntity> {
 
+        List<AttendanceEntity> findByUserId(Long userId);
     }
 
     interface Service {
@@ -23,5 +24,7 @@ public interface AttendanceContract {
         void update(AttendanceEntity model);
 
         void delete(Long id);
+
+        List<AttendanceEntity> findByUserId(Long userId);
     }
 }

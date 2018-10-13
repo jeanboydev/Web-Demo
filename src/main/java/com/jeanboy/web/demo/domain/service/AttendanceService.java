@@ -41,4 +41,9 @@ public class AttendanceService implements AttendanceContract.Service {
     public void delete(Long id) {
         repository.delete(id);
     }
+
+    @Override
+    public List<AttendanceEntity> findByUserId(Long userId) {
+        return repository.findByUserId(userId);
+    }
 }

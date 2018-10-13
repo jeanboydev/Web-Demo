@@ -41,4 +41,9 @@ public class SalaryService implements SalaryContract.Service {
     public void delete(Integer id) {
         repository.delete(id);
     }
+
+    @Override
+    public List<SalaryEntity> findByJobId(Integer jobId) {
+        return repository.findByJobId(jobId);
+    }
 }

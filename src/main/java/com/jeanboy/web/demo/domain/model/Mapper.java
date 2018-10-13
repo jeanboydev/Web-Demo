@@ -100,4 +100,14 @@ public class Mapper {
         rolePermissionModel.setCreateTime(rolePermissionModel.getCreateTime());
         return rolePermissionModel;
     }
+
+    public static SalaryModel transform(SalaryEntity salaryEntity) {
+        SalaryModel salaryModel = new SalaryModel();
+        salaryModel.setId(salaryEntity.getId());
+        salaryModel.setJobId(salaryEntity.getJobId());
+        salaryModel.setJobName(MemoryCache.getJobEntity(salaryEntity.getJobId()).getName());
+        salaryModel.setMonthlyValue(salaryEntity.getMonthlyValue());
+        salaryEntity.setCreateTime(salaryEntity.getCreateTime());
+        return salaryModel;
+    }
 }

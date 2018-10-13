@@ -23,10 +23,10 @@ $(function () {
                 body += getFormSelectGroup("所属角色", "roleId", roleList);
                 var tableList = $("#tableList").val();
                 body += getFormSelectGroup("所属表", "table", tableList);
-                body += getFormCheckGroup("查询", "select", 1, false);
-                body += getFormCheckGroup("添加", "insert", 2, false);
-                body += getFormCheckGroup("修改", "update", 4, false);
-                body += getFormCheckGroup("删除", "delete", 8, false);
+                body += getFormCheckGroup("查询", "select", 1, "selectPrivileged", 1 << 4);
+                body += getFormCheckGroup("添加", "insert", 2, "insertPrivileged", 2 << 4);
+                body += getFormCheckGroup("修改", "update", 4, "updatePrivileged", 4 << 4);
+                body += getFormCheckGroup("删除", "delete", 8, "deletePrivileged", 8 << 4);
             }
         } else if (action === 4) {//编辑
             var id = button.data('id');
@@ -43,10 +43,10 @@ $(function () {
                 var permissionIdentity = button.data('permissionidentity');
                 var tableList = $("#tableList").val();
                 body += getFormSelectGroup("表", "table", tableList);
-                body += getFormCheckGroup("查询", "select", 1, false);
-                body += getFormCheckGroup("添加", "insert", 2, false);
-                body += getFormCheckGroup("修改", "update", 4, false);
-                body += getFormCheckGroup("删除", "delete", 8, false);
+                body += getFormCheckGroup("查询", "select", 1, "selectPrivileged", 1 << 4);
+                body += getFormCheckGroup("添加", "insert", 2, "insertPrivileged", 2 << 4);
+                body += getFormCheckGroup("修改", "update", 4, "updatePrivileged", 4 << 4);
+                body += getFormCheckGroup("删除", "delete", 8, "deletePrivileged", 8 << 4);
             }
         } else if (action === 8) {//删除
             title = "提示";
@@ -79,22 +79,33 @@ function onConfirmClick(tab, action) {
             var insertValue = $("#insert").is(":checked") ? $("#insert").val() : 0;
             var updateValue = $("#update").is(":checked") ? $("#update").val() : 0;
             var deleteValue = $("#delete").is(":checked") ? $("#delete").val() : 0;
+
+            var selectPrivilegedValue = $("#selectPrivileged").is(":checked") ? $("#selectPrivileged").val() : 0;
+            var insertPrivilegedValue = $("#insertPrivileged").is(":checked") ? $("#insertPrivileged").val() : 0;
+            var updatePrivilegedValue = $("#updatePrivileged").is(":checked") ? $("#updatePrivileged").val() : 0;
+            var deletePrivilegedValue = $("#deletePrivileged").is(":checked") ? $("#deletePrivileged").val() : 0;
             var permissionIdentity = parseInt($("#table").val()) +
-                parseInt(selectValue) +
-                parseInt(insertValue) +
-                parseInt(updateValue) +
-                parseInt(deleteValue);
+                parseInt(selectValue) + parseInt(selectPrivilegedValue) +
+                parseInt(insertValue) + parseInt(insertPrivilegedValue) +
+                parseInt(updateValue) + parseInt(updatePrivilegedValue) +
+                parseInt(deleteValue) + parseInt(deletePrivilegedValue);
             toSubmitRolePermissionCreate(currentToken, $("#roleId").val(), permissionIdentity);
         } else if (action === 4) {//编辑
             var selectValue = $("#select").is(":checked") ? $("#select").val() : 0;
             var insertValue = $("#insert").is(":checked") ? $("#insert").val() : 0;
             var updateValue = $("#update").is(":checked") ? $("#update").val() : 0;
             var deleteValue = $("#delete").is(":checked") ? $("#delete").val() : 0;
+
+            var selectPrivilegedValue = $("#selectPrivileged").is(":checked") ? $("#selectPrivileged").val() : 0;
+            var insertPrivilegedValue = $("#insertPrivileged").is(":checked") ? $("#insertPrivileged").val() : 0;
+            var updatePrivilegedValue = $("#updatePrivileged").is(":checked") ? $("#updatePrivileged").val() : 0;
+            var deletePrivilegedValue = $("#deletePrivileged").is(":checked") ? $("#deletePrivileged").val() : 0;
+
             var permissionIdentity = parseInt($("#table").val()) +
-                parseInt(selectValue) +
-                parseInt(insertValue) +
-                parseInt(updateValue) +
-                parseInt(deleteValue);
+                parseInt(selectValue) + parseInt(selectPrivilegedValue) +
+                parseInt(insertValue) + parseInt(insertPrivilegedValue) +
+                parseInt(updateValue) + parseInt(updatePrivilegedValue) +
+                parseInt(deleteValue) + parseInt(deletePrivilegedValue);
             toSubmitRolePermissionUpdate(currentToken, $("#idMark").val(), $("#roleId").val(), permissionIdentity);
         } else if (action === 8) {//删除
             toSubmitRolePermissionDelete(currentToken, $("#idMark").val());

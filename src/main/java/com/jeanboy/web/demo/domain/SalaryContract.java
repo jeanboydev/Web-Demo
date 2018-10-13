@@ -9,6 +9,7 @@ public interface SalaryContract {
 
     interface Repository extends BaseContract<Integer, SalaryEntity> {
 
+        List<SalaryEntity> findByJobId(Integer jobId);
     }
 
     interface Service {
@@ -22,5 +23,7 @@ public interface SalaryContract {
         void update(SalaryEntity model);
 
         void delete(Integer id);
+
+        List<SalaryEntity> findByJobId(Integer jobId);
     }
 }

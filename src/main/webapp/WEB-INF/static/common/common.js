@@ -74,11 +74,17 @@ function getFormSelectGroup(label, idName, value) {
         "</div></div>";
 }
 
-function getFormCheckGroup(label, idName, value, isChecked) {
-    return "<div class='form-check form-check-inline'>\n" +
-        "<input class='form-check-input' type='checkbox' value='" + value + "' id='" + idName + "'" + (isChecked ? 'checked' : '') + ">" +
-        "<label for='" + idName + "' class='form-check-label'>" + label + "</label>\n" +
-        "</div>";
+function getFormCheckGroup(label, idName, value, privilegedId, privilegedValue) {
+    return "<div class='form-group row'>\n" +
+        "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
+        "<div class='col-sm-10'>\n<div class='form-control-plaintext'>" +
+        "<div class='form-check form-check-inline'>\n" +
+        "<input class='form-check-input' type='checkbox' value='" + value + "' id='" + idName + "'>" +
+        "<label for='" + idName + "' class='form-check-label'>仅自己</label></div>"
+        + "<div class='form-check form-check-inline'>\n" +
+        "<input class='form-check-input' type='checkbox' value='" + privilegedValue + "' id='" + privilegedId + "'>" +
+        "<label for='" + privilegedId + "' class='form-check-label'>全部</label></div>" +
+        "</div></div></div>";
 }
 
 function getFormInputGroup(label, idName, value) {
