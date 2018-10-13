@@ -1,13 +1,10 @@
 var currentToken = "";
+var currentShownMenu = 0;
 $(function () {
     currentToken = getParam("token");
+    currentShownMenu = $("#shownMenu").val();
 
-    $("#leftNav").html("<div class='nav flex-column nav-pills'>" +
-        "<a class='nav-link' href='/console?tab=1&token=" + currentToken + "'>首页</a>" +
-        "<a class='nav-link' href='/console/auth?tab=1&token=" + currentToken + "'>权限管理</a>" +
-        "<a class='nav-link' href='/console/profile?tab=1&token=" + currentToken + "'>人事管理</a>" +
-        "<a class='nav-link' href='/console/salary?tab=1&token=" + currentToken + "'>工资管理</a>" +
-        "<a class='nav-link active' href='/console/record?tab=1&token=" + currentToken + "'>考勤管理</a></div>");
+    createMenu(currentShownMenu, menuRecord, currentToken);
 
     $("#actionModal").on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -17,38 +14,38 @@ $(function () {
         var title = "";
         var body = "<div id='toast'></div>";
         var footer = getFormFooterButton(tab, action);
-        if (action === 0) {//新建
+        if (action === 2) {//新建
             title = "新建";
             if (tab === 1) {
-                body += getFormGroup("考勤类型名称", "name", "");
+                body += getFormInputGroup("考勤类型名称", "name", "");
             } else if (tab === 2) {
-                body += getFormGroup("用户ID", "userId", "");
-                body += getFormGroup("考勤类型ID", "attendanceTypeId", "");
-                body += getFormGroup("打卡日期", "createDate", "");
-                body += getFormGroup("上班日期", "startTime", "");
-                body += getFormGroup("下班日期", "endTime", "");
+                body += getFormInputGroup("用户ID", "userId", "");
+                body += getFormInputGroup("考勤类型ID", "attendanceTypeId", "");
+                body += getFormInputGroup("打卡日期", "createDate", "");
+                body += getFormInputGroup("上班日期", "startTime", "");
+                body += getFormInputGroup("下班日期", "endTime", "");
             }
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             var id = button.data('id');
             title = "编辑";
             body += getFormIDGroup(id);
 
             if (tab === 1) {
                 var name = button.data('name')
-                body += getFormGroup("考勤类型名称", "name", name);
+                body += getFormInputGroup("考勤类型名称", "name", name);
             } else if (tab === 2) {
                 var userId = button.data('userid');
                 var attendanceTypeId = button.data('attendancetypeid');
                 var createDate = button.data('createdate');
                 var startTime = button.data('starttime');
                 var endTime = button.data('endtime');
-                body += getFormGroup("用户ID", "userId", userId);
-                body += getFormGroup("考勤类型ID", "attendanceTypeId", attendanceTypeId);
-                body += getFormGroup("打卡日期", "createDate", createDate);
-                body += getFormGroup("上班日期", "startTime", startTime);
-                body += getFormGroup("下班日期", "endTime", endTime);
+                body += getFormInputGroup("用户ID", "userId", userId);
+                body += getFormInputGroup("考勤类型ID", "attendanceTypeId", attendanceTypeId);
+                body += getFormInputGroup("打卡日期", "createDate", createDate);
+                body += getFormInputGroup("上班日期", "startTime", startTime);
+                body += getFormInputGroup("下班日期", "endTime", endTime);
             }
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             title = "提示";
             var id = button.data('id');
             body += getDeleteContent(id);
@@ -66,24 +63,24 @@ function onTabClick(tab) {
 
 function onConfirmClick(tab, action) {
     if (tab === 1) {
-        if (action === 0) {//新建
+        if (action === 2) {//新建
             toSubmitAttendanceTypeCreate(currentToken, $("#name").val());
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             toSubmitAttendanceTypeUpdate(currentToken,
                 $("#idMark").val(),
                 $("#name").val());
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             toSubmitAttendanceTypeDelete(currentToken, $("#idMark").val());
         }
     } else if (tab === 2) {
-        if (action === 0) {//新建
+        if (action === 2) {//新建
             toSubmitAttendanceCreate(currentToken,
                 $("#userId").val(),
                 $("#attendanceTypeId").val(),
                 $("#createDate").val(),
                 $("#startTime").val(),
                 $("#endTime").val());
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             toSubmitAttendanceUpdate(currentToken,
                 $("#idMark").val(),
                 $("#userId").val(),
@@ -91,7 +88,7 @@ function onConfirmClick(tab, action) {
                 $("#createDate").val(),
                 $("#startTime").val(),
                 $("#endTime").val());
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             toSubmitAttendanceDelete(currentToken, $("#idMark").val());
         }
     }

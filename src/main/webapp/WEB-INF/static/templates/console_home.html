@@ -66,6 +66,7 @@
         </div>
     </div>
 </div>
+<input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/console.js}"></script>

@@ -144,9 +144,7 @@ public class UsersController extends BaseController {
             resultUser = userService.get(userId);
         }
         RoleEntity roleEntity = MemoryCache.getRoleEntity(resultUser.getRoleId());
-        RolePermissionEntity rolePermissionEntity = MemoryCache.getRolePermissionEntity(roleEntity.getId());
         RoleModel roleModel = Mapper.transform(roleEntity);
-        roleModel.setIdentity(rolePermissionEntity.getPermissionIdentity());
         UserModel userModel = Mapper.transform(resultUser, roleModel);
         return getResponseInfo(JSON.toJSONString(userModel));
     }

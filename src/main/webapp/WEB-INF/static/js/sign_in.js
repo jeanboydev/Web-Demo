@@ -14,7 +14,7 @@ function toSignIn() {
         dataType: "json",
         data: {
             username: username,
-            password: md5(password)
+            password: password
         },
         success: function (response) {
             window.location.href = host + "/console?tab=1&token=" + encodeURIComponent(response.data.token);

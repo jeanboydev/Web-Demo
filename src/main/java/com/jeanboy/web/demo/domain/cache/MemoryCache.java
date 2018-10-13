@@ -4,24 +4,31 @@ import com.jeanboy.web.demo.domain.entity.*;
 import com.jeanboy.web.demo.domain.model.DepartmentModel;
 import com.jeanboy.web.demo.domain.model.TokenModel;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MemoryCache {
 
-    private static Map<Integer, RolePermissionEntity> permissionMap = new HashMap<>();
+    private static Map<Integer, List<RolePermissionEntity>> permissionMap = new HashMap<>();
     private static Map<Integer, RoleEntity> roleMap = new HashMap<>();
     private static Map<Integer, JobEntity> jobMap = new HashMap<>();
     private static Map<Integer, DepartmentEntity> departmentMap = new HashMap<>();
     private static Map<String, UserEntity> userMap = new HashMap<>();
     private static Map<String, TokenModel> tokenMap = new HashMap<>();
 
-    public static RolePermissionEntity getRolePermissionEntity(Integer roleId) {
+    public static List<RolePermissionEntity> getRolePermissionEntity(Integer roleId) {
         return permissionMap.get(roleId);
     }
 
     public static void putRolePermissionEntity(RolePermissionEntity rolePermissionEntity) {
-        permissionMap.put(rolePermissionEntity.getRoleId(), rolePermissionEntity);
+        List<RolePermissionEntity> rolePermissionList = getRolePermissionEntity(rolePermissionEntity.getRoleId());
+        if (rolePermissionList == null) {
+            rolePermissionList = new ArrayList<>();
+        }
+        rolePermissionList.add(rolePermissionEntity);
+        permissionMap.put(rolePermissionEntity.getRoleId(), rolePermissionList);
     }
 
     public static RoleEntity getRoleEntity(Integer roleId) {

@@ -43,18 +43,20 @@
             <div class="container-fluid row">
                 <ul class="nav nav-tabs col-10">
                     <li class="nav-item">
-                        <a th:class="${tab==1}?'nav-link active':'nav-link'" href="javascript:onTabClick(1);">考勤类型表</a>
+                        <a th:if="${page.shownTab>=1}"
+                           th:class="${tab==1}?'nav-link active':'nav-link'" href="javascript:onTabClick(1);">考勤类型表</a>
                     </li>
                     <li class="nav-item">
-                        <a th:class="${tab==2}?'nav-link active':'nav-link'" href="javascript:onTabClick(2);">考勤记录表</a>
+                        <a th:if="${page.shownTab>=2}"
+                           th:class="${tab==2}?'nav-link active':'nav-link'" href="javascript:onTabClick(2);">考勤记录表</a>
                     </li>
                 </ul>
                 <div class="col-2">
                     <button type="button" class="btn btn-primary px-4 float-right"
                             data-toggle="modal"
                             data-target="#actionModal"
-                            th:attr="data-tab=${tab},data-action=0">
-                        新建
+                            th:attr="data-tab=${tab},data-action=2"
+                            th:if="${page.shownAction>=2}">新建
                     </button>
                 </div>
             </div>
@@ -88,23 +90,25 @@
                         <td th:if="${tab==2}" th:text="${#dates.format(item.endTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td th:text="${#dates.format(item.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
                         <td>
-                            <button th:if="${tab==1}" type="button" class="btn btn-outline-primary btn-sm"
+                            <button th:if="${tab==1&&page.shownAction>=4}" type="button"
+                                    class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
-                                    th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-name=${item.name}">编辑
+                                    th:attr="data-tab=${tab},data-action=4,data-id=${item.id},data-name=${item.name}">编辑
                             </button>
-                            <button th:if="${tab==2}" type="button" class="btn btn-outline-primary btn-sm"
+                            <button th:if="${tab==2&&page.shownAction>=4}" type="button"
+                                    class="btn btn-outline-primary btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
-                                    th:attr="data-tab=${tab},data-action=1,data-id=${item.id},data-userid=${item.userId},
+                                    th:attr="data-tab=${tab},data-action=4,data-id=${item.id},data-userid=${item.userId},
                                     data-attendancetypeid=${item.attendanceTypeId},data-createdate=${item.createDate},
-                                    data-starttime=${item.startTime},data-endtime=${item.endTime}">
-                                编辑
+                                    data-starttime=${item.startTime},data-endtime=${item.endTime}"> 编辑
                             </button>
                             <button type="button" class="btn btn-outline-danger btn-sm"
                                     data-toggle="modal"
                                     data-target="#actionModal"
-                                    th:attr="data-tab=${tab},data-action=2,data-id=${item.id}">删除
+                                    th:attr="data-tab=${tab},data-action=8,data-id=${item.id}"
+                                    th:if="${page.shownAction>=8}">删除
                             </button>
                         </td>
                     </tr>
@@ -129,6 +133,7 @@
         </div>
     </div>
 </div>
+<input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/console_record.js}"></script>

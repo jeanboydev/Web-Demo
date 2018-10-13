@@ -18,16 +18,31 @@ function getParam(key) {
 
 function showToast(title, content) {
     $("#toast").empty();
-    $("#toast").append("<div class=\"alert alert-warning alert-dismissible fade show\" role=\"alert\">\n" +
+    $("#toast").append("<div class='alert alert-warning alert-dismissible fade show' role='alert'>\n" +
         "        <strong>" + title + "</strong> " + content + "\n" +
-        "        <button type=\"button\" class=\"close\" onclick=\"hideToast();\">\n" +
-        "            <span aria-hidden=\"true\">&times;</span>\n" +
+        "        <button type='button' class='close' onclick='hideToast();'>\n" +
+        "            <span aria-hidden='true'>&times;</span>\n" +
         "        </button>\n" +
         "    </div>");
 }
 
 function hideToast() {
     $("#toast").empty();
+}
+
+var menuHome = 0;
+var menuAuth = 1;
+var menuProfile = 2;
+var menuSalary = 4;
+var menuRecord = 8;
+
+function createMenu(shownMenu, currentMenu, token) {
+    $("#leftNav").html("<div class='nav flex-column nav-pills'>" +
+        ((shownMenu & menuHome) === menuHome ? "<a class='nav-link" + (currentMenu === menuHome ? " active" : "") + "' href='/console?tab=1&token=" + token + "'>首页</a>" : "") +
+        ((shownMenu & menuAuth) === menuAuth ? "<a class='nav-link" + (currentMenu === menuAuth ? " active" : "") + "' href='/console/auth?tab=1&token=" + token + "'>权限管理</a>" : "") +
+        ((shownMenu & menuProfile) === menuProfile ? "<a class='nav-link" + (currentMenu === menuProfile ? " active" : "") + "' href='/console/profile?tab=1&token=" + token + "'>人事管理</a>" : "") +
+        ((shownMenu & menuSalary) === menuSalary ? "<a class='nav-link" + (currentMenu === menuSalary ? " active" : "") + "' href='/console/salary?tab=1&token=" + token + "'>工资管理</a>" : "") +
+        ((shownMenu & menuRecord) === menuRecord ? "<a class='nav-link" + (currentMenu === menuRecord ? " active" : "") + "' href='/console/record?tab=1&token=" + token + "'>考勤管理</a></div>" : ""));
 }
 
 
@@ -43,9 +58,32 @@ function getFormIDGroup(value) {
         "</div></div>";
 }
 
-function getFormGroup(label, idName, value) {
+function getFormSelectGroup(label, idName, value) {
+    var valueList = JSON.parse(value);
+    var content = "<option>请选择表</option>";
+    for (var i = 0; i < valueList.length; i++) {
+        var item = valueList[i];
+        content += "<option value='" + item.identity + "'>" + item.name + "</option>";
+    }
     return "<div class='form-group row'>\n" +
-        "<label for='role_name' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
+        "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
+        "<div class='col-sm-10'>\n" +
+        "<select class='form-control' id='" + idName + "'>" +
+        content +
+        "</select>\n" +
+        "</div></div>";
+}
+
+function getFormCheckGroup(label, idName, value, isChecked) {
+    return "<div class='form-check form-check-inline'>\n" +
+        "<input class='form-check-input' type='checkbox' value='" + value + "' id='" + idName + "'" + (isChecked ? 'checked' : '') + ">" +
+        "<label for='" + idName + "' class='form-check-label'>" + label + "</label>\n" +
+        "</div>";
+}
+
+function getFormInputGroup(label, idName, value) {
+    return "<div class='form-group row'>\n" +
+        "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
         "<div class='col-sm-10'>\n" +
         "<input type='text' class='form-control' placeholder='请输入" + label + "' id='" + idName + "' value='" + value + "'>\n" +
         "</div></div>";

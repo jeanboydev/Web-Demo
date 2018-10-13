@@ -59,7 +59,7 @@ public class TokenController extends BaseController {
         }
         UserEntity userEntity = userList.get(0);
         String cachePassword = userEntity.getPassword();
-        if (!password.toUpperCase().equals(cachePassword)) {
+        if (!password.toUpperCase().equals(cachePassword.toUpperCase())) {
             throw new ServerException(ErrorCode.PASSWORD_ERROR);
         }
         TokenModel tokenModel = TokenUtil.getToken(userEntity.getId());

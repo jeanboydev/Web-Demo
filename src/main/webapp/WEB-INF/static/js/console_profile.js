@@ -1,13 +1,10 @@
 var currentToken = "";
+var currentShownMenu = 0;
 $(function () {
     currentToken = getParam("token");
+    currentShownMenu = $("#shownMenu").val();
 
-    $("#leftNav").html("<div class='nav flex-column nav-pills'>" +
-        "<a class='nav-link' href='/console?tab=1&token=" + currentToken + "'>首页</a>" +
-        "<a class='nav-link' href='/console/auth?tab=1&token=" + currentToken + "'>权限管理</a>" +
-        "<a class='nav-link active' href='/console/tab=1&profile?token=" + currentToken + "'>人事管理</a>" +
-        "<a class='nav-link' href='/console/salary?tab=1&token=" + currentToken + "'>工资管理</a>" +
-        "<a class='nav-link' href='/console/record?tab=1&token=" + currentToken + "'>考勤管理</a></div>");
+    createMenu(currentShownMenu, menuProfile, currentToken);
 
     $("#actionModal").on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
@@ -17,27 +14,27 @@ $(function () {
         var title = "";
         var body = "<div id='toast'></div>";
         var footer = getFormFooterButton(tab, action);
-        if (action === 0) {//新建
+        if (action === 2) {//新建
             title = "新建";
 
             if (tab === 1) {
-                body += getFormGroup("用户名", "username", "");
-                body += getFormGroup("密码", "password", "");
-                body += getFormGroup("角色ID", "roleId", "");
+                body += getFormInputGroup("用户名", "username", "");
+                body += getFormInputGroup("密码", "password", "");
+                body += getFormInputGroup("角色ID", "roleId", "");
             } else if (tab === 2) {
-                body += getFormGroup("用户ID", "userId", "");
-                body += getFormGroup("真实姓名", "realName", "");
-                body += getFormGroup("性别", "gender", "");
-                body += getFormGroup("出生日期", "birthday", "");
-                body += getFormGroup("教育程度", "educationLevel", "");
-                body += getFormGroup("职位ID", "job", "");
-                body += getFormGroup("部门ID", "department", "");
-            } else if (tab === 3) {
-                body += getFormGroup("部门名称", "name", "");
+                body += getFormInputGroup("用户ID", "userId", "");
+                body += getFormInputGroup("真实姓名", "realName", "");
+                body += getFormInputGroup("性别", "gender", "");
+                body += getFormInputGroup("出生日期", "birthday", "");
+                body += getFormInputGroup("教育程度", "educationLevel", "");
+                body += getFormInputGroup("职位ID", "job", "");
+                body += getFormInputGroup("部门ID", "department", "");
             } else if (tab === 4) {
-                body += getFormGroup("职位名称", "name", "");
+                body += getFormInputGroup("部门名称", "name", "");
+            } else if (tab === 8) {
+                body += getFormInputGroup("职位名称", "name", "");
             }
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             var id = button.data('id');
             title = "编辑";
             body += getFormIDGroup(id);
@@ -46,9 +43,9 @@ $(function () {
                 var username = button.data('username');
                 var password = button.data('password');
                 var roleId = button.data('roleid');
-                body += getFormGroup("用户名", "username", username);
-                body += getFormGroup("密码", "password", password);
-                body += getFormGroup("角色ID", "roleId", roleId);
+                body += getFormInputGroup("用户名", "username", username);
+                body += getFormInputGroup("密码", "password", password);
+                body += getFormInputGroup("角色ID", "roleId", roleId);
             } else if (tab === 2) {
                 var userId = button.data('userid');
                 var realName = button.data('realname');
@@ -57,21 +54,21 @@ $(function () {
                 var educationLevel = button.data('educationlevel');
                 var jobId = button.data('jobid');
                 var departmentId = button.data('departmentid');
-                body += getFormGroup("用户ID", "userId", userId);
-                body += getFormGroup("真实姓名", "realName", realName);
-                body += getFormGroup("性别", "gender", gender);
-                body += getFormGroup("出生日期", "birthday", birthday);
-                body += getFormGroup("教育程度", "educationLevel", educationLevel);
-                body += getFormGroup("职位", "job", jobId);
-                body += getFormGroup("部门", "department", departmentId);
-            } else if (tab === 3) {
-                var name = button.data('name');
-                body += getFormGroup("部门名称", "name", name);
+                body += getFormInputGroup("用户ID", "userId", userId);
+                body += getFormInputGroup("真实姓名", "realName", realName);
+                body += getFormInputGroup("性别", "gender", gender);
+                body += getFormInputGroup("出生日期", "birthday", birthday);
+                body += getFormInputGroup("教育程度", "educationLevel", educationLevel);
+                body += getFormInputGroup("职位", "job", jobId);
+                body += getFormInputGroup("部门", "department", departmentId);
             } else if (tab === 4) {
                 var name = button.data('name');
-                body += getFormGroup("职位名称", "name", name);
+                body += getFormInputGroup("部门名称", "name", name);
+            } else if (tab === 8) {
+                var name = button.data('name');
+                body += getFormInputGroup("职位名称", "name", name);
             }
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             title = "提示";
             var id = button.data('id');
             body += getDeleteContent(id);
@@ -89,22 +86,22 @@ function onTabClick(tab) {
 
 function onConfirmClick(tab, action) {
     if (tab === 1) {
-        if (action === 0) {//新建
+        if (action === 2) {//新建
             toSubmitUserCreate(currentToken,
                 $("#username").val(),
                 $("#password").val(),
                 $("#roleId").val());
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             toSubmitUserUpdate(currentToken,
                 $("#idMark").val(),
                 $("#username").val(),
                 $("#password").val(),
                 $("#roleId").val());
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             toSubmitUserDelete(currentToken, $("#idMark").val());
         }
     } else if (tab === 2) {
-        if (action === 0) {//新建
+        if (action === 2) {//新建
             toSubmitUserInfoCreate(currentToken,
                 $("#userId").val(),
                 $("#realName").val(),
@@ -113,7 +110,7 @@ function onConfirmClick(tab, action) {
                 $("#educationLevel").val(),
                 $("#job").val(),
                 $("#department").val());
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             toSubmitUserInfoUpdate(currentToken,
                 $("#idMark").val(),
                 $("#userId").val(),
@@ -123,23 +120,23 @@ function onConfirmClick(tab, action) {
                 $("#educationLevel").val(),
                 $("#job").val(),
                 $("#department").val());
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             toSubmitUserInfoDelete(currentToken, $("#idMark").val());
         }
-    } else if (tab === 3) {
-        if (action === 0) {//新建
+    } else if (tab === 4) {
+        if (action === 2) {//新建
             toSubmitDepartmentCreate(currentToken, $("#name").val());
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             toSubmitDepartmentUpdate(currentToken, $("#idMark").val(), $("#name").val());
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             toSubmitDepartmentDelete(currentToken, $("#idMark").val());
         }
-    } else if (tab === 4) {
-        if (action === 0) {//新建
+    } else if (tab === 8) {
+        if (action === 2) {//新建
             toSubmitJobCreate(currentToken, $("#name").val());
-        } else if (action === 1) {//编辑
+        } else if (action === 4) {//编辑
             toSubmitJobUpdate(currentToken, $("#idMark").val(), $("#name").val());
-        } else if (action === 2) {//删除
+        } else if (action === 8) {//删除
             toSubmitJobDelete(currentToken, $("#idMark").val());
         }
     }
