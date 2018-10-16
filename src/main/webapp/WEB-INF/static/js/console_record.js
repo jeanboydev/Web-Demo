@@ -19,7 +19,8 @@ $(function () {
             if (tab === 1) {
                 body += getFormInputGroup("考勤类型名称", "name", "");
             } else if (tab === 2) {
-                body += getFormInputGroup("用户ID", "userId", "");
+                var userList = $("#userList").val();
+                body += getFormSelectGroup("用户", "userId", userList, 0);
                 var attendanceTypeList = $("#attendanceTypeList").val();
                 body += getFormSelectGroup("考勤类型", "attendanceTypeId", attendanceTypeList);
                 body += getFormInputGroup("打卡日期", "createDate", "");
@@ -40,9 +41,10 @@ $(function () {
                 var createDate = button.data('createdate');
                 var startTime = button.data('starttime');
                 var endTime = button.data('endtime');
-                body += getFormInputGroup("用户ID", "userId", userId);
+                var userList = $("#userList").val();
+                body += getFormSelectGroup("用户", "userId", userList, userId);
                 var attendanceTypeList = $("#attendanceTypeList").val();
-                body += getFormSelectGroup("考勤类型", "attendanceTypeId", attendanceTypeList);
+                body += getFormSelectGroup("考勤类型", "attendanceTypeId", attendanceTypeList, attendanceTypeId);
                 body += getFormInputGroup("打卡日期", "createDate", createDate);
                 body += getFormInputGroup("上班日期", "startTime", startTime);
                 body += getFormInputGroup("下班日期", "endTime", endTime);

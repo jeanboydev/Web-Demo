@@ -2,7 +2,7 @@ package com.jeanboy.web.demo.domain.model;
 
 public class SelectModel {
 
-    private int id;
+    private long id;
     private String name;
 
     public SelectModel() {
@@ -13,11 +13,11 @@ public class SelectModel {
         this.name = name;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

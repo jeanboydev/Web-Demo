@@ -58,12 +58,12 @@ function getFormIDGroup(value) {
         "</div></div>";
 }
 
-function getFormSelectGroup(label, idName, value) {
-    var valueList = JSON.parse(value);
+function getFormSelectGroup(label, idName, dataList, defaultId) {
+    var valueList = JSON.parse(dataList);
     var content = "";
     for (var i = 0; i < valueList.length; i++) {
         var item = valueList[i];
-        content += "<option value='" + item.id + "'>" + item.name + "</option>";
+        content += "<option value='" + item.id + "' " + (item.id === defaultId ? "selected" : "") + ">" + item.name + "</option>";
     }
     return "<div class='form-group row'>\n" +
         "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +

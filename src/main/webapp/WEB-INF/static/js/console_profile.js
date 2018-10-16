@@ -21,19 +21,20 @@ $(function () {
                 body += getFormInputGroup("用户名", "username", "");
                 body += getFormInputGroup("密码", "password", "");
                 var roleList = $("#roleList").val();
-                body += getFormSelectGroup("角色", "roleId", roleList);
+                body += getFormSelectGroup("角色", "roleId", roleList, 0);
             } else if (tab === 2) {
-                body += getFormInputGroup("用户ID", "userId", "");
+                var userList = $("#userList").val();
+                body += getFormSelectGroup("用户", "userId", userList, 0);
                 body += getFormInputGroup("真实姓名", "realName", "");
                 var genderList = $("#genderList").val();
-                body += getFormSelectGroup("性别", "gender", genderList);
+                body += getFormSelectGroup("性别", "gender", genderList, 0);
                 body += getFormInputGroup("出生日期", "birthday", "");
                 var educationLevelList = $("#educationLevelList").val();
-                body += getFormSelectGroup("教育程度", "educationLevel", educationLevelList);
+                body += getFormSelectGroup("教育程度", "educationLevel", educationLevelList, 0);
                 var jobList = $("#jobList").val();
-                body += getFormSelectGroup("职位ID", "job", jobList);
+                body += getFormSelectGroup("职位ID", "job", jobList, 0);
                 var departmentList = $("#departmentList").val();
-                body += getFormSelectGroup("部门ID", "department", departmentList);
+                body += getFormSelectGroup("部门ID", "department", departmentList, 0);
             } else if (tab === 4) {
                 body += getFormInputGroup("部门名称", "name", "");
             } else if (tab === 8) {
@@ -51,7 +52,7 @@ $(function () {
                 body += getFormInputGroup("用户名", "username", username);
                 body += getFormInputGroup("密码", "password", password);
                 var roleList = $("#roleList").val();
-                body += getFormSelectGroup("角色", "roleId", roleList);
+                body += getFormSelectGroup("角色", "roleId", roleList, roleId);
             } else if (tab === 2) {
                 var userId = button.data('userid');
                 var realName = button.data('realname');
@@ -60,17 +61,18 @@ $(function () {
                 var educationLevel = button.data('educationlevel');
                 var jobId = button.data('jobid');
                 var departmentId = button.data('departmentid');
-                body += getFormInputGroup("用户ID", "userId", userId);
+                var userList = $("#userList").val();
+                body += getFormSelectGroup("用户", "userId", userList, userId);
                 body += getFormInputGroup("真实姓名", "realName", realName);
                 var genderList = $("#genderList").val();
-                body += getFormSelectGroup("性别", "gender", genderList);
+                body += getFormSelectGroup("性别", "gender", genderList, gender);
                 body += getFormInputGroup("出生日期", "birthday", "");
                 var educationLevelList = $("#educationLevelList").val();
-                body += getFormSelectGroup("教育程度", "educationLevel", educationLevelList);
+                body += getFormSelectGroup("教育程度", "educationLevel", educationLevelList, educationLevel);
                 var jobList = $("#jobList").val();
-                body += getFormSelectGroup("职位ID", "job", jobList);
+                body += getFormSelectGroup("职位ID", "job", jobList, jobId);
                 var departmentList = $("#departmentList").val();
-                body += getFormSelectGroup("部门ID", "department", departmentList);
+                body += getFormSelectGroup("部门ID", "department", departmentList, departmentId);
             } else if (tab === 4) {
                 var name = button.data('name');
                 body += getFormInputGroup("部门名称", "name", name);

@@ -17,6 +17,7 @@ public class MemoryCache {
     private static Map<Integer, DepartmentEntity> departmentMap = new HashMap<>();
     private static Map<String, UserEntity> userMap = new HashMap<>();
     private static Map<String, TokenModel> tokenMap = new HashMap<>();
+    private static Map<Integer, AttendanceTypeEntity> attendanceTypeMap = new HashMap<>();
 
     public static List<RolePermissionEntity> getRolePermissionEntity(Integer roleId) {
         return permissionMap.get(roleId);
@@ -79,4 +80,15 @@ public class MemoryCache {
         return tokenMap.get(token);
     }
 
+    public static void putAttendanceTypeEntity(AttendanceTypeEntity attendanceTypeEntity) {
+        attendanceTypeMap.put(attendanceTypeEntity.getId(), attendanceTypeEntity);
+    }
+
+    public static AttendanceTypeEntity getAttendanceTypeEntity(Integer attendanceTypeId) {
+        return attendanceTypeMap.get(attendanceTypeId);
+    }
+
+    public static void removeAttendanceTypeEntity(Integer attendanceTypeId) {
+        attendanceTypeMap.remove(attendanceTypeId);
+    }
 }

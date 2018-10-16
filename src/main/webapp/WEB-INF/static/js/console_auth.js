@@ -22,7 +22,7 @@ $(function () {
                 var roleList = $("#roleList").val();
                 body += getFormSelectGroup("所属角色", "roleId", roleList);
                 var tableList = $("#tableList").val();
-                body += getFormSelectGroup("所属表", "table", tableList);
+                body += getFormSelectGroup("所属表", "table", tableList, 0);
                 body += getFormCheckGroup("查询", "select", 1, "selectPrivileged", 1 << 4);
                 body += getFormCheckGroup("添加", "insert", 2, "insertPrivileged", 2 << 4);
                 body += getFormCheckGroup("修改", "update", 4, "updatePrivileged", 4 << 4);
@@ -39,10 +39,19 @@ $(function () {
             } else if (tab === 2) {
                 var roleId = button.data('roleid');
                 var roleList = $("#roleList").val();
-                body += getFormSelectGroup("所属角色", "roleId", roleList);
+                body += getFormSelectGroup("所属角色", "roleId", roleList, roleId);
                 var permissionIdentity = button.data('permissionidentity');
                 var tableList = $("#tableList").val();
-                body += getFormSelectGroup("表", "table", tableList);
+                var valueList = JSON.parse(tableList);
+                var defaultId = 0;
+                for (var i = 0; i < valueList.length; i++) {
+                    var item = valueList[i];
+                    if ((permissionIdentity & item.id) === item.id) {
+                        defaultId = item.id;
+                        break;
+                    }
+                }
+                body += getFormSelectGroup("表", "table", tableList, defaultId);
                 body += getFormCheckGroup("查询", "select", 1, "selectPrivileged", 1 << 4);
                 body += getFormCheckGroup("添加", "insert", 2, "insertPrivileged", 2 << 4);
                 body += getFormCheckGroup("修改", "update", 4, "updatePrivileged", 4 << 4);

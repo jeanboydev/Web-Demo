@@ -69,6 +69,7 @@
                         <th th:if="${tab==1}" scope="col">考勤类型名称</th>
                         <th th:if="${tab==2}" scope="col">用户ID</th>
                         <th th:if="${tab==2}" scope="col">考勤类型ID</th>
+                        <th th:if="${tab==2}" scope="col">考勤类型名称</th>
                         <th th:if="${tab==2}" scope="col">打卡日期</th>
                         <th th:if="${tab==2}" scope="col">时长(小时)</th>
                         <th th:if="${tab==2}" scope="col">上班时间</th>
@@ -84,6 +85,7 @@
                         <td th:if="${tab==1}" th:text="${item.name}"></td>
                         <td th:if="${tab==2}" th:text="${item.userId}"></td>
                         <td th:if="${tab==2}" th:text="${item.attendanceTypeId}"></td>
+                        <td th:if="${tab==2}" th:text="${item.attendanceTypeName}"></td>
                         <td th:if="${tab==2}" th:text="${#dates.format(item.createDate,'yyyy-MM-dd')}"></td>
                         <td th:if="${tab==2}">8</td>
                         <td th:if="${tab==2}" th:text="${#dates.format(item.startTime,'yyyy-MM-dd HH:mm:ss')}"></td>
@@ -134,6 +136,7 @@
     </div>
 </div>
 <input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
+<input id="userList" type="text" th:value="${userList}" hidden="hidden"/>
 <input id="attendanceTypeList" type="text" th:value="${attendanceTypeList}" hidden="hidden"/>
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">

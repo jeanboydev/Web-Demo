@@ -3,6 +3,7 @@ package com.jeanboy.web.demo.controller;
 import com.alibaba.fastjson.JSON;
 import com.jeanboy.web.demo.base.BaseController;
 import com.jeanboy.web.demo.config.PermissionConfig;
+import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.AttendanceEntity;
 import com.jeanboy.web.demo.domain.entity.AttendanceTypeEntity;
 import com.jeanboy.web.demo.domain.entity.UserEntity;
@@ -49,7 +50,9 @@ public class AttendanceController extends BaseController {
         AttendanceTypeEntity attendanceTypeEntity = new AttendanceTypeEntity();
         attendanceTypeEntity.setName(name);
         attendanceTypeEntity.setCreateTime(System.currentTimeMillis());
-        attendanceTypeService.save(attendanceTypeEntity);
+        Integer id = attendanceTypeService.save(attendanceTypeEntity);
+        attendanceTypeEntity.setId(id);
+        MemoryCache.putAttendanceTypeEntity(attendanceTypeEntity);
         return getResponseInfo("");
     }
 
@@ -77,6 +80,7 @@ public class AttendanceController extends BaseController {
         AttendanceTypeEntity attendanceTypeEntity = attendanceTypeService.get(id);
         attendanceTypeEntity.setName(name);
         attendanceTypeService.update(attendanceTypeEntity);
+        MemoryCache.putAttendanceTypeEntity(attendanceTypeEntity);
         return getResponseInfo("");
     }
 
@@ -125,6 +129,7 @@ public class AttendanceController extends BaseController {
         UserEntity onlineUser = getOnlineUser(token);
         checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE_TYPE, PermissionConfig.IDENTITY_DELETE, true);
         attendanceTypeService.delete(id);
+        MemoryCache.removeAttendanceTypeEntity(id);
         return getResponseInfo("");
     }
 

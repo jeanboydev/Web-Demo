@@ -235,6 +235,14 @@ public class ViewController extends BaseController {
             model.addAttribute("dataList", dataList);
             model.addAttribute("tab", 2);
 
+            List<SelectModel> userList = new ArrayList<>();
+            List<UserEntity> userEntityList = userService.getAll();
+            for (UserEntity entity : userEntityList) {
+                SelectModel transform = Mapper.transformToSelect(entity);
+                userList.add(transform);
+            }
+            model.addAttribute("userList", JSON.toJSON(userList));
+
             List<SelectModel> genderList = new ArrayList<>();
             genderList.add(new SelectModel(Gender.UNKNOWN.getValue(), Gender.UNKNOWN.getName()));
             genderList.add(new SelectModel(Gender.MALE.getValue(), Gender.MALE.getName()));
@@ -426,16 +434,29 @@ public class ViewController extends BaseController {
         UserModel userModel = Mapper.transform(onlineUser);
         model.addAttribute("user", userModel);
         if (tab == 2) {//考勤表
-            List<AttendanceEntity> dataList;
+            List<AttendanceEntity> attendanceEntityList;
             try {
                 checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, true);
-                dataList = attendanceService.getAll();
+                attendanceEntityList = attendanceService.getAll();
             } catch (Exception e) {
                 checkPermission(onlineUser.getRoleId(), PermissionConfig.TABLE_ATTENDANCE, PermissionConfig.IDENTITY_SELECT, false);
-                dataList = attendanceService.findByUserId(onlineUser.getId());
+                attendanceEntityList = attendanceService.findByUserId(onlineUser.getId());
+            }
+            List<AttendanceModel> dataList = new ArrayList<>();
+            for (AttendanceEntity entity : attendanceEntityList) {
+                AttendanceModel transform = Mapper.transform(entity);
+                dataList.add(transform);
             }
             model.addAttribute("dataList", dataList);
             model.addAttribute("tab", 2);
+
+            List<SelectModel> userList = new ArrayList<>();
+            List<UserEntity> userEntityList = userService.getAll();
+            for (UserEntity entity : userEntityList) {
+                SelectModel transform = Mapper.transformToSelect(entity);
+                userList.add(transform);
+            }
+            model.addAttribute("userList", JSON.toJSON(userList));
 
             List<SelectModel> attendanceTypeList = new ArrayList<>();
             List<AttendanceTypeEntity> jobEntityList = attendanceTypeService.getAll();

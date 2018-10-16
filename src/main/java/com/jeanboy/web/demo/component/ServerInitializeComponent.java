@@ -5,7 +5,6 @@ import com.jeanboy.web.demo.config.PermissionConfig;
 import com.jeanboy.web.demo.domain.cache.MemoryCache;
 import com.jeanboy.web.demo.domain.entity.*;
 import com.jeanboy.web.demo.domain.service.*;
-import com.jeanboy.web.demo.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +26,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
     private final UserInfoService userInfoService;
     private final JobService jobService;
     private final DepartmentService departmentService;
+    private final AttendanceTypeService attendanceTypeService;
 
     @Autowired
     public ServerInitializeComponent(PermissionService permissionService,
@@ -35,7 +35,8 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
                                      UserService userService,
                                      UserInfoService userInfoService,
                                      JobService jobService,
-                                     DepartmentService departmentService) {
+                                     DepartmentService departmentService,
+                                     AttendanceTypeService attendanceTypeService) {
         this.permissionService = permissionService;
         this.roleService = roleService;
         this.rolePermissionService = rolePermissionService;
@@ -43,6 +44,7 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
         this.userInfoService = userInfoService;
         this.jobService = jobService;
         this.departmentService = departmentService;
+        this.attendanceTypeService = attendanceTypeService;
     }
 
     @Override
@@ -125,6 +127,10 @@ public class ServerInitializeComponent implements ApplicationListener<ContextRef
         List<DepartmentEntity> departmentEntityList = departmentService.getAll();
         for (DepartmentEntity entity : departmentEntityList) {
             MemoryCache.putDepartmentEntity(entity);
+        }
+        List<AttendanceTypeEntity> attendanceTypeEntityList = attendanceTypeService.getAll();
+        for (AttendanceTypeEntity entity : attendanceTypeEntityList) {
+            MemoryCache.putAttendanceTypeEntity(entity);
         }
     }
 }

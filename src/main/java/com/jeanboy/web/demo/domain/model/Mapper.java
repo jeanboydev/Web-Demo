@@ -28,6 +28,14 @@ public class Mapper {
         return userModel;
     }
 
+    public static SelectModel transformToSelect(UserEntity userEntity) {
+        if (userEntity == null) return null;
+        SelectModel selectModel = new SelectModel();
+        selectModel.setId(userEntity.getId());
+        selectModel.setName(userEntity.getUsername());
+        return selectModel;
+    }
+
     public static JobModel transform(JobEntity jobEntity) {
         if (jobEntity == null) return null;
         JobModel jobModel = new JobModel();
@@ -92,6 +100,7 @@ public class Mapper {
     }
 
     public static RolePermissionModel transform(RolePermissionEntity rolePermissionEntity) {
+        if (rolePermissionEntity == null) return null;
         RolePermissionModel rolePermissionModel = new RolePermissionModel();
         rolePermissionModel.setId(rolePermissionEntity.getId());
         rolePermissionModel.setRoleId(rolePermissionEntity.getRoleId());
@@ -102,6 +111,7 @@ public class Mapper {
     }
 
     public static SalaryModel transform(SalaryEntity salaryEntity) {
+        if (salaryEntity == null) return null;
         SalaryModel salaryModel = new SalaryModel();
         salaryModel.setId(salaryEntity.getId());
         salaryModel.setJobId(salaryEntity.getJobId());
@@ -109,5 +119,19 @@ public class Mapper {
         salaryModel.setMonthlyValue(salaryEntity.getMonthlyValue());
         salaryEntity.setCreateTime(salaryEntity.getCreateTime());
         return salaryModel;
+    }
+
+    public static AttendanceModel transform(AttendanceEntity attendanceEntity) {
+        if (attendanceEntity == null) return null;
+        AttendanceModel attendanceModel = new AttendanceModel();
+        attendanceModel.setId(attendanceEntity.getId());
+        attendanceModel.setUserId(attendanceEntity.getUserId());
+        attendanceModel.setCreateDate(attendanceEntity.getCreateDate());
+        attendanceModel.setStartTime(attendanceEntity.getStartTime());
+        attendanceModel.setEndTime(attendanceEntity.getEndTime());
+        attendanceModel.setCreateTime(attendanceEntity.getCreateTime());
+        attendanceModel.setAttendanceTypeId(attendanceEntity.getAttendanceTypeId());
+        attendanceModel.setAttendanceTypeName(MemoryCache.getAttendanceTypeEntity(attendanceEntity.getAttendanceTypeId()).getName());
+        return attendanceModel;
     }
 }

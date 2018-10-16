@@ -19,7 +19,7 @@ $(function () {
             if (tab === 1) {
                 body += getFormInputGroup("薪水(元/月)", "monthlyValue", "");
                 var jobList = $("#jobList").val();
-                body += getFormSelectGroup("职位ID", "job", jobList);
+                body += getFormSelectGroup("职位ID", "job", jobList, 0);
             }
         } else if (action === 4) {//编辑
             var id = button.data('id');
@@ -31,7 +31,7 @@ $(function () {
                 var jobId = button.data('jobid');
                 body += getFormInputGroup("薪水(元/月)", "monthlyValue", monthlyValue);
                 var jobList = $("#jobList").val();
-                body += getFormSelectGroup("职位ID", "job", jobList);
+                body += getFormSelectGroup("职位ID", "job", jobList, jobId);
             }
         } else if (action === 8) {//删除
             title = "提示";
