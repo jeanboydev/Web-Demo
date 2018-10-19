@@ -138,9 +138,33 @@
 <input id="shownMenu" type="text" th:value="${page.shownMenu}" hidden="hidden"/>
 <input id="userList" type="text" th:value="${userList}" hidden="hidden"/>
 <input id="attendanceTypeList" type="text" th:value="${attendanceTypeList}" hidden="hidden"/>
+
 <!-- 底部 -->
 <div th:replace="_footer::footer(~{::script})">
     <script th:src="@{/static/js/console_record.js}"></script>
 </div>
+
 </body>
 </html>
+
+
+<!--<div class="input-group mb-3">-->
+    <!--<input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username"-->
+           <!--aria-describedby="basic-addon2">-->
+    <!--<div class="input-group-append">-->
+        <!--<span class="input-group-text" id="basic-addon2">@example.com</span>-->
+    <!--</div>-->
+<!--</div>-->
+
+
+<!--<div class="form-group">-->
+    <!--<label for="dtp_input1" class="col-md-2 control-label">DateTime Picking</label>-->
+    <!--<div class="input-group date form_datetime col-md-5" data-date="1979-09-16T05:25:07Z"-->
+         <!--data-date-format="dd MM yyyy - HH:ii p" data-link-field="dtp_input1">-->
+        <!--<input class="form-control" size="16" type="text" value="" readonly>-->
+        <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>-->
+        <!--<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>-->
+    <!--</div>-->
+    <!--<input type="hidden" id="dtp_input1" value=""/><br/>-->
+<!--</div>-->
+

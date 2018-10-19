@@ -1,3 +1,15 @@
+$(function () {
+    $('.form_datetime').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 1,
+        todayBtn:  1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        forceParse: 0,
+        showMeridian: 1
+    });
+});
 function getParam(key) {
     var url = location.search;
     var context = "";
@@ -52,8 +64,8 @@ function getDeleteContent(id) {
 
 function getFormIDGroup(value) {
     return "<div class='form-group row'>\n" +
-        "<label for='id_value' class='col-sm-2 col-form-label'>ID</label>\n" +
-        "<div class='col-sm-10'>\n" +
+        "<label for='id_value' class='col-sm-3 col-form-label'>ID</label>\n" +
+        "<div class='col-sm-9'>\n" +
         "<input type='text' readonly class='form-control-plaintext' id='idMark' value='" + value + "'>\n" +
         "</div></div>";
 }
@@ -66,8 +78,8 @@ function getFormSelectGroup(label, idName, dataList, defaultId) {
         content += "<option value='" + item.id + "' " + (item.id === defaultId ? "selected" : "") + ">" + item.name + "</option>";
     }
     return "<div class='form-group row'>\n" +
-        "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
-        "<div class='col-sm-10'>\n" +
+        "<label for='" + idName + "' class='col-sm-3 col-form-label'>" + label + "</label>\n" +
+        "<div class='col-sm-9'>\n" +
         "<select class='form-control' id='" + idName + "'>" +
         content +
         "</select>\n" +
@@ -76,8 +88,8 @@ function getFormSelectGroup(label, idName, dataList, defaultId) {
 
 function getFormCheckGroup(label, idName, value, privilegedId, privilegedValue) {
     return "<div class='form-group row'>\n" +
-        "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
-        "<div class='col-sm-10'>\n<div class='form-control-plaintext'>" +
+        "<label for='" + idName + "' class='col-sm-3 col-form-label'>" + label + "</label>\n" +
+        "<div class='col-sm-9'>\n<div class='form-control-plaintext'>" +
         "<div class='form-check form-check-inline'>\n" +
         "<input class='form-check-input' type='checkbox' value='" + value + "' id='" + idName + "'>" +
         "<label for='" + idName + "' class='form-check-label'>仅自己</label></div>"
@@ -89,11 +101,21 @@ function getFormCheckGroup(label, idName, value, privilegedId, privilegedValue) 
 
 function getFormInputGroup(label, idName, value) {
     return "<div class='form-group row'>\n" +
-        "<label for='" + idName + "' class='col-sm-2 col-form-label'>" + label + "</label>\n" +
-        "<div class='col-sm-10'>\n" +
+        "<label for='" + idName + "' class='col-sm-3 col-form-label'>" + label + "</label>\n" +
+        "<div class='col-sm-9'>\n" +
         "<input type='text' class='form-control' placeholder='请输入" + label + "' id='" + idName + "' value='" + value + "'>\n" +
         "</div></div>";
 }
+
+function getDatePicker(label, idName, value) {
+    return "\n" +
+        "<div class='form-group row'>\n" +
+        "<label for='"+ idName + "' class='col-sm-3 col-form-label'>"+ label +"</label>\n" +
+        "<div class='col-sm-9'>\n" +
+        "<input type='text' class='form-control' name='" + idName + "' value='" + value + "' readonly>\n" +
+        "</div></div>";
+}
+
 
 function getFormFooterButton(tab, action) {
     return "<button type='button' class='btn btn-secondary' data-dismiss='modal'>取消</button>\n"

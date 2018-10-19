@@ -26,6 +26,7 @@ $(function () {
                 body += getFormInputGroup("打卡日期", "createDate", "");
                 body += getFormInputGroup("上班日期", "startTime", "");
                 body += getFormInputGroup("下班日期", "endTime", "");
+                body += getDatePicker("下班日期", "testTime", "");
             }
         } else if (action === 4) {//编辑
             var id = button.data('id');
@@ -58,6 +59,8 @@ $(function () {
         modal.find(".modal-title").text(title);
         modal.find(".modal-body").html(body);
         modal.find(".modal-footer").html(footer);
+
+        modal.find("[name='testTime']").datetimepicker();
     });
 });
 
